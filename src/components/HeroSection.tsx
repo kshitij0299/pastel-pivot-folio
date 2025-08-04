@@ -7,10 +7,8 @@ const AnimatedDesigner = () => {
   
   const fonts = [
     'font-playfair',
-    'font-rethink', 
-    'font-mono',
-    'font-serif',
-    'font-sans'
+    'font-coral-pixels',
+    'font-pixelify'
   ];
 
   useEffect(() => {

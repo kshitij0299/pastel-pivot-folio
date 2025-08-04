@@ -23,6 +23,8 @@ export default {
 				'mono': ['Space Mono', 'monospace'],
 				'playfair': ['Playfair Display', 'serif'],
 				'rethink': ['Rethink Sans', 'sans-serif'],
+				'coral-pixels': ['Coral Pixels', 'cursive'],
+				'pixelify': ['Pixelify Sans', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
