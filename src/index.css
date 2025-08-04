@@ -1,40 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Portfolio Design System - Modern, soft, with beautiful gradients */
 
 @layer base {
   :root {
+    /* Core background colors */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 0 0% 10%;
+    
+    /* Typography colors */
+    --heading: 0 0% 10%;
+    --body-text: 0 0% 27%;
+    --link-default: 248 85% 70%;
+    --link-hover: 248 85% 60%;
+    
+    /* Accent colors */
+    --accent-purple: 275 75% 85%;
+    --accent-aqua: 180 100% 90%;
+    --accent-blush: 350 100% 95%;
+    
+    /* Gradient stops for hero backgrounds */
+    --gradient-pink: 324 100% 95%;
+    --gradient-blue: 210 100% 92%;
+    --gradient-mint: 150 100% 93%;
+    --gradient-cream: 48 100% 94%;
+    --gradient-lavender: 280 100% 95%;
+    --gradient-aqua: 180 100% 93%;
+    --gradient-rose: 350 100% 94%;
+    
+    /* Additional custom colors */
+    --text-heading: 0 0% 10%;
+    --text-body: 0 0% 27%;
+    --text-link: 248 85% 70%;
 
+    /* Shadcn compatibility */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 248 85% 70%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 27%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 275 75% 85%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 91%;
+    --input: 0 0% 91%;
+    --ring: 248 85% 70%;
 
     --radius: 0.5rem;
 
@@ -97,9 +117,82 @@ All colors MUST be HSL.
 @layer base {
   * {
     @apply border-border;
+    cursor: none;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter overflow-x-hidden;
+    cursor: none;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Custom Cursor Styles */
+  .custom-cursor {
+    @apply fixed top-0 left-0 w-6 h-6 rounded-full pointer-events-none z-50 mix-blend-difference;
+    background: rgba(255, 255, 255, 0.8);
+    transition: transform 0.1s ease-out, scale 0.2s ease-out;
+    backdrop-filter: blur(10px);
+  }
+  
+  .custom-cursor.link-hover {
+    transform: scale(2);
+    background: hsl(var(--accent-purple));
+    mix-blend-mode: normal;
+  }
+  
+  /* Hero Gradient Background */
+  .hero-gradient {
+    background: radial-gradient(ellipse 80% 50% at 50% 40%, hsl(var(--gradient-pink)) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 20% 70%, hsl(var(--gradient-blue)) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, hsl(var(--gradient-mint)) 0%, transparent 50%),
+                radial-gradient(ellipse 40% 30% at 60% 20%, hsl(var(--gradient-lavender)) 0%, transparent 40%),
+                radial-gradient(ellipse 50% 35% at 30% 30%, hsl(var(--gradient-aqua)) 0%, transparent 45%);
+  }
+  
+  /* Project Card Hover Effects */
+  .project-card {
+    @apply transition-all duration-300 ease-out;
+    transform: translateY(0px);
+  }
+  
+  .project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Smooth Animations */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  
+  .fade-in-up.animate {
+    opacity: 1;
+    transform: translateY(0px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Typography Classes */
+  .text-heading {
+    color: hsl(var(--text-heading));
+  }
+  
+  .text-body {
+    color: hsl(var(--text-body));
+  }
+  
+  .text-link {
+    color: hsl(var(--text-link));
+    transition: color 0.2s ease;
+  }
+  
+  .text-link:hover {
+    color: hsl(var(--text-link));
+    opacity: 0.8;
   }
 }
