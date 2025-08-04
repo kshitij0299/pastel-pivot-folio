@@ -145,33 +145,33 @@
     mix-blend-mode: normal;
   }
 
-  /* Frosted Glass Button Effect - Much Slower Animations to match profile pic */
+  /* Frosted Glass Button Effect - Very Slow Grainy Gradient */
   .glass-button {
     background: linear-gradient(
       135deg,
-      hsl(var(--gradient-pink) / 0.4),
-      hsl(var(--accent-purple) / 0.4),
-      hsl(var(--gradient-blue) / 0.4),
-      hsl(var(--accent-aqua) / 0.4),
-      hsl(var(--gradient-mint) / 0.4),
-      hsl(var(--gradient-lavender) / 0.4),
-      hsl(var(--accent-blush) / 0.4)
+      hsl(var(--gradient-pink) / 0.3),
+      hsl(var(--accent-purple) / 0.35),
+      hsl(var(--gradient-blue) / 0.3),
+      hsl(var(--accent-aqua) / 0.32),
+      hsl(var(--gradient-mint) / 0.3),
+      hsl(var(--gradient-lavender) / 0.33),
+      hsl(var(--accent-blush) / 0.3)
     );
-    background-size: 400% 400%;
+    background-size: 800% 800%;
     backdrop-filter: blur(20px);
-    border: 2px solid rgba(49, 49, 49, 0.3);
+    border: 2px solid rgba(49, 49, 49, 0.2);
     position: relative;
     overflow: hidden;
-    animation: gradient-move 25s ease-in-out infinite, glass-shimmer 20s ease-in-out infinite;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 4s ease-out;
+    animation: gradient-move 60s ease-in-out infinite, glass-shimmer 45s ease-in-out infinite;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: all 6s ease-out;
   }
   
   .glass-button:hover {
-    animation: gradient-move 15s ease-in-out infinite, glass-shimmer 12s ease-in-out infinite;
-    transform: scale(1.05);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
-    transition: all 3s ease-out;
+    animation: gradient-move 40s ease-in-out infinite, glass-shimmer 30s ease-in-out infinite;
+    transform: scale(1.03);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    transition: all 4s ease-out;
   }
   
   .glass-button::before {
