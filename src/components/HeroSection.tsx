@@ -142,54 +142,46 @@ export const HeroSection = () => {
           Hi !, I'm Kshitij
         </h1>
         
-        <p ref={subtitleRef} className="font-playfair text-base sm:text-lg md:text-xl text-body max-w-none md:max-w-3xl leading-relaxed mb-6 md:mb-8 tracking-[-0.06em]">
+        <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-3xl lg:text-4xl text-body max-w-none md:max-w-4xl leading-relaxed mb-6 md:mb-8 tracking-[-0.06em]">
           a <AnimatedDesigner /> who believes in the power of warmth, wit,
           <br className="hidden sm:block" />
           and good visual storytelling.
         </p>
 
-        <div className="font-playfair text-sm sm:text-base md:text-lg text-body max-w-none md:max-w-4xl leading-relaxed space-y-4 md:space-y-6 tracking-[-0.06em]">
-          <p>
-            I make things look good and feel right. From branding and social media to 
-            illustrations and UI/UX, my work leans into clarity, intention, and a little 
-            charm. I've worked across fashion, wellness, and tech—always with one goal: 
-            to make people feel something (and maybe smile a little).
-          </p>
-          
-          <p>Outside the pixels, I'm into ambient music, culture, and chasing soft light with my camera.</p>
-          
-          <p className="font-playfair italic text-lg md:text-xl tracking-[-0.06em]">
-            Let's make something <em>lovely</em>.
-          </p>
-        </div>
-
-        {/* Awards section */}
+        {/* Projects section with hover images */}
         <div className="mt-12 md:mt-16 space-y-2 md:space-y-4 max-w-none md:max-w-4xl">
           {[{
-          name: 'FWA',
-          count: '09'
+          name: 'Opendoor/Mainstay',
+          count: '2024',
+          image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop'
         }, {
-          name: 'The Webby Awards',
-          count: '08'
+          name: 'Interactive Platform',
+          count: '2024', 
+          image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=300&fit=crop'
         }, {
-          name: 'Red Dot Design Award',
-          count: '01'
+          name: 'Figma for Education',
+          count: '2023',
+          image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop'
         }, {
-          name: 'San Francisco Design Week',
-          count: '01'
-        }, {
-          name: 'Awwwards',
-          count: '23'
-        }, {
-          name: 'CSS Design Award',
-          count: '07'
-        }].map(award => <div key={award.name} className="flex items-center justify-between py-3 md:py-4 border-b border-gray-200 cursor-hover group">
+          name: 'Coffee Shop Menu',
+          count: '2023',
+          image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop'
+        }].map(project => <div key={project.name} className="relative flex items-center justify-between py-3 md:py-4 border-b border-gray-200 cursor-hover group">
               <span className="font-playfair text-base md:text-lg text-heading font-medium group-hover:text-link transition-colors tracking-[-0.06em]">
-                {award.name}
+                {project.name}
               </span>
               <span className="font-playfair text-xs md:text-sm text-body tracking-[-0.06em]">
-                / {award.count}
+                / {project.count}
               </span>
+              
+              {/* Hover image */}
+              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                <img 
+                  src={project.image} 
+                  alt={project.name}
+                  className="w-64 h-48 object-cover rounded-lg shadow-xl"
+                />
+              </div>
             </div>)}
         </div>
       </div>

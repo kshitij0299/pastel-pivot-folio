@@ -34,16 +34,16 @@ export const Footer = () => {
         <div className="max-w-4xl mx-auto">
           {/* Contact Section */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-heading mb-6">
+            <h2 className="font-playfair text-3xl md:text-4xl font-light text-heading mb-6 tracking-[-0.06em]">
               Let's work together
             </h2>
-            <p className="text-lg text-body mb-8 max-w-2xl mx-auto">
+            <p className="font-rethink text-lg text-body mb-8 max-w-2xl mx-auto">
               I'm always open to discussing new opportunities, creative projects, 
               or just having a conversation about design.
             </p>
             <a
-              href="mailto:hello@eliserosekim.com"
-              className="inline-flex items-center bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-medium cursor-hover hover:bg-primary/90 transition-colors"
+              href="mailto:hello@kshitij.com"
+              className="font-rethink inline-flex items-center bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-medium cursor-hover hover:bg-primary/90 transition-colors"
             >
               Get in touch
               <svg className="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -63,7 +63,7 @@ export const Footer = () => {
               <a
                 key={social.name}
                 href={social.href}
-                className="text-body hover:text-link transition-colors cursor-hover"
+                className="font-rethink text-body hover:text-link transition-colors cursor-hover"
               >
                 {social.name}
               </a>
@@ -72,13 +72,13 @@ export const Footer = () => {
 
           {/* Footer Bottom */}
           <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-100">
-            <p className="text-sm text-body mb-4 md:mb-0">
-              © 2024 Elise Rose Kim. All rights reserved.
+            <p className="font-rethink text-sm text-body mb-4 md:mb-0">
+              © 2024 Kshitij. All rights reserved.
             </p>
             
             <button
               onClick={scrollToTop}
-              className="flex items-center text-sm text-body hover:text-link transition-colors cursor-hover"
+              className="font-rethink flex items-center text-sm text-body hover:text-link transition-colors cursor-hover"
             >
               Back to top
               <svg className="ml-1 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -39,6 +39,17 @@ export const AboutSection = () => {
             </h2>
             <div className="space-y-6 text-body leading-relaxed">
               <p className="font-rethink">
+                I make things look good and feel right. From branding and social media to 
+                illustrations and UI/UX, my work leans into clarity, intention, and a little 
+                charm. I've worked across fashion, wellness, and tech—always with one goal: 
+                to make people feel something (and maybe smile a little).
+              </p>
+              
+              <p className="font-rethink">
+                Outside the pixels, I'm into ambient music, culture, and chasing soft light with my camera.
+              </p>
+              
+              <p className="font-rethink">
                 I'm a designer making playful and purposeful products. After hours, I run
                 <span className="text-link cursor-hover"> Meridrop</span>, my independent art and clothing brand.
               </p>
@@ -52,6 +63,10 @@ export const AboutSection = () => {
                 When I'm not designing, you'll find me exploring new creative tools,
                 experimenting with generative art, or working on personal projects that
                 push the boundaries of traditional design.
+              </p>
+              
+              <p className="font-playfair italic text-lg md:text-xl tracking-[-0.06em]">
+                Let's make something <em>lovely</em>.
               </p>
             </div>
 

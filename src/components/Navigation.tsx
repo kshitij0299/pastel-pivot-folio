@@ -21,7 +21,6 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
     { label: 'Work', href: '#work' },
     { label: 'Playground', href: '#playground' },
     { label: 'About', href: '#about' },
-    { label: 'Shop', href: '#shop' },
   ];
 
   const scrollToSection = (href: string) => {

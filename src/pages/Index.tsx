@@ -5,7 +5,6 @@ import { HeroSection } from '@/components/HeroSection';
 import { WorkSection } from '@/components/WorkSection';
 import { PlaygroundSection } from '@/components/PlaygroundSection';
 import { AboutSection } from '@/components/AboutSection';
-import { ShopSection } from '@/components/ShopSection';
 import { Footer } from '@/components/Footer';
 
 const Index = () => {
@@ -13,7 +12,7 @@ const Index = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'work', 'playground', 'about', 'shop', 'contact'];
+      const sections = ['hero', 'work', 'playground', 'about', 'contact'];
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -42,7 +41,6 @@ const Index = () => {
         <WorkSection />
         <PlaygroundSection />
         <AboutSection />
-        <ShopSection />
         <Footer />
       </main>
     </div>
