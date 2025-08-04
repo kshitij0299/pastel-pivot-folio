@@ -3,7 +3,9 @@ import { gsap } from 'gsap';
 
 const AnimatedDesigner = () => {
   const [currentFont, setCurrentFont] = useState(0);
+  const [isUnjumbling, setIsUnjumbling] = useState(true);
   const designerRef = useRef<HTMLSpanElement>(null);
+  const lettersRef = useRef<HTMLSpanElement[]>([]);
   
   const fonts = [
     'font-playfair',
@@ -11,29 +13,77 @@ const AnimatedDesigner = () => {
     'font-pixelify'
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFont((prev) => (prev + 1) % fonts.length);
-    }, 2000);
+  const word = "designer";
+  const scrambledLetters = "dgrsneei".split('');
 
-    return () => clearInterval(interval);
+  useEffect(() => {
+    // Unjumbling animation
+    if (designerRef.current && isUnjumbling) {
+      const letters = lettersRef.current;
+      
+      // Initial scrambled state
+      letters.forEach((letter, i) => {
+        if (letter) {
+          letter.textContent = scrambledLetters[i];
+          gsap.set(letter, { opacity: 0.3, scale: 0.8, rotation: Math.random() * 30 - 15 });
+        }
+      });
+
+      // Unjumble animation
+      const tl = gsap.timeline({
+        onComplete: () => {
+          setIsUnjumbling(false);
+        }
+      });
+
+      letters.forEach((letter, i) => {
+        tl.to(letter, {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          duration: 0.3,
+          ease: "back.out(1.7)",
+          onComplete: () => {
+            if (letter) letter.textContent = word[i];
+          }
+        }, i * 0.1);
+      });
+    }
   }, []);
 
   useEffect(() => {
-    if (designerRef.current) {
+    if (!isUnjumbling) {
+      const interval = setInterval(() => {
+        setCurrentFont((prev) => (prev + 1) % fonts.length);
+      }, 800); // Faster cycling - 800ms
+
+      return () => clearInterval(interval);
+    }
+  }, [isUnjumbling]);
+
+  useEffect(() => {
+    if (designerRef.current && !isUnjumbling) {
       gsap.fromTo(designerRef.current, 
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }
+        { scale: 0.9 },
+        { scale: 1, duration: 0.3, ease: 'back.out(1.7)' }
       );
     }
-  }, [currentFont]);
+  }, [currentFont, isUnjumbling]);
 
   return (
     <span 
       ref={designerRef}
-      className={`${fonts[currentFont]} transition-all duration-500`}
+      className={`${fonts[currentFont]} transition-all duration-300 inline-block`}
     >
-      designer
+      {word.split('').map((letter, i) => (
+        <span 
+          key={i}
+          ref={el => lettersRef.current[i] = el!}
+          className="inline-block"
+        >
+          {letter}
+        </span>
+      ))}
     </span>
   );
 };
