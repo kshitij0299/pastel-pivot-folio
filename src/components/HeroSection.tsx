@@ -98,8 +98,12 @@ export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const workSectionRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const tl = gsap.timeline();
+    
+    // Initial hero animations
     tl.fromTo(titleRef.current, {
       opacity: 0,
       y: 50
@@ -118,36 +122,51 @@ export const HeroSection = () => {
       ease: 'power3.out'
     }, '-=0.6');
 
-    // Enhanced scroll animations for hero section and gradient
+    // Enhanced scroll animations using GSAP ScrollTrigger
     const handleScroll = () => {
       if (heroRef.current) {
         const scrolled = window.pageYOffset;
         const rate = scrolled * -0.3;
-        heroRef.current.style.transform = `translateY(${rate}px)`;
+        
+        // Use GSAP for smooth parallax
+        gsap.to(heroRef.current, {
+          y: rate,
+          duration: 0.1,
+          ease: 'none'
+        });
         
         // Animated gradient background on scroll
         const gradientElement = document.querySelector('.hero-gradient');
         if (gradientElement) {
           const rotation = scrolled * 0.1;
           const scale = 1 + (scrolled * 0.0002);
-          (gradientElement as HTMLElement).style.transform = `rotate(${rotation}deg) scale(${scale})`;
-          (gradientElement as HTMLElement).style.opacity = `${Math.max(0.3, 0.6 - scrolled * 0.001)}`;
+          gsap.to(gradientElement, {
+            rotation: rotation,
+            scale: scale,
+            opacity: Math.max(0.3, 0.6 - scrolled * 0.001),
+            duration: 0.1,
+            ease: 'none'
+          });
         }
         
-        // Animate selected work section on scroll
+        // Animate selected work section on scroll using GSAP
         const workSection = document.getElementById('selected-work');
         if (workSection) {
           const rect = workSection.getBoundingClientRect();
           const windowHeight = window.innerHeight;
           
           if (rect.top < windowHeight * 0.8) {
-            workSection.style.opacity = '1';
-            workSection.style.transform = 'translateY(0)';
-            workSection.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            gsap.to(workSection, {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power3.out'
+            });
           }
         }
       }
     };
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -178,7 +197,7 @@ export const HeroSection = () => {
             <img 
               src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" 
               alt="Kshitij"
-              className="w-full h-full rounded-full object-cover animate-float shadow-lg transition-transform duration-300 group-hover:scale-110"
+              className="w-full h-full rounded-full object-cover animate-float shadow-lg transition-transform duration-700 ease-out group-hover:scale-110"
             />
           </div>
         </div>
@@ -189,52 +208,50 @@ export const HeroSection = () => {
           and good visual storytelling.
         </p>
 
-        {/* Simple work list - initially hidden with glass background */}
-        <div className="mt-32 md:mt-40 max-w-none md:max-w-4xl opacity-0 transform translate-y-20" id="selected-work">
-          <div className="work-glass-bg rounded-3xl p-8 md:p-12">
-            <h2 className="font-playfair text-2xl md:text-3xl font-light text-heading mb-8 tracking-[-0.06em]">
-              Selected Work
-            </h2>
-            
-            <div className="space-y-8">
-              {[{
-                title: 'Opendoor/Mainstay',
-                category: 'Brand & website launch',
-                year: '2024',
-                description: 'Led the design of the public launch of Mainstay, Opendoor\'s enterprise branch, from the full website experience to brand identity.'
-              }, {
-                title: 'Interactive Platform', 
-                category: 'Product Design',
-                year: '2024',
-                description: 'Designing highly interactive platforms to storytelling microsites, we stand above the noise, creating engaging web experiences.'
-              }, {
-                title: 'Figma for Education',
-                category: 'Educational Tools', 
-                year: '2023',
-                description: 'Comprehensive design system and learning platform for educational institutions using Figma.'
-              }, {
-                title: 'Coffee Shop Menu',
-                category: 'Print Design',
-                year: '2023', 
-                description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.'
-              }].map((project, index) => (
-                <div key={index} className="border-b border-white/20 pb-6 cursor-hover group last:border-b-0">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-playfair text-xl md:text-2xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors">
-                      {project.title}
-                    </h3>
-                    <span className="font-rethink text-sm text-body">{project.year}</span>
-                  </div>
-                  <p className="font-rethink text-body text-sm font-medium mb-3">{project.category}</p>
-                  <p className="font-rethink text-body leading-relaxed text-sm">{project.description}</p>
+        {/* Simple work list - initially hidden, clean design */}
+        <div className="mt-16 md:mt-20 max-w-none md:max-w-4xl opacity-0 transform translate-y-20" id="selected-work">
+          <h2 className="font-playfair text-2xl md:text-3xl font-light text-heading mb-8 tracking-[-0.06em]">
+            Selected Work
+          </h2>
+          
+          <div className="space-y-6">
+            {[{
+              title: 'Opendoor/Mainstay',
+              category: 'Brand & website launch',
+              year: '2024',
+              description: 'Led the design of the public launch of Mainstay, Opendoor\'s enterprise branch, from the full website experience to brand identity.'
+            }, {
+              title: 'Interactive Platform', 
+              category: 'Product Design',
+              year: '2024',
+              description: 'Designing highly interactive platforms to storytelling microsites, we stand above the noise, creating engaging web experiences.'
+            }, {
+              title: 'Figma for Education',
+              category: 'Educational Tools', 
+              year: '2023',
+              description: 'Comprehensive design system and learning platform for educational institutions using Figma.'
+            }, {
+              title: 'Coffee Shop Menu',
+              category: 'Print Design',
+              year: '2023', 
+              description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.'
+            }].map((project, index) => (
+              <div key={index} className="border-b border-gray-200 pb-6 cursor-hover group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-playfair text-xl md:text-2xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  <span className="font-rethink text-sm text-body">{project.year}</span>
                 </div>
-              ))}
-            </div>
+                <p className="font-rethink text-body text-sm font-medium mb-2">{project.category}</p>
+                <p className="font-rethink text-body leading-relaxed text-sm">{project.description}</p>
+              </div>
+            ))}
           </div>
         </div>
         
-        {/* Scroll indicator */}
-        <div className="flex justify-center mt-20 md:mt-24">
+        {/* Scroll indicator with GSAP animation */}
+        <div className="flex justify-center mt-16 md:mt-20">
           <div className="scroll-indicator">
             <svg className="w-6 h-6 text-body" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
