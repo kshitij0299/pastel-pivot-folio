@@ -73,7 +73,8 @@ const AnimatedDesigner = () => {
   return (
     <span 
       ref={designerRef}
-      className={`${fonts[currentFont]} transition-all duration-300 inline-block`}
+      className={`${fonts[currentFont]} transition-all duration-300 inline-block min-w-[120px] text-center`}
+      style={{ height: '1.2em' }}
     >
       {word.split('').map((letter, i) => (
         <span 
@@ -138,9 +139,20 @@ export const HeroSection = () => {
     }} />
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
-        <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-heading mb-6 md:mb-8 leading-none tracking-[-0.06em]">
-          Hi !, I'm Kshitij
-        </h1>
+        <div className="relative">
+          <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-heading mb-6 md:mb-8 leading-none tracking-[-0.06em]">
+            Hi !, I'm Kshitij
+          </h1>
+          
+          {/* Floating profile image */}
+          <div className="absolute top-0 right-0 md:right-8 lg:right-16 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24">
+            <img 
+              src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" 
+              alt="Kshitij"
+              className="w-full h-full rounded-full object-cover animate-float shadow-lg"
+            />
+          </div>
+        </div>
         
         <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-3xl lg:text-4xl text-body max-w-none md:max-w-4xl leading-relaxed mb-6 md:mb-8 tracking-[-0.06em]">
           a <AnimatedDesigner /> who believes in the power of warmth, wit,
