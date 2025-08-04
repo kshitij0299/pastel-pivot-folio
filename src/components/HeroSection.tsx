@@ -71,22 +71,14 @@ const AnimatedDesigner = () => {
   }, [currentFont, isUnjumbling]);
 
   return (
-    <span 
-      className="inline-block relative align-baseline"
-      style={{ 
-        width: '160px', 
-        height: '1.4em',
-        display: 'inline-block',
-        verticalAlign: 'baseline'
-      }}
-    >
+    <span className="inline-block relative" style={{ width: '160px' }}>
       <span
         ref={designerRef}
-        className={`${fonts[currentFont]} transition-all duration-300 absolute top-0 left-0`}
+        className={`${fonts[currentFont]} transition-all duration-300 block text-left`}
         style={{
           lineHeight: '1.4',
-          height: '1.4em',
-          display: 'block'
+          position: 'relative',
+          top: 0
         }}
       >
         {word.split('').map((letter, i) => (
@@ -94,10 +86,6 @@ const AnimatedDesigner = () => {
             key={i}
             ref={el => lettersRef.current[i] = el!}
             className="inline-block"
-            style={{ 
-              lineHeight: '1.4',
-              verticalAlign: 'baseline'
-            }}
           >
             {letter}
           </span>
@@ -145,6 +133,19 @@ export const HeroSection = () => {
           (gradientElement as HTMLElement).style.transform = `rotate(${rotation}deg) scale(${scale})`;
           (gradientElement as HTMLElement).style.opacity = `${Math.max(0.3, 0.6 - scrolled * 0.001)}`;
         }
+        
+        // Animate selected work section on scroll
+        const workSection = document.getElementById('selected-work');
+        if (workSection) {
+          const rect = workSection.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          
+          if (rect.top < windowHeight * 0.8) {
+            workSection.style.opacity = '1';
+            workSection.style.transform = 'translateY(0)';
+            workSection.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+          }
+        }
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -187,8 +188,8 @@ export const HeroSection = () => {
           and good visual storytelling.
         </p>
 
-        {/* Simple work list */}
-        <div className="mt-12 md:mt-16 max-w-none md:max-w-4xl">
+        {/* Simple work list - initially hidden */}
+        <div className="mt-12 md:mt-16 max-w-none md:max-w-4xl opacity-0 transform translate-y-20" id="selected-work">
           <h2 className="font-playfair text-2xl md:text-3xl font-light text-heading mb-8 tracking-[-0.06em]">
             Selected Work
           </h2>
@@ -226,6 +227,15 @@ export const HeroSection = () => {
                 <p className="font-rethink text-body leading-relaxed text-sm">{project.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+        
+        {/* Scroll indicator */}
+        <div className="flex justify-center mt-16 md:mt-20">
+          <div className="scroll-indicator">
+            <svg className="w-6 h-6 text-body" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
           </div>
         </div>
       </div>
