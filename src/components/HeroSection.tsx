@@ -97,25 +97,31 @@ const AnimatedDesigner = () => {
 
 export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const avatarRef = useRef<HTMLDivElement>(null);
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
-  const nameRef = useRef<HTMLHeadingElement>(null);
-  const workSectionRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tl = gsap.timeline();
     
-    // Simple fade in animations
-    tl.fromTo([avatarRef.current, descriptionRef.current, nameRef.current], {
+    // Initial hero animations
+    tl.fromTo(titleRef.current, {
+      opacity: 0,
+      y: 50
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 1.5,
+      ease: 'power3.out'
+    }).fromTo(subtitleRef.current, {
       opacity: 0,
       y: 30
     }, {
       opacity: 1,
       y: 0,
-      duration: 1,
-      ease: 'power2.out',
-      stagger: 0.2
-    });
+      duration: 1.2,
+      ease: 'power3.out'
+    }, '-=0.8');
 
     // Handle scroll for Selected Work reveal
     const handleScroll = () => {
@@ -149,7 +155,7 @@ export const HeroSection = () => {
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 md:px-12">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20">
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
@@ -164,33 +170,36 @@ export const HeroSection = () => {
         animationDelay: '4s'
       }} />
 
-      <div ref={heroRef} className="relative z-10 max-w-4xl mx-auto text-center">
-        {/* Avatar */}
-        <div 
-          ref={avatarRef}
-          className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-6 md:mb-8"
-        >
-          <img 
-            src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" 
-            alt="Kshitij"
-            className="w-full h-full rounded-full object-cover shadow-lg"
-          />
+      <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+          <div className="flex-1">
+            <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-4 md:mb-6 leading-none tracking-[-0.06em]">
+              <span className="gradient-text cursor-hover">Hi !</span><span className="text-heading">, I'm Kshitij</span>
+            </h1>
+            
+            <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl text-body max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-[-0.06em]">
+              a <AnimatedDesigner /> who believes in the power of warmth, wit,
+              <br className="hidden sm:block" />
+              and good visual storytelling.
+            </p>
+          </div>
+          
+          {/* Floating profile image */}
+          <div 
+            ref={profileRef}
+            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 cursor-hover md:ml-8 mx-auto md:mx-0 mt-6 md:mt-0"
+          >
+            <img 
+              src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" 
+              alt="Kshitij"
+              className="w-full h-full rounded-full object-cover animate-float shadow-lg"
+            />
+          </div>
         </div>
-        
-        {/* Description */}
-        <p ref={descriptionRef} className="font-rethink text-sm md:text-base lg:text-lg text-body max-w-2xl mx-auto mb-16 md:mb-20">
-          a <AnimatedDesigner /> who believes in the power of warmth, wit,
-          and good visual storytelling.
-        </p>
-
-        {/* Large Name */}
-        <h1 ref={nameRef} className="font-playfair text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-light text-heading leading-none tracking-[-0.06em]">
-          Kshitij Rana
-        </h1>
       </div>
 
       {/* Selected Work section - initially hidden, reveals on scroll */}
-      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-12 mt-32 opacity-0" id="selected-work">
+      <div className="absolute inset-x-0 bottom-0 w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-12 pb-20 opacity-0" id="selected-work">
         <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-heading mb-12 md:mb-16 tracking-[-0.06em] text-center">
           Selected Work
         </h2>
