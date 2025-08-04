@@ -72,19 +72,21 @@ const AnimatedDesigner = () => {
 
   return (
     <span 
-      className="inline-flex items-baseline relative"
+      className="inline-block relative align-baseline"
       style={{ 
         width: '160px', 
-        minHeight: '1.2em',
+        height: '1.4em',
+        display: 'inline-block',
         verticalAlign: 'baseline'
       }}
     >
       <span
         ref={designerRef}
-        className={`${fonts[currentFont]} transition-all duration-300 absolute top-0 left-0 flex items-baseline`}
+        className={`${fonts[currentFont]} transition-all duration-300 absolute top-0 left-0`}
         style={{
-          lineHeight: '1.2',
-          height: '1.2em'
+          lineHeight: '1.4',
+          height: '1.4em',
+          display: 'block'
         }}
       >
         {word.split('').map((letter, i) => (
@@ -93,7 +95,7 @@ const AnimatedDesigner = () => {
             ref={el => lettersRef.current[i] = el!}
             className="inline-block"
             style={{ 
-              lineHeight: '1.2',
+              lineHeight: '1.4',
               verticalAlign: 'baseline'
             }}
           >
@@ -165,8 +167,8 @@ export const HeroSection = () => {
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
         <div className="relative">
-          <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-heading mb-6 md:mb-8 leading-none tracking-[-0.06em]">
-            Hi !, I'm Kshitij
+          <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-6 md:mb-8 leading-none tracking-[-0.06em]">
+            <span className="gradient-text cursor-hover">Hi !</span><span className="text-heading">, I'm Kshitij</span>
           </h1>
           
           {/* Floating profile image */}
