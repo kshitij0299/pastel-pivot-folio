@@ -100,6 +100,7 @@ export const HeroSection = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
     const tl = gsap.timeline();
@@ -122,6 +123,14 @@ export const HeroSection = () => {
       duration: 1.2,
       ease: 'power3.out'
     }, '-=0.8');
+
+    // Handle scroll for arrow fade
+    const handleScroll = () => {
+      setScrollY(window.pageYOffset);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -129,16 +138,27 @@ export const HeroSection = () => {
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
-      {/* Floating decorative elements */}
-      <div className="absolute top-20 left-4 md:left-10 w-3 h-3 md:w-4 md:h-4 bg-accent-purple rounded-full animate-float" style={{
-        animationDelay: '0s'
-      }} />
-      <div className="absolute top-32 right-4 md:right-20 md:top-40 w-4 h-4 md:w-6 md:h-6 bg-accent-aqua rounded-full animate-float" style={{
-        animationDelay: '2s'
-      }} />
-      <div className="absolute bottom-32 left-8 md:left-20 md:bottom-40 w-2 h-2 md:w-3 md:h-3 bg-accent-blush rounded-full animate-float" style={{
-        animationDelay: '4s'
-      }} />
+      {/* Floating PNG stickers */}
+      <img 
+        src="/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png" 
+        alt="Decorative sticker"
+        className="floating-sticker w-16 h-16 md:w-20 md:h-20 top-20 left-4 md:left-10"
+      />
+      <img 
+        src="/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png" 
+        alt="Decorative sticker"
+        className="floating-sticker w-20 h-20 md:w-24 md:h-24 top-32 right-4 md:right-20"
+      />
+      <img 
+        src="/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png" 
+        alt="Decorative sticker"
+        className="floating-sticker w-14 h-14 md:w-16 md:h-16 bottom-32 left-8 md:left-20"
+      />
+      <img 
+        src="/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png" 
+        alt="Decorative sticker"
+        className="floating-sticker w-18 h-18 md:w-22 md:h-22 bottom-20 right-8 md:right-16"
+      />
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -168,42 +188,67 @@ export const HeroSection = () => {
         </div>
       </div>
 
+      {/* Scroll down arrow */}
+      <div 
+        className="scroll-arrow"
+        style={{ opacity: Math.max(0, 1 - scrollY / 300) }}
+      >
+        <img 
+          src="/lovable-uploads/67843970-e07e-4e59-84de-0c9151dc63a7.png" 
+          alt="Scroll down"
+          className="w-8 h-12 md:w-10 md:h-16"
+        />
+      </div>
+
     </section>
   );
 };
 
 // Selected Work Section as separate component
 export const SelectedWorkSection = () => {
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+
+  const projects = [{
+    title: 'Opendoor/Mainstay',
+    category: 'Brand & website launch',
+    year: '2024',
+    description: 'Led the design of the public launch of Mainstay, Opendoor\'s enterprise branch, from the full website experience to brand identity.',
+    color: 'from-purple-400 to-purple-600'
+  }, {
+    title: 'Interactive Platform', 
+    category: 'Product Design',
+    year: '2024',
+    description: 'Designing highly interactive platforms to storytelling microsites, we stand above the noise, creating engaging web experiences.',
+    color: 'from-blue-400 to-blue-600'
+  }, {
+    title: 'Figma for Education',
+    category: 'Educational Tools', 
+    year: '2023',
+    description: 'Comprehensive design system and learning platform for educational institutions using Figma.',
+    color: 'from-green-400 to-green-600'
+  }, {
+    title: 'Coffee Shop Menu',
+    category: 'Print Design',
+    year: '2023', 
+    description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.',
+    color: 'from-orange-400 to-orange-600'
+  }];
+
   return (
-    <section id="selected-work" className="py-20 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16">
-      <div className="w-full max-w-6xl mx-auto">
+    <section id="selected-work" className="py-20 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 relative">
+      <div className="w-full max-w-6xl mx-auto frosted-glass p-8 md:p-12">
         <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-heading mb-12 md:mb-16 tracking-[-0.06em] text-center">
           Selected Work
         </h2>
         
-        <div className="space-y-6 md:space-y-8">
-          {[{
-            title: 'Opendoor/Mainstay',
-            category: 'Brand & website launch',
-            year: '2024',
-            description: 'Led the design of the public launch of Mainstay, Opendoor\'s enterprise branch, from the full website experience to brand identity.'
-          }, {
-            title: 'Interactive Platform', 
-            category: 'Product Design',
-            year: '2024',
-            description: 'Designing highly interactive platforms to storytelling microsites, we stand above the noise, creating engaging web experiences.'
-          }, {
-            title: 'Figma for Education',
-            category: 'Educational Tools', 
-            year: '2023',
-            description: 'Comprehensive design system and learning platform for educational institutions using Figma.'
-          }, {
-            title: 'Coffee Shop Menu',
-            category: 'Print Design',
-            year: '2023', 
-            description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.'
-          }].map((project, index) => (
-            <div key={index} className="border-b border-gray-200 pb-6 md:pb-8 cursor-hover group">
+        <div className="space-y-6 md:space-y-8 relative">
+          {projects.map((project, index) => (
+            <div 
+              key={index} 
+              className="border-b border-gray-200 pb-6 md:pb-8 cursor-hover group relative"
+              onMouseEnter={() => setHoveredProject(index)}
+              onMouseLeave={() => setHoveredProject(null)}
+            >
               <div className="flex items-center justify-between mb-2 md:mb-3">
                 <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
                   {project.title}
@@ -214,6 +259,17 @@ export const SelectedWorkSection = () => {
               <p className="font-rethink text-body leading-relaxed text-sm md:text-base max-w-full md:max-w-4xl">{project.description}</p>
             </div>
           ))}
+
+          {/* Hover image preview */}
+          {hoveredProject !== null && (
+            <div className="fixed top-1/2 right-8 transform -translate-y-1/2 pointer-events-none z-50 transition-all duration-300">
+              <div className="project-hover-image p-6 w-64 h-40 flex items-center justify-center">
+                <div className={`w-full h-full bg-gradient-to-br ${projects[hoveredProject].color} rounded-lg flex items-center justify-center text-white font-semibold`}>
+                  {projects[hoveredProject].title}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

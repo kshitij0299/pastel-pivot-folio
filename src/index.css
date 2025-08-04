@@ -145,7 +145,7 @@
     mix-blend-mode: normal;
   }
 
-  /* Frosted Glass Button Effect - Much Slower Animations */
+  /* Frosted Glass Button Effect - Much Slower Animations to match profile pic */
   .glass-button {
     background: linear-gradient(
       135deg,
@@ -162,13 +162,13 @@
     border: 2px solid rgba(49, 49, 49, 0.3);
     position: relative;
     overflow: hidden;
-    animation: gradient-move 40s ease-in-out infinite, glass-shimmer 35s ease-in-out infinite;
+    animation: gradient-move 8s ease-in-out infinite, glass-shimmer 6s ease-in-out infinite;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     transition: all 1.2s ease-out;
   }
   
   .glass-button:hover {
-    animation: gradient-move 20s ease-in-out infinite, glass-shimmer 18s ease-in-out infinite;
+    animation: gradient-move 4s ease-in-out infinite, glass-shimmer 3s ease-in-out infinite;
     transform: scale(1.05);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   }
@@ -184,8 +184,47 @@
       transparent 0%, 
       rgba(255, 255, 255, 0.2) 50%, 
       transparent 100%);
-    animation: glass-sweep 45s ease-in-out infinite;
+    animation: glass-sweep 8s ease-in-out infinite;
   }
+
+  /* Frosted glass backgrounds for sections */
+  .frosted-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+  }
+
+  /* Project hover image */
+  .project-hover-image {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+  }
+
+  /* Scroll down arrow */
+  .scroll-arrow {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    transition: opacity 0.3s ease-out;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Floating stickers */
+  .floating-sticker {
+    position: absolute;
+    animation: float 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .floating-sticker:nth-child(1) { animation-delay: 0s; }
+  .floating-sticker:nth-child(2) { animation-delay: 1s; }
+  .floating-sticker:nth-child(3) { animation-delay: 2s; }
+  .floating-sticker:nth-child(4) { animation-delay: 3s; }
 
   .glass-button::after {
     content: '';
@@ -209,6 +248,12 @@
     0% { left: -100%; }
     50% { left: 100%; }
     100% { left: 100%; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-20px) rotate(2deg); }
+    66% { transform: translateY(-10px) rotate(-1deg); }
   }
   
   /* Scroll indicator */
