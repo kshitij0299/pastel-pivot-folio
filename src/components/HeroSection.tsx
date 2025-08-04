@@ -163,39 +163,41 @@ export const HeroSection = () => {
       
       if (heroRef.current && heroSectionRef.current) {
         const workSection = document.getElementById('selected-work');
-        const workSectionTop = workSection ? workSection.offsetTop : windowHeight;
-        const workSectionHeight = workSection ? workSection.offsetHeight : 0;
+        const workSectionTop = workSection ? workSection.offsetTop : windowHeight * 2;
         
-        // Check if selected work is in view
-        const workRect = workSection ? workSection.getBoundingClientRect() : null;
-        const isWorkInView = workRect && workRect.top < windowHeight && workRect.bottom > 0;
+        // Smooth transition zones
+        const heroExitPoint = workSectionTop - windowHeight * 0.3;
+        const heroReturnPoint = workSectionTop - windowHeight * 0.7;
         
-        // When approaching selected work, push hero up completely
-        if (scrolled > workSectionTop - windowHeight * 0.5) {
-          const pushDistance = -(windowHeight + 100); // Push completely out of view
+        // Calculate hero position based on scroll
+        if (scrolled > heroExitPoint) {
+          // Hero moves to center when selected work takes over
+          const progress = Math.min(1, (scrolled - heroExitPoint) / (windowHeight * 0.4));
+          const centerY = windowHeight * 0.1; // Move to center, not completely off screen
+          
           gsap.to(heroSectionRef.current, {
-            y: pushDistance,
-            duration: 0.8,
+            y: -centerY * progress,
+            opacity: Math.max(0.3, 1 - progress * 0.7),
+            duration: 0.3,
             ease: 'power2.out'
           });
         } else {
-          // Return to center when scrolling back up
+          // Hero returns to normal position
           gsap.to(heroSectionRef.current, {
             y: 0,
-            duration: 0.8,
+            opacity: 1,
+            duration: 0.5,
             ease: 'power2.out'
           });
         }
         
-        // Parallax effect for hero content when visible
-        if (scrolled < workSectionTop - windowHeight * 0.5) {
-          const rate = scrolled * -0.1;
-          gsap.to(heroRef.current, {
-            y: rate,
-            duration: 0.1,
-            ease: 'none'
-          });
-        }
+        // Gentle parallax effect for hero content
+        const rate = scrolled * -0.05;
+        gsap.to(heroRef.current, {
+          y: rate,
+          duration: 0.1,
+          ease: 'none'
+        });
         
         // Animated gradient background on scroll
         const gradientElement = document.querySelector('.hero-gradient');
@@ -210,29 +212,38 @@ export const HeroSection = () => {
           });
         }
         
-        // Animate selected work section reveal - no opacity changes when in view
-        if (workSection && !isWorkInView && workRect && workRect.top < windowHeight * 0.8) {
-          gsap.to(workSection, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power3.out'
-          });
+        // Animate selected work section reveal
+        if (workSection) {
+          const rect = workSection.getBoundingClientRect();
           
-          // Animate work title with stagger
-          if (workTitleRef.current) {
-            gsap.fromTo(workTitleRef.current, {
+          if (rect.top < windowHeight * 0.8 && !workSection.classList.contains('revealed')) {
+            workSection.classList.add('revealed');
+            
+            gsap.fromTo(workSection, {
               opacity: 0,
-              y: 50,
-              scale: 0.8
+              y: 50
             }, {
               opacity: 1,
               y: 0,
-              scale: 1,
-              duration: 1.5,
-              ease: 'back.out(1.7)',
-              delay: 0.3
+              duration: 1.2,
+              ease: 'power3.out'
             });
+            
+            // Animate work title
+            if (workTitleRef.current) {
+              gsap.fromTo(workTitleRef.current, {
+                opacity: 0,
+                y: 50,
+                scale: 0.9
+              }, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1.5,
+                ease: 'back.out(1.7)',
+                delay: 0.3
+              });
+            }
           }
         }
       }
@@ -288,7 +299,7 @@ export const HeroSection = () => {
         </p>
 
         {/* Selected Work section - initially hidden, takes over on scroll */}
-        <div className="mt-32 md:mt-40 max-w-none md:max-w-6xl opacity-0 transform translate-y-20" id="selected-work">
+        <div className="mt-32 md:mt-40 max-w-none md:max-w-6xl opacity-0 transform translate-y-12" id="selected-work">
           <h2 
             ref={workTitleRef}
             className="font-playfair text-5xl md:text-6xl lg:text-7xl font-light text-heading mb-12 md:mb-16 tracking-[-0.06em] text-center"
