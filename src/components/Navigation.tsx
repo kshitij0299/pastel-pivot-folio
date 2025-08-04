@@ -46,7 +46,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
             onClick={() => scrollToSection('#hero')}
             className="font-playfair text-lg font-bold text-heading cursor-hover tracking-[-0.06em]"
           >
-            Portfolio
+            Kshitij's Design Portfolio
           </button>
 
           <div className="hidden md:flex items-center space-x-8">
