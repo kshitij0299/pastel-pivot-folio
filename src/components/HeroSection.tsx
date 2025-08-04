@@ -98,8 +98,10 @@ export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
   const workSectionRef = useRef<HTMLDivElement>(null);
-
+  const workTitleRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     const tl = gsap.timeline();
     
@@ -110,7 +112,7 @@ export const HeroSection = () => {
     }, {
       opacity: 1,
       y: 0,
-      duration: 1.2,
+      duration: 1.5,
       ease: 'power3.out'
     }).fromTo(subtitleRef.current, {
       opacity: 0,
@@ -118,19 +120,61 @@ export const HeroSection = () => {
     }, {
       opacity: 1,
       y: 0,
-      duration: 1,
+      duration: 1.2,
       ease: 'power3.out'
-    }, '-=0.6');
+    }, '-=0.8');
+
+    // Magnetic effect for profile picture
+    const handleMouseMove = (e: MouseEvent) => {
+      if (profileRef.current) {
+        const rect = profileRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const distanceX = e.clientX - centerX;
+        const distanceY = e.clientY - centerY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        
+        if (distance < 150) { // Magnetic zone
+          const strength = (150 - distance) / 150;
+          const moveX = distanceX * strength * 0.3;
+          const moveY = distanceY * strength * 0.3;
+          
+          gsap.to(profileRef.current, {
+            x: moveX,
+            y: moveY,
+            duration: 0.3,
+            ease: 'power2.out'
+          });
+        } else {
+          gsap.to(profileRef.current, {
+            x: 0,
+            y: 0,
+            duration: 0.5,
+            ease: 'back.out(1.7)'
+          });
+        }
+      }
+    };
 
     // Enhanced scroll animations using GSAP ScrollTrigger
     const handleScroll = () => {
-      if (heroRef.current) {
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * -0.3;
+      const scrolled = window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      
+      if (heroRef.current && heroSectionRef.current) {
+        const rate = scrolled * -0.2;
         
-        // Use GSAP for smooth parallax
+        // Hero parallax and fade out
         gsap.to(heroRef.current, {
           y: rate,
+          duration: 0.1,
+          ease: 'none'
+        });
+        
+        // Fade out hero section as we scroll
+        const heroOpacity = Math.max(0, 1 - (scrolled / (windowHeight * 0.8)));
+        gsap.to(heroSectionRef.current, {
+          opacity: heroOpacity,
           duration: 0.1,
           ease: 'none'
         });
@@ -138,40 +182,60 @@ export const HeroSection = () => {
         // Animated gradient background on scroll
         const gradientElement = document.querySelector('.hero-gradient');
         if (gradientElement) {
-          const rotation = scrolled * 0.1;
-          const scale = 1 + (scrolled * 0.0002);
+          const rotation = scrolled * 0.05;
+          const scale = 1 + (scrolled * 0.0001);
           gsap.to(gradientElement, {
             rotation: rotation,
             scale: scale,
-            opacity: Math.max(0.3, 0.6 - scrolled * 0.001),
+            opacity: Math.max(0.2, 0.6 - scrolled * 0.0008),
             duration: 0.1,
             ease: 'none'
           });
         }
         
-        // Animate selected work section on scroll using GSAP
+        // Animate selected work section reveal
         const workSection = document.getElementById('selected-work');
         if (workSection) {
           const rect = workSection.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
           
-          if (rect.top < windowHeight * 0.8) {
+          if (rect.top < windowHeight * 0.6) {
             gsap.to(workSection, {
               opacity: 1,
               y: 0,
-              duration: 0.8,
+              duration: 1.2,
               ease: 'power3.out'
             });
+            
+            // Animate work title with stagger
+            if (workTitleRef.current) {
+              gsap.fromTo(workTitleRef.current, {
+                opacity: 0,
+                y: 50,
+                scale: 0.8
+              }, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1.5,
+                ease: 'back.out(1.7)',
+                delay: 0.3
+              });
+            }
           }
         }
       }
     };
     
+    document.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
   return (
-    <section id="hero" className="relative min-h-screen flex items-start justify-start overflow-hidden pt-20 md:pt-32">
+    <section ref={heroSectionRef} id="hero" className="relative min-h-screen flex items-start justify-start overflow-hidden pt-20 md:pt-32">
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
@@ -192,12 +256,15 @@ export const HeroSection = () => {
             <span className="gradient-text cursor-hover">Hi !</span><span className="text-heading">, I'm Kshitij</span>
           </h1>
           
-          {/* Floating profile image */}
-          <div className="absolute top-0 right-0 md:right-8 lg:right-16 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 group">
+          {/* Floating profile image with magnetic effect */}
+          <div 
+            ref={profileRef}
+            className="absolute top-0 right-0 md:right-8 lg:right-16 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 cursor-hover"
+          >
             <img 
               src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" 
               alt="Kshitij"
-              className="w-full h-full rounded-full object-cover animate-float shadow-lg transition-transform duration-700 ease-out group-hover:scale-110"
+              className="w-full h-full rounded-full object-cover animate-float shadow-lg"
             />
           </div>
         </div>
@@ -208,13 +275,16 @@ export const HeroSection = () => {
           and good visual storytelling.
         </p>
 
-        {/* Simple work list - initially hidden, clean design */}
-        <div className="mt-16 md:mt-20 max-w-none md:max-w-4xl opacity-0 transform translate-y-20" id="selected-work">
-          <h2 className="font-playfair text-2xl md:text-3xl font-light text-heading mb-8 tracking-[-0.06em]">
+        {/* Selected Work section - initially hidden, takes over on scroll */}
+        <div className="mt-32 md:mt-40 max-w-none md:max-w-6xl opacity-0 transform translate-y-20" id="selected-work">
+          <h2 
+            ref={workTitleRef}
+            className="font-playfair text-5xl md:text-6xl lg:text-7xl font-light text-heading mb-12 md:mb-16 tracking-[-0.06em] text-center"
+          >
             Selected Work
           </h2>
           
-          <div className="space-y-6">
+          <div className="space-y-8 md:space-y-10">
             {[{
               title: 'Opendoor/Mainstay',
               category: 'Brand & website launch',
@@ -236,15 +306,15 @@ export const HeroSection = () => {
               year: '2023', 
               description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.'
             }].map((project, index) => (
-              <div key={index} className="border-b border-gray-200 pb-6 cursor-hover group">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-playfair text-xl md:text-2xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-300">
+              <div key={index} className="border-b border-gray-200 pb-8 cursor-hover group">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-playfair text-2xl md:text-3xl lg:text-4xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
                     {project.title}
                   </h3>
-                  <span className="font-rethink text-sm text-body">{project.year}</span>
+                  <span className="font-rethink text-base text-body">{project.year}</span>
                 </div>
-                <p className="font-rethink text-body text-sm font-medium mb-2">{project.category}</p>
-                <p className="font-rethink text-body leading-relaxed text-sm">{project.description}</p>
+                <p className="font-rethink text-body text-base font-medium mb-3">{project.category}</p>
+                <p className="font-rethink text-body leading-relaxed text-base max-w-4xl">{project.description}</p>
               </div>
             ))}
           </div>
