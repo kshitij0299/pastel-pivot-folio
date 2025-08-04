@@ -162,65 +162,77 @@ export const HeroSection = () => {
       const windowHeight = window.innerHeight;
       
       if (heroRef.current && heroSectionRef.current) {
-        const rate = scrolled * -0.2;
+        const workSection = document.getElementById('selected-work');
+        const workSectionTop = workSection ? workSection.offsetTop : windowHeight;
+        const workSectionHeight = workSection ? workSection.offsetHeight : 0;
         
-        // Hero parallax and fade out
-        gsap.to(heroRef.current, {
-          y: rate,
-          duration: 0.1,
-          ease: 'none'
-        });
+        // Check if selected work is in view
+        const workRect = workSection ? workSection.getBoundingClientRect() : null;
+        const isWorkInView = workRect && workRect.top < windowHeight && workRect.bottom > 0;
         
-        // Fade out hero section as we scroll
-        const heroOpacity = Math.max(0, 1 - (scrolled / (windowHeight * 0.8)));
-        gsap.to(heroSectionRef.current, {
-          opacity: heroOpacity,
-          duration: 0.1,
-          ease: 'none'
-        });
+        // When approaching selected work, push hero up completely
+        if (scrolled > workSectionTop - windowHeight * 0.5) {
+          const pushDistance = -(windowHeight + 100); // Push completely out of view
+          gsap.to(heroSectionRef.current, {
+            y: pushDistance,
+            duration: 0.8,
+            ease: 'power2.out'
+          });
+        } else {
+          // Return to center when scrolling back up
+          gsap.to(heroSectionRef.current, {
+            y: 0,
+            duration: 0.8,
+            ease: 'power2.out'
+          });
+        }
         
-        // Animated gradient background on scroll
-        const gradientElement = document.querySelector('.hero-gradient');
-        if (gradientElement) {
-          const rotation = scrolled * 0.05;
-          const scale = 1 + (scrolled * 0.0001);
-          gsap.to(gradientElement, {
-            rotation: rotation,
-            scale: scale,
-            opacity: Math.max(0.2, 0.6 - scrolled * 0.0008),
+        // Parallax effect for hero content when visible
+        if (scrolled < workSectionTop - windowHeight * 0.5) {
+          const rate = scrolled * -0.1;
+          gsap.to(heroRef.current, {
+            y: rate,
             duration: 0.1,
             ease: 'none'
           });
         }
         
-        // Animate selected work section reveal
-        const workSection = document.getElementById('selected-work');
-        if (workSection) {
-          const rect = workSection.getBoundingClientRect();
+        // Animated gradient background on scroll
+        const gradientElement = document.querySelector('.hero-gradient');
+        if (gradientElement) {
+          const rotation = scrolled * 0.02;
+          const scale = 1 + (scrolled * 0.00005);
+          gsap.to(gradientElement, {
+            rotation: rotation,
+            scale: scale,
+            duration: 0.1,
+            ease: 'none'
+          });
+        }
+        
+        // Animate selected work section reveal - no opacity changes when in view
+        if (workSection && !isWorkInView && workRect && workRect.top < windowHeight * 0.8) {
+          gsap.to(workSection, {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out'
+          });
           
-          if (rect.top < windowHeight * 0.6) {
-            gsap.to(workSection, {
+          // Animate work title with stagger
+          if (workTitleRef.current) {
+            gsap.fromTo(workTitleRef.current, {
+              opacity: 0,
+              y: 50,
+              scale: 0.8
+            }, {
               opacity: 1,
               y: 0,
-              duration: 1.2,
-              ease: 'power3.out'
+              scale: 1,
+              duration: 1.5,
+              ease: 'back.out(1.7)',
+              delay: 0.3
             });
-            
-            // Animate work title with stagger
-            if (workTitleRef.current) {
-              gsap.fromTo(workTitleRef.current, {
-                opacity: 0,
-                y: 50,
-                scale: 0.8
-              }, {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 1.5,
-                ease: 'back.out(1.7)',
-                delay: 0.3
-              });
-            }
           }
         }
       }

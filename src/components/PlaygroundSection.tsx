@@ -58,34 +58,27 @@ export const PlaygroundSection = () => {
   ];
 
   return (
-    <section id="playground" ref={sectionRef} className="py-24 bg-white">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="font-playfair text-4xl md:text-6xl font-light text-heading mb-4 tracking-[-0.06em]">
+    <section id="playground" ref={sectionRef} className="min-h-screen py-24 bg-background">
+      <div className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-24">
+          <h2 className="font-playfair text-5xl md:text-6xl lg:text-7xl font-light text-heading mb-8 tracking-[-0.06em]">
             Playground
           </h2>
-          <p className="font-rethink text-lg text-body max-w-2xl mx-auto">
+          <p className="font-rethink text-lg md:text-xl text-body max-w-4xl mx-auto leading-relaxed">
             A space for experimentation, personal projects, and creative exploration.
           </p>
         </div>
 
-        <div ref={itemsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div ref={itemsRef} className="space-y-8 md:space-y-10">
           {playgroundItems.map((item, index) => (
-            <div
-              key={index}
-              className="group relative overflow-hidden rounded-2xl p-6 cursor-hover transition-all duration-300 hover:scale-105"
-              style={{ backgroundColor: item.color }}
-            >
-              <div className="text-4xl mb-4">{item.icon}</div>
-              <h3 className="font-playfair text-lg font-semibold text-heading mb-2 tracking-[-0.06em]">
-                {item.title}
-              </h3>
-              <p className="font-rethink text-sm text-body">
-                {item.description}
-              </p>
-              
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+            <div key={index} className="border-b border-gray-200 pb-8 cursor-hover group">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-playfair text-2xl md:text-3xl lg:text-4xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
+                  {item.title}
+                </h3>
+                <span className="text-4xl">{item.icon}</span>
+              </div>
+              <p className="font-rethink text-body leading-relaxed text-base max-w-4xl">{item.description}</p>
             </div>
           ))}
         </div>
