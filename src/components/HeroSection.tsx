@@ -4,6 +4,78 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Draggable sticker component
+const DraggableSticker = ({ 
+  src, 
+  alt, 
+  className, 
+  stickerRef, 
+  initialPosition = { x: 0, y: 0 } 
+}: {
+  src: string;
+  alt: string;
+  className: string;
+  stickerRef: React.RefObject<HTMLImageElement>;
+  initialPosition?: { x: number; y: number };
+}) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState(initialPosition);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    setDragOffset({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging) return;
+    
+    setPosition({
+      x: e.clientX - dragOffset.x,
+      y: e.clientY - dragOffset.y
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, dragOffset]);
+
+  return (
+    <img
+      ref={stickerRef}
+      src={src}
+      alt={alt}
+      className={`${className} ${isDragging ? 'cursor-grabbing z-50' : 'cursor-grab'} select-none transition-transform duration-200 ${isDragging ? 'scale-110' : ''}`}
+      style={{
+        position: 'fixed',
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        transform: isDragging ? 'scale(1.1)' : 'scale(1)',
+      }}
+      onMouseDown={handleMouseDown}
+      draggable={false}
+    />
+  );
+};
+
 const SimpleDesigner = () => {
   return (
     <span className="font-pixelify text-body">designer</span>
@@ -20,6 +92,17 @@ export const HeroSection = () => {
   const sticker3Ref = useRef<HTMLImageElement>(null);
   const sticker4Ref = useRef<HTMLImageElement>(null);
   const [scrollY, setScrollY] = useState(0);
+
+  // Get safe initial positions
+  const getSafePosition = (defaultX: number, defaultY: number) => {
+    if (typeof window !== 'undefined') {
+      return {
+        x: Math.min(defaultX, window.innerWidth - 120),
+        y: Math.min(defaultY, window.innerHeight - 120)
+      };
+    }
+    return { x: defaultX, y: defaultY };
+  };
 
   useEffect(() => {
     const tl = gsap.timeline();
@@ -90,30 +173,34 @@ export const HeroSection = () => {
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
-      {/* Floating PNG stickers */}
-      <img 
-        ref={sticker1Ref}
-        src="/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png" 
+      {/* Floating PNG stickers - now draggable */}
+      <DraggableSticker
+        src="/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png"
         alt="Decorative sticker"
-        className="floating-sticker w-20 h-20 md:w-24 md:h-24 top-20 left-4 md:left-10"
+        className="floating-sticker w-20 h-20 md:w-24 md:h-24"
+        stickerRef={sticker1Ref}
+        initialPosition={getSafePosition(16, 80)}
       />
-      <img 
-        ref={sticker2Ref}
-        src="/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png" 
+      <DraggableSticker
+        src="/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png"
         alt="Decorative sticker"
-        className="floating-sticker w-20 h-20 md:w-24 md:h-24 top-32 right-4 md:right-20"
+        className="floating-sticker w-20 h-20 md:w-24 md:h-24"
+        stickerRef={sticker2Ref}
+        initialPosition={getSafePosition(800, 128)}
       />
-      <img 
-        ref={sticker3Ref}
-        src="/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png" 
+      <DraggableSticker
+        src="/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png"
         alt="Decorative sticker"
-        className="floating-sticker w-18 h-18 md:w-22 md:h-22 bottom-32 left-8 md:left-20"
+        className="floating-sticker w-18 h-18 md:w-22 md:h-22"
+        stickerRef={sticker3Ref}
+        initialPosition={getSafePosition(32, 400)}
       />
-      <img 
-        ref={sticker4Ref}
-        src="/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png" 
+      <DraggableSticker
+        src="/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png"
         alt="Decorative sticker"
-        className="floating-sticker w-18 h-18 md:w-22 md:h-22 bottom-20 right-8 md:right-16"
+        className="floating-sticker w-18 h-18 md:w-22 md:h-22"
+        stickerRef={sticker4Ref}
+        initialPosition={getSafePosition(900, 450)}
       />
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
