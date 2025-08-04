@@ -11,14 +11,14 @@ export const CustomCursor = () => {
 
     const handleMouseEnter = (e: Event) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.classList.contains('cursor-hover')) {
+      if (target && target.classList && (target.tagName === 'A' || target.tagName === 'BUTTON' || target.classList.contains('cursor-hover'))) {
         setIsHovered(true);
       }
     };
 
     const handleMouseLeave = (e: Event) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.classList.contains('cursor-hover')) {
+      if (target && target.classList && (target.tagName === 'A' || target.tagName === 'BUTTON' || target.classList.contains('cursor-hover'))) {
         setIsHovered(false);
       }
     };

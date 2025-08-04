@@ -151,7 +151,8 @@ export const HeroSection = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  return <section id="hero" className="relative min-h-screen flex items-start justify-start overflow-hidden pt-20 md:pt-32">
+  return (
+    <section id="hero" className="relative min-h-screen flex items-start justify-start overflow-hidden pt-20 md:pt-32">
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
