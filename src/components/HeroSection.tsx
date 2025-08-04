@@ -43,30 +43,28 @@ export const HeroSection = () => {
       ease: 'power3.out'
     }, '-=0.8');
 
-    // Sticker scroll animations with 3D spin and fade
+    // Sticker fade animations (no spinning, permanent fade like arrow)
     const stickers = [sticker1Ref.current, sticker2Ref.current, sticker3Ref.current, sticker4Ref.current];
     
     stickers.forEach((sticker, index) => {
       if (sticker) {
         gsap.to(sticker, {
-          rotateY: 360,
           opacity: 0,
           duration: 1.5,
           ease: "power2.out",
           scrollTrigger: {
             trigger: "body",
             start: "top top",
-            end: "500px top",
+            end: "400px top",
             scrub: true,
             onUpdate: (self) => {
               const progress = self.progress;
-              // Start fading later than the arrow (after 60% scroll vs 30% for arrow)
-              const fadeStart = 0.6;
+              // Start fading later than the arrow (after 50% scroll vs 30% for arrow)
+              const fadeStart = 0.5;
               if (progress > fadeStart) {
                 const fadeProgress = (progress - fadeStart) / (1 - fadeStart);
                 gsap.set(sticker, { 
-                  opacity: 1 - fadeProgress,
-                  rotateY: fadeProgress * 360
+                  opacity: Math.max(0, 1 - fadeProgress)
                 });
               }
             }

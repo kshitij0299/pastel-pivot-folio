@@ -162,16 +162,16 @@
     border: 2px solid rgba(49, 49, 49, 0.3);
     position: relative;
     overflow: hidden;
-    animation: gradient-move 15s ease-in-out infinite, glass-shimmer 12s ease-in-out infinite;
+    animation: gradient-move 25s ease-in-out infinite, glass-shimmer 20s ease-in-out infinite;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 2s ease-out;
+    transition: all 4s ease-out;
   }
   
   .glass-button:hover {
-    animation: gradient-move 8s ease-in-out infinite, glass-shimmer 6s ease-in-out infinite;
-    transform: scale(1.08);
+    animation: gradient-move 15s ease-in-out infinite, glass-shimmer 12s ease-in-out infinite;
+    transform: scale(1.05);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
-    transition: all 1.5s ease-out;
+    transition: all 3s ease-out;
   }
   
   .glass-button::before {

@@ -42,7 +42,7 @@ export const Footer = () => {
               or just having a conversation about design.
             </p>
             <a
-              href="mailto:hello@kshitij.com"
+              href="mailto:kshitij0299@gmail.com"
               className="glass-button font-rethink inline-flex items-center text-gray-800 px-8 py-4 rounded-full text-lg font-medium cursor-hover hover:scale-105 transition-all duration-300"
             >
               Get in touch
@@ -55,14 +55,15 @@ export const Footer = () => {
           {/* Social Links */}
           <div className="flex justify-center space-x-8 mb-12">
             {[
-              { name: 'Instagram', href: '#' },
-              { name: 'LinkedIn', href: '#' },
-              { name: 'Behance', href: '#' },
-              { name: 'Twitter', href: '#' },
+              { name: 'Instagram', href: 'https://www.instagram.com/0texture/' },
+              { name: 'LinkedIn', href: 'https://www.linkedin.com/in/0texture' },
+              { name: 'Behance', href: 'https://www.behance.net/0texture' },
             ].map((social) => (
               <a
                 key={social.name}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-rethink text-body hover:text-link transition-colors cursor-hover"
               >
                 {social.name}
