@@ -66,7 +66,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
 
           <button
             onClick={() => scrollToSection('#contact')}
-            className="glass-button font-rethink text-primary-foreground px-6 py-2 rounded-full text-sm font-medium cursor-hover hover:scale-105 transition-all duration-300"
+            className="glass-button font-rethink text-gray-800 px-6 py-2 rounded-full text-sm font-medium cursor-hover hover:scale-105 transition-all duration-300 shadow-lg"
           >
             Contact
           </button>

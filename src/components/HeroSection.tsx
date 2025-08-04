@@ -128,12 +128,21 @@ export const HeroSection = () => {
       ease: 'power3.out'
     }, '-=0.6');
 
-    // Gentle parallax effect on scroll
+    // Enhanced scroll animations for hero section and gradient
     const handleScroll = () => {
       if (heroRef.current) {
         const scrolled = window.pageYOffset;
         const rate = scrolled * -0.3;
         heroRef.current.style.transform = `translateY(${rate}px)`;
+        
+        // Animated gradient background on scroll
+        const gradientElement = document.querySelector('.hero-gradient');
+        if (gradientElement) {
+          const rotation = scrolled * 0.1;
+          const scale = 1 + (scrolled * 0.0002);
+          (gradientElement as HTMLElement).style.transform = `rotate(${rotation}deg) scale(${scale})`;
+          (gradientElement as HTMLElement).style.opacity = `${Math.max(0.3, 0.6 - scrolled * 0.001)}`;
+        }
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -170,7 +179,7 @@ export const HeroSection = () => {
           </div>
         </div>
         
-        <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-3xl lg:text-4xl text-body max-w-none md:max-w-4xl leading-[1.3] mb-6 md:mb-8 tracking-[-0.06em]">
+        <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-3xl lg:text-4xl text-body max-w-none md:max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-[-0.06em]">
           a <AnimatedDesigner /> who believes in the power of warmth, wit,
           <br className="hidden sm:block" />
           and good visual storytelling.
