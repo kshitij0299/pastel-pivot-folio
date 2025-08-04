@@ -47,19 +47,40 @@ export const HeroSection = () => {
       <div ref={heroRef} className="container mx-auto px-6 text-center relative z-10">
         <h1
           ref={titleRef}
-          className="text-6xl md:text-8xl lg:text-9xl font-light text-heading mb-8 leading-none"
+          className="font-playfair text-6xl md:text-8xl lg:text-9xl font-light text-heading mb-8 leading-none tracking-[-0.06em]"
         >
-          Elise Rose Kim
+          Hi !, I'm Kshitij
         </h1>
         
         <p
           ref={subtitleRef}
-          className="text-lg md:text-xl text-body max-w-2xl mx-auto leading-relaxed"
+          className="text-lg md:text-xl text-body max-w-3xl mx-auto leading-relaxed mb-8"
         >
-          An interdisciplinary product designer at Google with a
+          a designer who believes in the power of warmth, wit,
           <br />
-          love for creative tools, motion, and interaction design.
+          and good visual storytelling.
         </p>
+
+        <div
+          ref={subtitleRef}
+          className="text-base md:text-lg text-body max-w-4xl mx-auto leading-relaxed space-y-4"
+        >
+          <p>
+            I make things look good and feel right. From branding and social media to 
+            illustrations and UI/UX, my work leans into clarity, intention, and a little 
+            charm. I've worked across fashion, wellness, and tech—always with one goal: 
+            to make people feel something (and maybe smile a little).
+          </p>
+          
+          <p>
+            Outside the pixels, I'm into ambient music, culture, and chasing soft light with 
+            my camera. Aand..it's been fun working on this project over the weekend.
+          </p>
+          
+          <p className="font-playfair italic text-xl">
+            Let's make something <em>lovely</em>.
+          </p>
+        </div>
 
         {/* Awards section */}
         <div className="mt-16 space-y-4 max-w-4xl mx-auto">
