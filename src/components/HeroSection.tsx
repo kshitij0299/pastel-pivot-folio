@@ -1,5 +1,44 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+
+const AnimatedDesigner = () => {
+  const [currentFont, setCurrentFont] = useState(0);
+  const designerRef = useRef<HTMLSpanElement>(null);
+  
+  const fonts = [
+    'font-playfair',
+    'font-rethink', 
+    'font-mono',
+    'font-serif',
+    'font-sans'
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentFont((prev) => (prev + 1) % fonts.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (designerRef.current) {
+      gsap.fromTo(designerRef.current, 
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }
+      );
+    }
+  }, [currentFont]);
+
+  return (
+    <span 
+      ref={designerRef}
+      className={`${fonts[currentFont]} transition-all duration-500`}
+    >
+      designer
+    </span>
+  );
+};
 export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -56,7 +95,7 @@ export const HeroSection = () => {
         </h1>
         
         <p ref={subtitleRef} className="font-playfair text-base sm:text-lg md:text-xl text-body max-w-none md:max-w-3xl leading-relaxed mb-6 md:mb-8 tracking-[-0.06em]">
-          a designer who believes in the power of warmth, wit,
+          a <AnimatedDesigner /> who believes in the power of warmth, wit,
           <br className="hidden sm:block" />
           and good visual storytelling.
         </p>
