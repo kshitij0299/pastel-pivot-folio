@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SimpleDesigner = () => {
   return (
@@ -12,6 +15,10 @@ export const HeroSection = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+  const sticker1Ref = useRef<HTMLImageElement>(null);
+  const sticker2Ref = useRef<HTMLImageElement>(null);
+  const sticker3Ref = useRef<HTMLImageElement>(null);
+  const sticker4Ref = useRef<HTMLImageElement>(null);
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
@@ -36,13 +43,48 @@ export const HeroSection = () => {
       ease: 'power3.out'
     }, '-=0.8');
 
+    // Sticker scroll animations with 3D spin and fade
+    const stickers = [sticker1Ref.current, sticker2Ref.current, sticker3Ref.current, sticker4Ref.current];
+    
+    stickers.forEach((sticker, index) => {
+      if (sticker) {
+        gsap.to(sticker, {
+          rotateY: 360,
+          opacity: 0,
+          duration: 1.5,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "500px top",
+            scrub: true,
+            onUpdate: (self) => {
+              const progress = self.progress;
+              // Start fading later than the arrow (after 60% scroll vs 30% for arrow)
+              const fadeStart = 0.6;
+              if (progress > fadeStart) {
+                const fadeProgress = (progress - fadeStart) / (1 - fadeStart);
+                gsap.set(sticker, { 
+                  opacity: 1 - fadeProgress,
+                  rotateY: fadeProgress * 360
+                });
+              }
+            }
+          }
+        });
+      }
+    });
+
     // Handle scroll for arrow fade
     const handleScroll = () => {
       setScrollY(window.pageYOffset);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
   }, []);
 
   return (
@@ -52,24 +94,28 @@ export const HeroSection = () => {
       
       {/* Floating PNG stickers */}
       <img 
+        ref={sticker1Ref}
         src="/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png" 
         alt="Decorative sticker"
         className="floating-sticker w-20 h-20 md:w-24 md:h-24 top-20 left-4 md:left-10"
       />
       <img 
+        ref={sticker2Ref}
         src="/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png" 
         alt="Decorative sticker"
         className="floating-sticker w-20 h-20 md:w-24 md:h-24 top-32 right-4 md:right-20"
       />
       <img 
+        ref={sticker3Ref}
         src="/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png" 
         alt="Decorative sticker"
-        className="floating-sticker w-14 h-14 md:w-16 md:h-16 bottom-32 left-8 md:left-20"
+        className="floating-sticker w-18 h-18 md:w-22 md:h-22 bottom-32 left-8 md:left-20"
       />
       <img 
+        ref={sticker4Ref}
         src="/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png" 
         alt="Decorative sticker"
-        className="floating-sticker w-12 h-12 md:w-14 md:h-14 bottom-20 right-8 md:right-16"
+        className="floating-sticker w-18 h-18 md:w-22 md:h-22 bottom-20 right-8 md:right-16"
       />
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">

@@ -26,6 +26,10 @@ export default {
 				'coral-pixels': ['Coral Pixels', 'cursive'],
 				'pixelify': ['Pixelify Sans', 'sans-serif'],
 			},
+			spacing: {
+				'18': '4.5rem',
+				'22': '5.5rem',
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
