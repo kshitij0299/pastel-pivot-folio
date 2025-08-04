@@ -12,7 +12,7 @@ const Index = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'work', 'playground', 'about', 'contact'];
+      const sections = ['hero', 'playground', 'about', 'contact'];
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -38,7 +38,6 @@ const Index = () => {
       
       <main>
         <HeroSection />
-        <WorkSection />
         <PlaygroundSection />
         <AboutSection />
         <Footer />

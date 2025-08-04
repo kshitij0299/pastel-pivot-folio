@@ -72,16 +72,16 @@ const AnimatedDesigner = () => {
 
   return (
     <span 
-      className="inline-block relative overflow-hidden"
+      className="inline-block relative"
       style={{ 
         width: '140px', 
-        height: '1.5em',
+        height: '1.2em',
         verticalAlign: 'baseline'
       }}
     >
       <span
         ref={designerRef}
-        className={`${fonts[currentFont]} transition-all duration-300 absolute inset-0 flex items-center justify-start`}
+        className={`${fonts[currentFont]} transition-all duration-300 absolute top-0 left-0`}
       >
         {word.split('').map((letter, i) => (
           <span 
@@ -168,41 +168,84 @@ export const HeroSection = () => {
           and good visual storytelling.
         </p>
 
-        {/* Projects section with hover images */}
-        <div className="mt-12 md:mt-16 space-y-2 md:space-y-4 max-w-none md:max-w-4xl">
+        {/* Projects section with detailed information and hover images */}
+        <div className="mt-12 md:mt-16 space-y-6 md:space-y-8 max-w-none md:max-w-6xl">
           {[{
           name: 'Opendoor/Mainstay',
-          count: '2024',
+          category: 'Brand & website launch',
+          year: '2024',
+          description: 'Led the design of the public launch of Mainstay, Opendoor\'s enterprise branch, from the full website experience to brand identity.',
+          tags: ['Branding', 'Web Design', 'UI/UX'],
+          color: '#FFF8E1',
           image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop'
         }, {
           name: 'Interactive Platform',
-          count: '2024', 
+          category: 'Product Design',
+          year: '2024',
+          description: 'Designing highly interactive platforms to storytelling microsites, we stand above the noise, creating engaging web experiences.',
+          tags: ['UI/UX', 'Interactive', 'Motion'],
+          color: '#E3FBE8',
           image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=300&fit=crop'
         }, {
           name: 'Figma for Education',
-          count: '2023',
+          category: 'Educational Tools',
+          year: '2023',
+          description: 'Comprehensive design system and learning platform for educational institutions using Figma.',
+          tags: ['Education', 'Design System', 'Personal'],
+          color: '#DDE9FB',
           image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop'
         }, {
           name: 'Coffee Shop Menu',
-          count: '2023',
+          category: 'Print Design',
+          year: '2023',
+          description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.',
+          tags: ['Print', 'Branding', 'Personal'],
+          color: '#FCE8F7',
           image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop'
-        }].map(project => <div key={project.name} className="relative flex items-center justify-between py-3 md:py-4 border-b border-gray-200 cursor-hover group">
-              <span className="font-playfair text-base md:text-lg text-heading font-medium group-hover:text-link transition-colors tracking-[-0.06em]">
-                {project.name}
-              </span>
-              <span className="font-playfair text-xs md:text-sm text-body tracking-[-0.06em]">
-                / {project.count}
-              </span>
+        }].map(project => <div 
+            key={project.name} 
+            className="relative rounded-2xl p-6 md:p-8 cursor-hover transition-all duration-300 hover:scale-105 group"
+            style={{ backgroundColor: project.color }}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="text-sm font-rethink text-body">{project.year}</div>
+            </div>
+            
+            <div className="mb-6">
+              <h3 className="font-playfair text-xl md:text-2xl font-semibold text-heading mb-2 tracking-[-0.06em]">{project.name}</h3>
+              <p className="font-rethink text-body text-sm font-medium mb-4">{project.category}</p>
+              <p className="font-rethink text-body leading-relaxed mb-4">{project.description}</p>
               
-              {/* Hover image */}
-              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                <img 
-                  src={project.image} 
-                  alt={project.name}
-                  className="w-64 h-48 object-cover rounded-lg shadow-xl"
-                />
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="font-rethink px-3 py-1 bg-white/60 rounded-full text-xs font-medium text-body"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
-            </div>)}
+            </div>
+
+            {/* Visit site link */}
+            <div className="flex items-center text-link">
+              <span className="font-rethink text-sm font-medium">VISIT SITE</span>
+              <svg className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </div>
+              
+            {/* Hover image */}
+            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+              <img 
+                src={project.image} 
+                alt={project.name}
+                className="w-48 h-36 object-cover rounded-lg shadow-xl"
+              />
+            </div>
+          </div>)}
         </div>
       </div>
     </section>;
