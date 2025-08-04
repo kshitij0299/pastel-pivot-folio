@@ -1,96 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
-const AnimatedDesigner = () => {
-  const [currentFont, setCurrentFont] = useState(0);
-  const [isUnjumbling, setIsUnjumbling] = useState(true);
-  const designerRef = useRef<HTMLSpanElement>(null);
-  const lettersRef = useRef<HTMLSpanElement[]>([]);
-  
-  const fonts = [
-    'font-playfair',
-    'font-coral-pixels',
-    'font-pixelify'
-  ];
-
-  const word = "designer";
-  const scrambledLetters = "dgrsneei".split('');
-
-  useEffect(() => {
-    // Unjumbling animation
-    if (designerRef.current && isUnjumbling) {
-      const letters = lettersRef.current;
-      
-      // Initial scrambled state
-      letters.forEach((letter, i) => {
-        if (letter) {
-          letter.textContent = scrambledLetters[i];
-          gsap.set(letter, { opacity: 0.3, scale: 0.8, rotation: Math.random() * 30 - 15 });
-        }
-      });
-
-      // Unjumble animation
-      const tl = gsap.timeline({
-        onComplete: () => {
-          setIsUnjumbling(false);
-        }
-      });
-
-      letters.forEach((letter, i) => {
-        tl.to(letter, {
-          opacity: 1,
-          scale: 1,
-          rotation: 0,
-          duration: 0.3,
-          ease: "back.out(1.7)",
-          onComplete: () => {
-            if (letter) letter.textContent = word[i];
-          }
-        }, i * 0.1);
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isUnjumbling) {
-      const interval = setInterval(() => {
-        setCurrentFont((prev) => (prev + 1) % fonts.length);
-      }, 800); // Faster cycling - 800ms
-
-      return () => clearInterval(interval);
-    }
-  }, [isUnjumbling]);
-
-  useEffect(() => {
-    if (designerRef.current && !isUnjumbling) {
-      gsap.fromTo(designerRef.current, 
-        { scale: 0.9 },
-        { scale: 1, duration: 0.3, ease: 'back.out(1.7)' }
-      );
-    }
-  }, [currentFont, isUnjumbling]);
-
+const SimpleDesigner = () => {
   return (
-    <span className="inline-block relative" style={{ width: '160px', height: '1.4em', verticalAlign: 'baseline' }}>
-      <span
-        ref={designerRef}
-        className={`${fonts[currentFont]} transition-all duration-300 absolute inset-0 flex items-baseline`}
-        style={{
-          lineHeight: '1.4',
-          textAlign: 'left'
-        }}
-      >
-        {word.split('').map((letter, i) => (
-          <span 
-            key={i}
-            ref={el => lettersRef.current[i] = el!}
-            className="inline-block"
-          >
-            {letter}
-          </span>
-        ))}
-      </span>
-    </span>
+    <span className="font-pixelify text-body">designer</span>
   );
 };
 
@@ -141,7 +54,7 @@ export const HeroSection = () => {
       <img 
         src="/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png" 
         alt="Decorative sticker"
-        className="floating-sticker w-16 h-16 md:w-20 md:h-20 top-20 left-4 md:left-10"
+        className="floating-sticker w-20 h-20 md:w-24 md:h-24 top-20 left-4 md:left-10"
       />
       <img 
         src="/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png" 
@@ -167,7 +80,7 @@ export const HeroSection = () => {
             </h1>
             
             <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl text-body max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-[-0.06em]">
-              a <AnimatedDesigner /> who believes in the power of warmth, wit,
+              a <SimpleDesigner /> who believes in the power of warmth, wit,
               <br className="hidden sm:block" />
               and good visual storytelling.
             </p>
