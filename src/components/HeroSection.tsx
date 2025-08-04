@@ -72,19 +72,27 @@ const AnimatedDesigner = () => {
 
   return (
     <span 
-      ref={designerRef}
-      className={`${fonts[currentFont]} transition-all duration-300 inline-block min-w-[120px] text-center`}
-      style={{ height: '1.2em' }}
+      className="inline-block relative overflow-hidden"
+      style={{ 
+        width: '140px', 
+        height: '1.5em',
+        verticalAlign: 'baseline'
+      }}
     >
-      {word.split('').map((letter, i) => (
-        <span 
-          key={i}
-          ref={el => lettersRef.current[i] = el!}
-          className="inline-block"
-        >
-          {letter}
-        </span>
-      ))}
+      <span
+        ref={designerRef}
+        className={`${fonts[currentFont]} transition-all duration-300 absolute inset-0 flex items-center justify-start`}
+      >
+        {word.split('').map((letter, i) => (
+          <span 
+            key={i}
+            ref={el => lettersRef.current[i] = el!}
+            className="inline-block"
+          >
+            {letter}
+          </span>
+        ))}
+      </span>
     </span>
   );
 };
