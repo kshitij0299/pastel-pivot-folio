@@ -33,13 +33,13 @@ export const ProjectCard = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Year badge */}
-      <div className="text-sm font-mono text-body mb-4">{year}</div>
+      <div className="font-playfair text-sm font-mono text-body mb-4 tracking-[-0.06em]">{year}</div>
 
       {/* Project info */}
       <div className="mb-6">
-        <h3 className="text-2xl font-semibold text-heading mb-2">{title}</h3>
-        <p className="text-body text-sm font-medium mb-4">{category}</p>
-        <p className="text-body leading-relaxed">{description}</p>
+        <h3 className="font-playfair text-2xl font-semibold text-heading mb-2 tracking-[-0.06em]">{title}</h3>
+        <p className="font-playfair text-body text-sm font-medium mb-4 tracking-[-0.06em]">{category}</p>
+        <p className="font-playfair text-body leading-relaxed tracking-[-0.06em]">{description}</p>
       </div>
 
       {/* Tags */}
@@ -47,7 +47,7 @@ export const ProjectCard = ({
         {tags.map((tag) => (
           <span
             key={tag}
-            className="px-3 py-1 bg-white/60 rounded-full text-xs font-medium text-body"
+            className="font-playfair px-3 py-1 bg-white/60 rounded-full text-xs font-medium text-body tracking-[-0.06em]"
           >
             {tag}
           </span>
@@ -56,7 +56,7 @@ export const ProjectCard = ({
 
       {/* Visit site link */}
       <div className="flex items-center text-link">
-        <span className="text-sm font-medium">VISIT SITE</span>
+        <span className="font-playfair text-sm font-medium tracking-[-0.06em]">VISIT SITE</span>
         <svg
           className={cn(
             'ml-2 w-4 h-4 transition-transform duration-300',

@@ -88,7 +88,7 @@ export const WorkSection = () => {
       <div className="container mx-auto px-6">
         <h2
           ref={titleRef}
-          className="text-4xl md:text-6xl font-light text-heading mb-16 text-center"
+          className="font-playfair text-4xl md:text-6xl font-light text-heading mb-16 text-center tracking-[-0.06em]"
         >
           Selected Work
         </h2>
