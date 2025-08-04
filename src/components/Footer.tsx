@@ -43,7 +43,7 @@ export const Footer = () => {
             </p>
             <a
               href="mailto:hello@kshitij.com"
-              className="font-rethink inline-flex items-center bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-medium cursor-hover hover:bg-primary/90 transition-colors"
+              className="glass-button font-rethink inline-flex items-center text-gray-800 px-8 py-4 rounded-full text-lg font-medium cursor-hover hover:scale-105 transition-all duration-300"
             >
               Get in touch
               <svg className="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
