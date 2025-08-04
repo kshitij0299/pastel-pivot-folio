@@ -58,27 +58,27 @@ export const PlaygroundSection = () => {
   ];
 
   return (
-    <section id="playground" ref={sectionRef} className="min-h-screen py-24 bg-background">
+    <section id="playground" ref={sectionRef} className="min-h-screen py-16 md:py-24 bg-background">
       <div className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
-        <div className="text-center mb-24">
-          <h2 className="font-playfair text-5xl md:text-6xl lg:text-7xl font-light text-heading mb-8 tracking-[-0.06em]">
+        <div className="text-center mb-16 md:mb-24">
+          <h2 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-heading mb-6 md:mb-8 tracking-[-0.06em]">
             Playground
           </h2>
-          <p className="font-rethink text-lg md:text-xl text-body max-w-4xl mx-auto leading-relaxed">
+          <p className="font-rethink text-base md:text-lg lg:text-xl text-body max-w-full md:max-w-4xl mx-auto leading-relaxed">
             A space for experimentation, personal projects, and creative exploration.
           </p>
         </div>
 
-        <div ref={itemsRef} className="space-y-8 md:space-y-10">
+        <div ref={itemsRef} className="space-y-6 md:space-y-8">
           {playgroundItems.map((item, index) => (
-            <div key={index} className="border-b border-gray-200 pb-8 cursor-hover group">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-playfair text-2xl md:text-3xl lg:text-4xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
+            <div key={index} className="border-b border-gray-200 pb-6 md:pb-8 cursor-hover group">
+              <div className="flex items-center justify-between mb-2 md:mb-3">
+                <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
                   {item.title}
                 </h3>
-                <span className="text-4xl">{item.icon}</span>
+                <span className="text-2xl md:text-4xl">{item.icon}</span>
               </div>
-              <p className="font-rethink text-body leading-relaxed text-base max-w-4xl">{item.description}</p>
+              <p className="font-rethink text-body leading-relaxed text-sm md:text-base max-w-full md:max-w-4xl">{item.description}</p>
             </div>
           ))}
         </div>

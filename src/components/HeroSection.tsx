@@ -258,7 +258,7 @@ export const HeroSection = () => {
     };
   }, []);
   return (
-    <section ref={heroSectionRef} id="hero" className="relative min-h-screen flex items-start justify-start overflow-hidden pt-20 md:pt-32">
+    <section ref={heroSectionRef} id="hero" className="relative min-h-screen flex items-center justify-start overflow-hidden pt-16 md:pt-20">
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
@@ -275,14 +275,14 @@ export const HeroSection = () => {
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
         <div className="relative">
-          <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light mb-6 md:mb-8 leading-none tracking-[-0.06em]">
+          <h1 ref={titleRef} className="font-playfair text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-4 md:mb-6 leading-none tracking-[-0.06em]">
             <span className="gradient-text cursor-hover">Hi !</span><span className="text-heading">, I'm Kshitij</span>
           </h1>
           
-          {/* Floating profile image with magnetic effect */}
+          {/* Floating profile image with magnetic effect - responsive positioning */}
           <div 
             ref={profileRef}
-            className="absolute top-0 right-0 md:right-8 lg:right-16 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 cursor-hover"
+            className="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 cursor-hover"
           >
             <img 
               src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" 
@@ -292,22 +292,22 @@ export const HeroSection = () => {
           </div>
         </div>
         
-        <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-3xl lg:text-4xl text-body max-w-none md:max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-[-0.06em]">
+        <p ref={subtitleRef} className="font-playfair text-base sm:text-lg md:text-2xl lg:text-3xl text-body max-w-none md:max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-[-0.06em]">
           a <AnimatedDesigner /> who believes in the power of warmth, wit,
           <br className="hidden sm:block" />
           and good visual storytelling.
         </p>
 
         {/* Selected Work section - initially hidden, takes over on scroll */}
-        <div className="mt-32 md:mt-40 max-w-none md:max-w-6xl opacity-0 transform translate-y-12" id="selected-work">
+        <div className="mt-24 md:mt-32 lg:mt-40 max-w-none md:max-w-6xl opacity-0 transform translate-y-12" id="selected-work">
           <h2 
             ref={workTitleRef}
-            className="font-playfair text-5xl md:text-6xl lg:text-7xl font-light text-heading mb-12 md:mb-16 tracking-[-0.06em] text-center"
+            className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-heading mb-8 md:mb-12 lg:mb-16 tracking-[-0.06em] text-center"
           >
             Selected Work
           </h2>
           
-          <div className="space-y-8 md:space-y-10">
+          <div className="space-y-6 md:space-y-8">
             {[{
               title: 'Opendoor/Mainstay',
               category: 'Brand & website launch',
@@ -329,24 +329,24 @@ export const HeroSection = () => {
               year: '2023', 
               description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.'
             }].map((project, index) => (
-              <div key={index} className="border-b border-gray-200 pb-8 cursor-hover group">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-playfair text-2xl md:text-3xl lg:text-4xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
+              <div key={index} className="border-b border-gray-200 pb-6 md:pb-8 cursor-hover group">
+                <div className="flex items-center justify-between mb-2 md:mb-3">
+                  <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
                     {project.title}
                   </h3>
-                  <span className="font-rethink text-base text-body">{project.year}</span>
+                  <span className="font-rethink text-sm md:text-base text-body">{project.year}</span>
                 </div>
-                <p className="font-rethink text-body text-base font-medium mb-3">{project.category}</p>
-                <p className="font-rethink text-body leading-relaxed text-base max-w-4xl">{project.description}</p>
+                <p className="font-rethink text-body text-sm md:text-base font-medium mb-2 md:mb-3">{project.category}</p>
+                <p className="font-rethink text-body leading-relaxed text-sm md:text-base max-w-full md:max-w-4xl">{project.description}</p>
               </div>
             ))}
           </div>
         </div>
         
         {/* Scroll indicator with GSAP animation */}
-        <div className="flex justify-center mt-16 md:mt-20">
+        <div className="flex justify-center mt-12 md:mt-16 lg:mt-20">
           <div className="scroll-indicator">
-            <svg className="w-6 h-6 text-body" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 md:w-6 md:h-6 text-body" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
           </div>
