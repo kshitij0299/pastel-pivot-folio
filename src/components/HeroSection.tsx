@@ -44,7 +44,7 @@ export const HeroSection = () => {
       <div className="absolute top-40 right-20 w-6 h-6 bg-accent-aqua rounded-full animate-float" style={{ animationDelay: '2s' }} />
       <div className="absolute bottom-40 left-20 w-3 h-3 bg-accent-blush rounded-full animate-float" style={{ animationDelay: '4s' }} />
 
-      <div ref={heroRef} className="container mx-auto px-6 text-center relative z-10">
+      <div ref={heroRef} className="container mx-auto px-6 md:px-12 lg:px-16 relative z-10 max-w-6xl">
         <h1
           ref={titleRef}
           className="font-playfair text-6xl md:text-8xl lg:text-9xl font-light text-heading mb-8 leading-none tracking-[-0.06em]"
@@ -54,7 +54,7 @@ export const HeroSection = () => {
         
         <p
           ref={subtitleRef}
-          className="text-lg md:text-xl text-body max-w-3xl mx-auto leading-relaxed mb-8"
+          className="font-playfair text-lg md:text-xl text-body max-w-3xl leading-relaxed mb-8 tracking-[-0.06em]"
         >
           a designer who believes in the power of warmth, wit,
           <br />
@@ -63,7 +63,7 @@ export const HeroSection = () => {
 
         <div
           ref={subtitleRef}
-          className="text-base md:text-lg text-body max-w-4xl mx-auto leading-relaxed space-y-4"
+          className="font-playfair text-base md:text-lg text-body max-w-4xl leading-relaxed space-y-6 tracking-[-0.06em]"
         >
           <p>
             I make things look good and feel right. From branding and social media to 
@@ -77,13 +77,13 @@ export const HeroSection = () => {
             my camera. Aand..it's been fun working on this project over the weekend.
           </p>
           
-          <p className="font-playfair italic text-xl">
+          <p className="font-playfair italic text-xl tracking-[-0.06em]">
             Let's make something <em>lovely</em>.
           </p>
         </div>
 
         {/* Awards section */}
-        <div className="mt-16 space-y-4 max-w-4xl mx-auto">
+        <div className="mt-16 space-y-4 max-w-4xl">
           {[
             { name: 'FWA', count: '09' },
             { name: 'The Webby Awards', count: '08' },
@@ -96,7 +96,7 @@ export const HeroSection = () => {
               key={award.name}
               className="flex items-center justify-between py-4 border-b border-gray-200 cursor-hover group"
             >
-              <span className="text-lg text-heading font-medium group-hover:text-link transition-colors">
+              <span className="font-playfair text-lg text-heading font-medium group-hover:text-link transition-colors tracking-[-0.06em]">
                 {award.name}
               </span>
               <span className="text-sm text-body font-mono">
