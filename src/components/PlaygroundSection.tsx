@@ -64,7 +64,7 @@ export const PlaygroundSection = () => {
           <h2 className="font-playfair text-4xl md:text-6xl font-light text-heading mb-4 tracking-[-0.06em]">
             Playground
           </h2>
-          <p className="font-inter text-lg text-body max-w-2xl mx-auto">
+          <p className="font-rethink text-lg text-body max-w-2xl mx-auto">
             A space for experimentation, personal projects, and creative exploration.
           </p>
         </div>
@@ -80,7 +80,7 @@ export const PlaygroundSection = () => {
               <h3 className="font-playfair text-lg font-semibold text-heading mb-2 tracking-[-0.06em]">
                 {item.title}
               </h3>
-              <p className="font-inter text-sm text-body">
+              <p className="font-rethink text-sm text-body">
                 {item.description}
               </p>
               

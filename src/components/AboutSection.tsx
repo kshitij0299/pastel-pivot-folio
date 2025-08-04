@@ -38,17 +38,17 @@ export const AboutSection = () => {
               About Me
             </h2>
             <div className="space-y-6 text-body leading-relaxed">
-              <p className="font-inter">
+              <p className="font-rethink">
                 I'm a designer making playful and purposeful products. After hours, I run
                 <span className="text-link cursor-hover"> Meridrop</span>, my independent art and clothing brand.
               </p>
-              <p className="font-inter">
+              <p className="font-rethink">
                 Currently working at Google, I focus on creating intuitive digital experiences
                 that balance functionality with delight. My background spans from interactive
                 platforms to storytelling microsites, always with an eye for motion and
                 interaction design.
               </p>
-              <p className="font-inter">
+              <p className="font-rethink">
                 When I'm not designing, you'll find me exploring new creative tools,
                 experimenting with generative art, or working on personal projects that
                 push the boundaries of traditional design.
@@ -57,7 +57,7 @@ export const AboutSection = () => {
 
             <div className="mt-12 flex items-center space-x-8">
               {['Stripe', 'Opendoor', 'Instagram', 'Meta'].map((company) => (
-                <div key={company} className="font-inter text-body font-medium cursor-hover hover:text-link transition-colors">
+                <div key={company} className="font-rethink text-body font-medium cursor-hover hover:text-link transition-colors">
                   {company}
                 </div>
               ))}

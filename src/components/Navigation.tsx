@@ -55,7 +55,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
                 key={item.label}
                 onClick={() => scrollToSection(item.href)}
                 className={cn(
-                  'font-inter text-sm font-medium transition-colors cursor-hover',
+                  'font-rethink text-sm font-medium transition-colors cursor-hover',
                   activeSection === item.href.slice(1)
                     ? 'text-link'
                     : 'text-body hover:text-link'
@@ -68,7 +68,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
 
           <button
             onClick={() => scrollToSection('#contact')}
-            className="font-inter bg-primary text-primary-foreground px-6 py-2 rounded-full text-sm font-medium cursor-hover hover:bg-primary/90 transition-colors"
+            className="font-rethink bg-primary text-primary-foreground px-6 py-2 rounded-full text-sm font-medium cursor-hover hover:bg-primary/90 transition-colors"
           >
             Contact
           </button>

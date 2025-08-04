@@ -58,7 +58,7 @@ export const ShopSection = () => {
           <h2 className="font-playfair text-4xl md:text-6xl font-light text-heading mb-4 tracking-[-0.06em]">
             Shop
           </h2>
-          <p className="font-inter text-lg text-body max-w-2xl mx-auto">
+          <p className="font-rethink text-lg text-body max-w-2xl mx-auto">
             Curated collection of design resources, art prints, and educational content.
           </p>
         </div>
@@ -74,14 +74,14 @@ export const ShopSection = () => {
                 <h3 className="font-playfair text-xl font-semibold text-heading mb-3 tracking-[-0.06em]">
                   {item.title}
                 </h3>
-                <p className="font-inter text-body mb-6 leading-relaxed">
+                <p className="font-rethink text-body mb-6 leading-relaxed">
                   {item.description}
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="font-playfair text-lg font-semibold text-heading tracking-[-0.06em]">
                     {item.price}
                   </span>
-                  <button className="font-inter bg-white/80 hover:bg-white text-heading px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                  <button className="font-rethink bg-white/80 hover:bg-white text-heading px-4 py-2 rounded-full text-sm font-medium transition-colors">
                     View
                   </button>
                 </div>
