@@ -72,22 +72,30 @@ const AnimatedDesigner = () => {
 
   return (
     <span 
-      className="inline-block relative"
+      className="inline-flex items-baseline relative"
       style={{ 
-        width: '140px', 
-        height: '1.2em',
+        width: '160px', 
+        minHeight: '1.2em',
         verticalAlign: 'baseline'
       }}
     >
       <span
         ref={designerRef}
-        className={`${fonts[currentFont]} transition-all duration-300 absolute top-0 left-0`}
+        className={`${fonts[currentFont]} transition-all duration-300 absolute top-0 left-0 flex items-baseline`}
+        style={{
+          lineHeight: '1.2',
+          height: '1.2em'
+        }}
       >
         {word.split('').map((letter, i) => (
           <span 
             key={i}
             ref={el => lettersRef.current[i] = el!}
             className="inline-block"
+            style={{ 
+              lineHeight: '1.2',
+              verticalAlign: 'baseline'
+            }}
           >
             {letter}
           </span>
