@@ -162,90 +162,52 @@ export const HeroSection = () => {
           </div>
         </div>
         
-        <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-3xl lg:text-4xl text-body max-w-none md:max-w-4xl leading-relaxed mb-6 md:mb-8 tracking-[-0.06em]">
+        <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-3xl lg:text-4xl text-body max-w-none md:max-w-4xl leading-[1.3] mb-6 md:mb-8 tracking-[-0.06em]">
           a <AnimatedDesigner /> who believes in the power of warmth, wit,
           <br className="hidden sm:block" />
           and good visual storytelling.
         </p>
 
-        {/* Projects section with detailed information and hover images */}
-        <div className="mt-12 md:mt-16 space-y-6 md:space-y-8 max-w-none md:max-w-6xl">
-          {[{
-          name: 'Opendoor/Mainstay',
-          category: 'Brand & website launch',
-          year: '2024',
-          description: 'Led the design of the public launch of Mainstay, Opendoor\'s enterprise branch, from the full website experience to brand identity.',
-          tags: ['Branding', 'Web Design', 'UI/UX'],
-          color: '#FFF8E1',
-          image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop'
-        }, {
-          name: 'Interactive Platform',
-          category: 'Product Design',
-          year: '2024',
-          description: 'Designing highly interactive platforms to storytelling microsites, we stand above the noise, creating engaging web experiences.',
-          tags: ['UI/UX', 'Interactive', 'Motion'],
-          color: '#E3FBE8',
-          image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=300&fit=crop'
-        }, {
-          name: 'Figma for Education',
-          category: 'Educational Tools',
-          year: '2023',
-          description: 'Comprehensive design system and learning platform for educational institutions using Figma.',
-          tags: ['Education', 'Design System', 'Personal'],
-          color: '#DDE9FB',
-          image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop'
-        }, {
-          name: 'Coffee Shop Menu',
-          category: 'Print Design',
-          year: '2023',
-          description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.',
-          tags: ['Print', 'Branding', 'Personal'],
-          color: '#FCE8F7',
-          image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop'
-        }].map(project => <div 
-            key={project.name} 
-            className="relative rounded-2xl p-6 md:p-8 cursor-hover transition-all duration-300 hover:scale-105 group"
-            style={{ backgroundColor: project.color }}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="text-sm font-rethink text-body">{project.year}</div>
-            </div>
-            
-            <div className="mb-6">
-              <h3 className="font-playfair text-xl md:text-2xl font-semibold text-heading mb-2 tracking-[-0.06em]">{project.name}</h3>
-              <p className="font-rethink text-body text-sm font-medium mb-4">{project.category}</p>
-              <p className="font-rethink text-body leading-relaxed mb-4">{project.description}</p>
-              
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="font-rethink px-3 py-1 bg-white/60 rounded-full text-xs font-medium text-body"
-                  >
-                    {tag}
-                  </span>
-                ))}
+        {/* Simple work list */}
+        <div className="mt-12 md:mt-16 max-w-none md:max-w-4xl">
+          <h2 className="font-playfair text-2xl md:text-3xl font-light text-heading mb-8 tracking-[-0.06em]">
+            Selected Work
+          </h2>
+          
+          <div className="space-y-6">
+            {[{
+              title: 'Opendoor/Mainstay',
+              category: 'Brand & website launch',
+              year: '2024',
+              description: 'Led the design of the public launch of Mainstay, Opendoor\'s enterprise branch, from the full website experience to brand identity.'
+            }, {
+              title: 'Interactive Platform', 
+              category: 'Product Design',
+              year: '2024',
+              description: 'Designing highly interactive platforms to storytelling microsites, we stand above the noise, creating engaging web experiences.'
+            }, {
+              title: 'Figma for Education',
+              category: 'Educational Tools', 
+              year: '2023',
+              description: 'Comprehensive design system and learning platform for educational institutions using Figma.'
+            }, {
+              title: 'Coffee Shop Menu',
+              category: 'Print Design',
+              year: '2023', 
+              description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.'
+            }].map((project, index) => (
+              <div key={index} className="border-b border-gray-200 pb-6 cursor-hover group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-playfair text-xl md:text-2xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors">
+                    {project.title}
+                  </h3>
+                  <span className="font-rethink text-sm text-body">{project.year}</span>
+                </div>
+                <p className="font-rethink text-body text-sm font-medium mb-2">{project.category}</p>
+                <p className="font-rethink text-body leading-relaxed text-sm">{project.description}</p>
               </div>
-            </div>
-
-            {/* Visit site link */}
-            <div className="flex items-center text-link">
-              <span className="font-rethink text-sm font-medium">VISIT SITE</span>
-              <svg className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </div>
-              
-            {/* Hover image */}
-            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-              <img 
-                src={project.image} 
-                alt={project.name}
-                className="w-48 h-36 object-cover rounded-lg shadow-xl"
-              />
-            </div>
-          </div>)}
+            ))}
+          </div>
         </div>
       </div>
     </section>;

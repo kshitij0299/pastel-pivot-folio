@@ -144,6 +144,46 @@
     background: hsl(var(--accent-purple));
     mix-blend-mode: normal;
   }
+
+  /* Frosted Glass Button Effect */
+  .glass-button {
+    background: linear-gradient(135deg, 
+      rgba(275, 75%, 85%, 0.2) 0%, 
+      rgba(180, 100%, 90%, 0.2) 25%,
+      rgba(350, 100%, 95%, 0.2) 50%,
+      rgba(248, 85%, 70%, 0.2) 75%,
+      rgba(275, 75%, 85%, 0.2) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    animation: glass-shimmer 3s ease-in-out infinite;
+  }
+  
+  .glass-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(255, 255, 255, 0.1) 50%, 
+      transparent 100%);
+    animation: glass-sweep 4s ease-in-out infinite;
+  }
+
+  @keyframes glass-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  @keyframes glass-sweep {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+  }
   
   /* Hero Gradient Background */
   .hero-gradient {

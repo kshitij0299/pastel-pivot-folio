@@ -46,7 +46,7 @@ export const AboutSection = () => {
               </p>
               
               <p className="font-rethink">
-                Outside the pixels, I'm into ambient music, culture, and chasing soft light with my camera.
+                Outside the pixels, I'm into ambient music, culture.
               </p>
               
               <p className="font-rethink">
@@ -70,13 +70,6 @@ export const AboutSection = () => {
               </p>
             </div>
 
-            <div className="mt-12 flex items-center space-x-8">
-              {['Stripe', 'Opendoor', 'Instagram', 'Meta'].map((company) => (
-                <div key={company} className="font-rethink text-body font-medium cursor-hover hover:text-link transition-colors">
-                  {company}
-                </div>
-              ))}
-            </div>
           </div>
 
           <div ref={imageRef} className="relative">
