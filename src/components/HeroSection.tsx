@@ -157,7 +157,7 @@ export const HeroSection = () => {
       <img 
         src="/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png" 
         alt="Decorative sticker"
-        className="floating-sticker w-18 h-18 md:w-22 md:h-22 bottom-20 right-8 md:right-16"
+        className="floating-sticker w-12 h-12 md:w-14 md:h-14 bottom-20 right-8 md:right-16"
       />
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
@@ -207,6 +207,7 @@ export const HeroSection = () => {
 // Selected Work Section as separate component
 export const SelectedWorkSection = () => {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const projects = [{
     title: 'Opendoor/Mainstay',
@@ -235,7 +236,11 @@ export const SelectedWorkSection = () => {
   }];
 
   return (
-    <section id="selected-work" className="py-20 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 relative">
+    <section 
+      id="selected-work" 
+      className="py-20 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16 relative"
+      onMouseMove={(e) => setMousePosition({ x: e.clientX, y: e.clientY })}
+    >
       <div className="w-full max-w-6xl mx-auto frosted-glass p-8 md:p-12">
         <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-heading mb-12 md:mb-16 tracking-[-0.06em] text-center">
           Selected Work
@@ -260,11 +265,17 @@ export const SelectedWorkSection = () => {
             </div>
           ))}
 
-          {/* Hover image preview */}
+          {/* Hover image preview - follows mouse cursor */}
           {hoveredProject !== null && (
-            <div className="fixed top-1/2 right-8 transform -translate-y-1/2 pointer-events-none z-50 transition-all duration-300">
-              <div className="project-hover-image p-6 w-64 h-40 flex items-center justify-center">
-                <div className={`w-full h-full bg-gradient-to-br ${projects[hoveredProject].color} rounded-lg flex items-center justify-center text-white font-semibold`}>
+            <div 
+              className="fixed pointer-events-none z-50 transition-all duration-200"
+              style={{
+                left: `${mousePosition.x + 20}px`,
+                top: `${mousePosition.y - 60}px`,
+              }}
+            >
+              <div className="project-hover-image p-4 w-32 h-32 flex items-center justify-center">
+                <div className={`w-full h-full bg-gradient-to-br ${projects[hoveredProject].color} rounded-lg flex items-center justify-center text-white font-semibold text-sm text-center`}>
                   {projects[hoveredProject].title}
                 </div>
               </div>
