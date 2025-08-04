@@ -71,14 +71,13 @@ const AnimatedDesigner = () => {
   }, [currentFont, isUnjumbling]);
 
   return (
-    <span className="inline-block relative" style={{ width: '160px' }}>
+    <span className="inline-block relative" style={{ width: '160px', height: '1.4em', verticalAlign: 'baseline' }}>
       <span
         ref={designerRef}
-        className={`${fonts[currentFont]} transition-all duration-300 block text-left`}
+        className={`${fonts[currentFont]} transition-all duration-300 absolute inset-0 flex items-baseline`}
         style={{
           lineHeight: '1.4',
-          position: 'relative',
-          top: 0
+          textAlign: 'left'
         }}
       >
         {word.split('').map((letter, i) => (
@@ -247,23 +246,27 @@ export const SelectedWorkSection = () => {
         </h2>
         
         <div className="space-y-6 md:space-y-8 relative">
-          {projects.map((project, index) => (
-            <div 
-              key={index} 
-              className="border-b border-gray-200 pb-6 md:pb-8 cursor-hover group relative"
-              onMouseEnter={() => setHoveredProject(index)}
-              onMouseLeave={() => setHoveredProject(null)}
-            >
-              <div className="flex items-center justify-between mb-2 md:mb-3">
-                <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
-                  {project.title}
-                </h3>
-                <span className="font-rethink text-sm md:text-base text-body">{project.year}</span>
-              </div>
-              <p className="font-rethink text-body text-sm md:text-base font-medium mb-2 md:mb-3">{project.category}</p>
-              <p className="font-rethink text-body leading-relaxed text-sm md:text-base max-w-full md:max-w-4xl">{project.description}</p>
-            </div>
-          ))}
+          {projects.map((project, index) => {
+            const projectId = project.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            return (
+              <a 
+                key={index}
+                href={`/project/${projectId}`}
+                className="block border-b border-gray-200 pb-6 md:pb-8 cursor-hover group relative"
+                onMouseEnter={() => setHoveredProject(index)}
+                onMouseLeave={() => setHoveredProject(null)}
+              >
+                <div className="flex items-center justify-between mb-2 md:mb-3">
+                  <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
+                    {project.title}
+                  </h3>
+                  <span className="font-rethink text-sm md:text-base text-body">{project.year}</span>
+                </div>
+                <p className="font-rethink text-body text-sm md:text-base font-medium mb-2 md:mb-3">{project.category}</p>
+                <p className="font-rethink text-body leading-relaxed text-sm md:text-base max-w-full md:max-w-4xl">{project.description}</p>
+              </a>
+            );
+          })}
 
           {/* Hover image preview - follows mouse cursor */}
           {hoveredProject !== null && (
@@ -274,8 +277,8 @@ export const SelectedWorkSection = () => {
                 top: `${mousePosition.y - 60}px`,
               }}
             >
-              <div className="project-hover-image p-4 w-32 h-32 flex items-center justify-center">
-                <div className={`w-full h-full bg-gradient-to-br ${projects[hoveredProject].color} rounded-lg flex items-center justify-center text-white font-semibold text-sm text-center`}>
+              <div className="project-hover-image p-4 w-24 h-24 flex items-center justify-center">
+                <div className={`w-full h-full bg-gradient-to-br ${projects[hoveredProject].color} rounded-lg flex items-center justify-center text-white font-semibold text-xs text-center`}>
                   {projects[hoveredProject].title}
                 </div>
               </div>
