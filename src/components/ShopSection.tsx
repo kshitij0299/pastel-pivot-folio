@@ -55,10 +55,10 @@ export const ShopSection = () => {
     <section id="shop" ref={sectionRef} className="py-24 bg-gray-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-light text-heading mb-4">
+          <h2 className="font-playfair text-4xl md:text-6xl font-light text-heading mb-4 tracking-[-0.06em]">
             Shop
           </h2>
-          <p className="text-lg text-body max-w-2xl mx-auto">
+          <p className="font-inter text-lg text-body max-w-2xl mx-auto">
             Curated collection of design resources, art prints, and educational content.
           </p>
         </div>
@@ -71,17 +71,17 @@ export const ShopSection = () => {
               style={{ backgroundColor: item.color }}
             >
               <div className="relative z-10">
-                <h3 className="text-xl font-semibold text-heading mb-3">
+                <h3 className="font-playfair text-xl font-semibold text-heading mb-3 tracking-[-0.06em]">
                   {item.title}
                 </h3>
-                <p className="text-body mb-6 leading-relaxed">
+                <p className="font-inter text-body mb-6 leading-relaxed">
                   {item.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-semibold text-heading">
+                  <span className="font-playfair text-lg font-semibold text-heading tracking-[-0.06em]">
                     {item.price}
                   </span>
-                  <button className="bg-white/80 hover:bg-white text-heading px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                  <button className="font-inter bg-white/80 hover:bg-white text-heading px-4 py-2 rounded-full text-sm font-medium transition-colors">
                     View
                   </button>
                 </div>

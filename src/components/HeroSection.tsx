@@ -55,13 +55,13 @@ export const HeroSection = () => {
           Hi !, I'm Kshitij
         </h1>
         
-        <p ref={subtitleRef} className="font-playfair text-base sm:text-lg md:text-xl text-body max-w-none md:max-w-3xl leading-relaxed mb-6 md:mb-8 tracking-[-0.06em]">
+        <p ref={subtitleRef} className="font-inter text-base sm:text-lg md:text-xl text-body max-w-none md:max-w-3xl leading-relaxed mb-6 md:mb-8">
           a designer who believes in the power of warmth, wit,
           <br className="hidden sm:block" />
           and good visual storytelling.
         </p>
 
-        <div className="font-playfair text-sm sm:text-base md:text-lg text-body max-w-none md:max-w-4xl leading-relaxed space-y-4 md:space-y-6 tracking-[-0.06em]">
+        <div className="font-inter text-sm sm:text-base md:text-lg text-body max-w-none md:max-w-4xl leading-relaxed space-y-4 md:space-y-6">
           <p>
             I make things look good and feel right. From branding and social media to 
             illustrations and UI/UX, my work leans into clarity, intention, and a little 
@@ -100,7 +100,7 @@ export const HeroSection = () => {
               <span className="font-playfair text-base md:text-lg text-heading font-medium group-hover:text-link transition-colors tracking-[-0.06em]">
                 {award.name}
               </span>
-              <span className="text-xs md:text-sm text-body font-mono">
+              <span className="font-inter text-xs md:text-sm text-body">
                 / {award.count}
               </span>
             </div>)}

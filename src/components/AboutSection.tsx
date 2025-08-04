@@ -34,21 +34,21 @@ export const AboutSection = () => {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
           <div ref={textRef}>
-            <h2 className="text-4xl md:text-5xl font-light text-heading mb-8">
+            <h2 className="font-playfair text-4xl md:text-5xl font-light text-heading mb-8 tracking-[-0.06em]">
               About Me
             </h2>
             <div className="space-y-6 text-body leading-relaxed">
-              <p>
+              <p className="font-inter">
                 I'm a designer making playful and purposeful products. After hours, I run
                 <span className="text-link cursor-hover"> Meridrop</span>, my independent art and clothing brand.
               </p>
-              <p>
+              <p className="font-inter">
                 Currently working at Google, I focus on creating intuitive digital experiences
                 that balance functionality with delight. My background spans from interactive
                 platforms to storytelling microsites, always with an eye for motion and
                 interaction design.
               </p>
-              <p>
+              <p className="font-inter">
                 When I'm not designing, you'll find me exploring new creative tools,
                 experimenting with generative art, or working on personal projects that
                 push the boundaries of traditional design.
@@ -57,7 +57,7 @@ export const AboutSection = () => {
 
             <div className="mt-12 flex items-center space-x-8">
               {['Stripe', 'Opendoor', 'Instagram', 'Meta'].map((company) => (
-                <div key={company} className="text-body font-medium cursor-hover hover:text-link transition-colors">
+                <div key={company} className="font-inter text-body font-medium cursor-hover hover:text-link transition-colors">
                   {company}
                 </div>
               ))}
