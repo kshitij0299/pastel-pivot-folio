@@ -57,7 +57,7 @@ export const Footer = () => {
             {[
               { name: 'Instagram', href: '#' },
               { name: 'LinkedIn', href: '#' },
-              { name: 'Dribbble', href: '#' },
+              { name: 'Behance', href: '#' },
               { name: 'Twitter', href: '#' },
             ].map((social) => (
               <a
