@@ -51,17 +51,17 @@ export const HeroSection = () => {
     }} />
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
-        <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-heading mb-6 md:mb-8 leading-none tracking-[-0.06em]">
+        <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-heading mb-6 md:mb-8 leading-none tracking-[-0.6em]">
           Hi !, I'm Kshitij
         </h1>
         
-        <p ref={subtitleRef} className="font-playfair text-base sm:text-lg md:text-xl text-body max-w-none md:max-w-3xl leading-relaxed mb-6 md:mb-8 tracking-[-0.06em]">
+        <p ref={subtitleRef} className="font-playfair text-base sm:text-lg md:text-xl text-body max-w-none md:max-w-3xl leading-relaxed mb-6 md:mb-8 tracking-[-0.6em]">
           a designer who believes in the power of warmth, wit,
           <br className="hidden sm:block" />
           and good visual storytelling.
         </p>
 
-        <div ref={subtitleRef} className="font-playfair text-sm sm:text-base md:text-lg text-body max-w-none md:max-w-4xl leading-relaxed space-y-4 md:space-y-6 tracking-[-0.06em]">
+        <div className="font-playfair text-sm sm:text-base md:text-lg text-body max-w-none md:max-w-4xl leading-relaxed space-y-4 md:space-y-6 tracking-[-0.6em]">
           <p>
             I make things look good and feel right. From branding and social media to 
             illustrations and UI/UX, my work leans into clarity, intention, and a little 
@@ -71,7 +71,7 @@ export const HeroSection = () => {
           
           <p>Outside the pixels, I'm into ambient music, culture, and chasing soft light with my camera.</p>
           
-          <p className="font-playfair italic text-lg md:text-xl tracking-[-0.06em]">
+          <p className="font-playfair italic text-lg md:text-xl tracking-[-0.6em]">
             Let's make something <em>lovely</em>.
           </p>
         </div>
