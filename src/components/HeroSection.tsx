@@ -122,36 +122,6 @@ export const HeroSection = () => {
       duration: 1.2,
       ease: 'power3.out'
     }, '-=0.8');
-
-    // Handle scroll for Selected Work reveal
-    const handleScroll = () => {
-      const scrolled = window.pageYOffset;
-      const windowHeight = window.innerHeight;
-      
-      // Show Selected Work when scrolling past 60% of viewport
-      if (scrolled > windowHeight * 0.6) {
-        const workSection = document.getElementById('selected-work');
-        if (workSection && !workSection.classList.contains('revealed')) {
-          workSection.classList.add('revealed');
-          
-          gsap.fromTo(workSection, {
-            opacity: 0,
-            y: 50
-          }, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power3.out'
-          });
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
   }, []);
 
   return (
@@ -198,8 +168,15 @@ export const HeroSection = () => {
         </div>
       </div>
 
-      {/* Selected Work section - initially hidden, reveals on scroll */}
-      <div className="absolute inset-x-0 bottom-0 w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-12 pb-20 opacity-0" id="selected-work">
+    </section>
+  );
+};
+
+// Selected Work Section as separate component
+export const SelectedWorkSection = () => {
+  return (
+    <section id="selected-work" className="py-20 md:py-32 px-4 sm:px-6 md:px-12 lg:px-16">
+      <div className="w-full max-w-6xl mx-auto">
         <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-heading mb-12 md:mb-16 tracking-[-0.06em] text-center">
           Selected Work
         </h2>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CustomCursor } from '@/components/CustomCursor';
 import { Navigation } from '@/components/Navigation';
-import { HeroSection } from '@/components/HeroSection';
+import { HeroSection, SelectedWorkSection } from '@/components/HeroSection';
 import { WorkSection } from '@/components/WorkSection';
 import { PlaygroundSection } from '@/components/PlaygroundSection';
 import { AboutSection } from '@/components/AboutSection';
@@ -38,6 +38,7 @@ const Index = () => {
       
       <main>
         <HeroSection />
+        <SelectedWorkSection />
         <PlaygroundSection />
         <AboutSection />
         <Footer />
