@@ -90,10 +90,10 @@ export const HeroSection = () => {
           setStickers(prev => prev.map(sticker => {
             if (sticker.id === 1) {
               // Position next to "Kshitij" text with offset
-              const offsetX = window.innerWidth > 768 ? 120 : 80;
-              const offsetY = window.innerWidth > 768 ? -20 : -10;
-              const newX = kshitijRect.right + offsetX;
-              const newY = kshitijRect.top + window.scrollY + offsetY;
+              const offsetX = window.innerWidth > 768 ? 120 : 40; // Reduced mobile offset
+              const offsetY = window.innerWidth > 768 ? -20 : 20; // Move below text on mobile
+              const newX = window.innerWidth > 768 ? kshitijRect.right + offsetX : kshitijRect.right + offsetX;
+              const newY = window.innerWidth > 768 ? kshitijRect.top + window.scrollY + offsetY : kshitijRect.bottom + window.scrollY + offsetY;
               
               console.log('Sticker 1 positioned at:', newX, newY);
               console.log('Calculated from Kshitij rect:', kshitijRect);
