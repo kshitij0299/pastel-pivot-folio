@@ -64,78 +64,84 @@ export const HeroSection = () => {
     }
   ]);
 
-  // Calculate positions based on actual DOM elements
+  // Calculate mobile-safe positions for stickers
   useEffect(() => {
-    const calculatePositions = () => {
-      // Wait for DOM to be fully rendered
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          const titleElement = titleRef.current;
-          if (!titleElement) return;
-
-          // Get the "Kshitij" text position
-          const titleRect = titleElement.getBoundingClientRect();
-          const kshitijText = titleElement.querySelector('span:last-child') as HTMLElement;
-          
-          console.log('Title element found:', !!titleElement);
-          console.log('Title rect:', titleRect);
-          console.log('Kshitij text found:', !!kshitijText);
-          
-          let kshitijRect = titleRect;
-          if (kshitijText) {
-            kshitijRect = kshitijText.getBoundingClientRect();
-            console.log('Kshitij text rect:', kshitijRect);
+    const calculateMobileSafePositions = () => {
+      const isMobile = window.innerWidth < 768;
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      
+      setStickers(prev => prev.map(sticker => {
+        if (isMobile) {
+          // Mobile-safe positioning: keep stickers in corners and margins
+          if (sticker.id === 1) {
+            return {
+              ...sticker,
+              x: 20, // Left margin
+              y: viewportHeight - 220 // Bottom area, above footer
+            };
           }
-
-          setStickers(prev => prev.map(sticker => {
-            if (sticker.id === 1) {
-              // Position next to "Kshitij" text with offset
-              const offsetX = window.innerWidth > 768 ? 120 : 80;
-              const offsetY = window.innerWidth > 768 ? -20 : -10;
-              const newX = kshitijRect.right + offsetX;
-              const newY = kshitijRect.top + window.scrollY + offsetY;
-              
-              console.log('Sticker 1 positioned at:', newX, newY);
-              console.log('Calculated from Kshitij rect:', kshitijRect);
-              
-              return {
-                ...sticker,
-                x: Math.max(0, Math.min(newX, window.innerWidth - 100)),
-                y: Math.max(0, newY)
-              };
-            }
-            if (sticker.id === 2) {
-              return {
-                ...sticker,
-                x: window.innerWidth - 120,
-                y: window.innerWidth > 768 ? 128 : 160
-              };
-            }
-            if (sticker.id === 3) {
-              return {
-                ...sticker,
-                x: window.innerWidth > 768 ? 80 : 40,
-                y: window.innerHeight - 200
-              };
-            }
-            if (sticker.id === 5) {
-              return {
-                ...sticker,
-                x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60,
-                y: window.innerWidth > 768 ? 300 : 400
-              };
-            }
-            return sticker;
-          }));
-        }, 100); // Small delay to ensure layout is complete
-      });
+          if (sticker.id === 2) {
+            return {
+              ...sticker,
+              x: viewportWidth - 100, // Right margin
+              y: 120 // Top area, below nav
+            };
+          }
+          if (sticker.id === 3) {
+            return {
+              ...sticker,
+              x: viewportWidth - 80, // Right corner
+              y: viewportHeight - 180 // Bottom area
+            };
+          }
+          if (sticker.id === 5) {
+            return {
+              ...sticker,
+              x: viewportWidth / 2 - 40, // Center horizontally
+              y: viewportHeight - 120 // Bottom, well below text
+            };
+          }
+        } else {
+          // Desktop positioning - more flexible around text
+          if (sticker.id === 1) {
+            return {
+              ...sticker,
+              x: viewportWidth - 180,
+              y: 200
+            };
+          }
+          if (sticker.id === 2) {
+            return {
+              ...sticker,
+              x: viewportWidth - 120,
+              y: 128
+            };
+          }
+          if (sticker.id === 3) {
+            return {
+              ...sticker,
+              x: 80,
+              y: viewportHeight - 200
+            };
+          }
+          if (sticker.id === 5) {
+            return {
+              ...sticker,
+              x: viewportWidth - 200,
+              y: 300
+            };
+          }
+        }
+        return sticker;
+      }));
     };
 
-    calculatePositions();
-    window.addEventListener('resize', calculatePositions);
+    calculateMobileSafePositions();
+    window.addEventListener('resize', calculateMobileSafePositions);
     
     return () => {
-      window.removeEventListener('resize', calculatePositions);
+      window.removeEventListener('resize', calculateMobileSafePositions);
     };
   }, []);
 
@@ -227,7 +233,7 @@ export const HeroSection = () => {
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
-      {/* Draggable PNG stickers and profile */}
+      {/* Mobile-safe positioned stickers */}
       {stickers.map((sticker) => (
         <img 
           key={sticker.id}
@@ -235,16 +241,17 @@ export const HeroSection = () => {
           alt={sticker.alt}
           className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''} ${
             sticker.id === 5 ? 'rounded-full object-cover shadow-lg' : ''
-          }`}
+          } ${window.innerWidth < 768 ? 'md:block' : ''}`}
           style={{
-            position: 'fixed',
+            position: 'absolute',
             left: `${sticker.x}px`,
             top: `${sticker.y}px`,
-            zIndex: draggedSticker === sticker.id ? 50 : 20,
-            opacity: Math.max(0.3, 1 - scrollY / 400), // Fade on scroll
+            zIndex: draggedSticker === sticker.id ? 50 : 10,
+            opacity: Math.max(0.4, 1 - scrollY / 400),
             transform: draggedSticker === sticker.id ? 'scale(1.1)' : 'scale(1)',
             transition: draggedSticker === sticker.id ? 'none' : 'transform 0.2s ease',
-            cursor: 'grab'
+            cursor: 'grab',
+            pointerEvents: window.innerWidth < 768 ? 'auto' : 'auto'
           }}
           onMouseDown={(e) => handleMouseDown(e, sticker.id)}
           draggable={false}
