@@ -21,7 +21,7 @@ export default {
 			fontFamily: {
 				'inter': ['Inter', 'sans-serif'],
 				'mono': ['Space Mono', 'monospace'],
-				'playfair': ['Playfair Display', 'serif'],
+				'playfair': ['Instrument Serif', 'serif'],
 				'rethink': ['Rethink Sans', 'sans-serif'],
 				'coral-pixels': ['Coral Pixels', 'cursive'],
 				'pixelify': ['Pixelify Sans', 'sans-serif'],
