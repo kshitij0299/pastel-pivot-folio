@@ -263,7 +263,7 @@ export const HeroSection = () => {
       ease: 'power3.out'
     }, '-=0.8');
 
-    // Handle scroll for arrow fade
+    // Handle scroll for arrow fade and sticker/profile animations
     const handleScroll = () => {
       setScrollY(window.pageYOffset);
     };
@@ -291,12 +291,16 @@ export const HeroSection = () => {
           }`}
           style={{
             position: 'fixed',
-            left: `${sticker.x}px`,
-            top: `${sticker.y}px`,
+            left: `${draggedSticker === sticker.id ? sticker.x : 
+              sticker.x + (scrollY * 0.5) // Move right with scroll
+            }px`,
+            top: `${draggedSticker === sticker.id ? sticker.y : 
+              Math.max(0, sticker.y - (scrollY * 0.3)) // Move up with scroll
+            }px`,
             zIndex: draggedSticker === sticker.id ? 50 : 20,
-            opacity: Math.max(0.3, 1 - scrollY / 400), // Fade on scroll
-            transform: draggedSticker === sticker.id ? 'scale(1.1)' : 'scale(1)',
-            transition: draggedSticker === sticker.id ? 'none' : 'transform 0.2s ease',
+            opacity: draggedSticker === sticker.id ? 1 : Math.max(0, 1 - scrollY / 300), // Complete fade out
+            transform: `scale(${draggedSticker === sticker.id ? 1.1 : Math.max(0.8, 1 - scrollY / 800)})`, // Scale down
+            transition: draggedSticker === sticker.id ? 'none' : 'all 0.3s ease-out',
             cursor: 'grab'
           }}
           onMouseDown={(e) => handleMouseDown(e, sticker.id)}
