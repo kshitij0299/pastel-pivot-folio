@@ -28,88 +28,114 @@ export const HeroSection = () => {
   const [draggedSticker, setDraggedSticker] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
-  // Initialize stickers with their default positions
+  // Initialize stickers with placeholder positions (will be calculated)
   const [stickers, setStickers] = useState<StickerData[]>([
     {
       id: 1,
       src: "/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png",
       alt: "Decorative sticker",
-      x: 650, // Will be updated in useEffect
-      y: 250,
+      x: 0,
+      y: 0,
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
       id: 2,
       src: "/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png",
       alt: "Decorative sticker",
-      x: 800, // Will be updated in useEffect
-      y: 128,
+      x: 0,
+      y: 0,
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
       id: 3,
       src: "/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png",
       alt: "Decorative sticker",
-      x: 80, // Will be updated in useEffect
-      y: 600,
+      x: 0,
+      y: 0,
       size: "w-18 h-18 md:w-22 md:h-22"
     },
     {
       id: 5,
       src: "/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png",
       alt: "Kshitij's Profile",
-      x: 700, // Will be updated in useEffect
-      y: 300,
+      x: 0,
+      y: 0,
       size: "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
     }
   ]);
 
-  // Update positions after component mounts
+  // Calculate positions based on actual DOM elements
   useEffect(() => {
-    const updatePositions = () => {
-      console.log('Updating positions, window size:', window.innerWidth, window.innerHeight);
-      setStickers(prev => prev.map(sticker => {
-        if (sticker.id === 1) {
-          // Position next to "Kshitij" text
-          const newX = window.innerWidth > 768 ? 650 : 280;
-          const newY = window.innerWidth > 768 ? 250 : 200;
-          console.log('Sticker 1 new position:', newX, newY);
-          return {
-            ...sticker,
-            x: newX,
-            y: newY
-          };
-        }
-        if (sticker.id === 2) {
-          return {
-            ...sticker,
-            x: window.innerWidth - 120,
-            y: window.innerWidth > 768 ? 128 : 160
-          };
-        }
-        if (sticker.id === 3) {
-          return {
-            ...sticker,
-            x: window.innerWidth > 768 ? 80 : 40,
-            y: window.innerHeight - 200
-          };
-        }
-        if (sticker.id === 5) {
-          return {
-            ...sticker,
-            x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60,
-            y: window.innerWidth > 768 ? 300 : 400
-          };
-        }
-        return sticker;
-      }));
+    const calculatePositions = () => {
+      // Wait for DOM to be fully rendered
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const titleElement = titleRef.current;
+          if (!titleElement) return;
+
+          // Get the "Kshitij" text position
+          const titleRect = titleElement.getBoundingClientRect();
+          const kshitijText = titleElement.querySelector('span:last-child') as HTMLElement;
+          
+          console.log('Title element found:', !!titleElement);
+          console.log('Title rect:', titleRect);
+          console.log('Kshitij text found:', !!kshitijText);
+          
+          let kshitijRect = titleRect;
+          if (kshitijText) {
+            kshitijRect = kshitijText.getBoundingClientRect();
+            console.log('Kshitij text rect:', kshitijRect);
+          }
+
+          setStickers(prev => prev.map(sticker => {
+            if (sticker.id === 1) {
+              // Position next to "Kshitij" text with offset
+              const offsetX = window.innerWidth > 768 ? 120 : 80;
+              const offsetY = window.innerWidth > 768 ? -20 : -10;
+              const newX = kshitijRect.right + offsetX;
+              const newY = kshitijRect.top + window.scrollY + offsetY;
+              
+              console.log('Sticker 1 positioned at:', newX, newY);
+              console.log('Calculated from Kshitij rect:', kshitijRect);
+              
+              return {
+                ...sticker,
+                x: Math.max(0, Math.min(newX, window.innerWidth - 100)),
+                y: Math.max(0, newY)
+              };
+            }
+            if (sticker.id === 2) {
+              return {
+                ...sticker,
+                x: window.innerWidth - 120,
+                y: window.innerWidth > 768 ? 128 : 160
+              };
+            }
+            if (sticker.id === 3) {
+              return {
+                ...sticker,
+                x: window.innerWidth > 768 ? 80 : 40,
+                y: window.innerHeight - 200
+              };
+            }
+            if (sticker.id === 5) {
+              return {
+                ...sticker,
+                x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60,
+                y: window.innerWidth > 768 ? 300 : 400
+              };
+            }
+            return sticker;
+          }));
+        }, 100); // Small delay to ensure layout is complete
+      });
     };
 
-    updatePositions();
-    window.addEventListener('resize', updatePositions);
+    calculatePositions();
+    window.addEventListener('resize', calculatePositions);
     
     return () => {
-      window.removeEventListener('resize', updatePositions);
+      window.removeEventListener('resize', calculatePositions);
     };
   }, []);
 
@@ -229,7 +255,7 @@ export const HeroSection = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="flex-1">
             <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-4 md:mb-6 leading-none tracking-wide">
-              <span className="gradient-text cursor-hover">Hi !</span><span className="text-heading">, I'm Kshitij</span>
+              <span className="gradient-text cursor-hover">Hi !</span><span className="text-heading" id="kshitij-text">, I'm Kshitij</span>
             </h1>
             
             <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl text-body max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-wide">
