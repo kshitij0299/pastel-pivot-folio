@@ -53,9 +53,14 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
         <div className="flex items-center justify-between">
           <button
             onClick={() => scrollToSection('#hero')}
-            className="font-playfair text-lg font-bold text-heading cursor-hover tracking-[-0.06em]"
+            className="font-playfair text-lg font-bold text-heading cursor-hover tracking-[-0.06em] flex items-center gap-2"
           >
-            Kshitij's Design Portfolio
+            Portfolio
+            <img 
+              src="/lovable-uploads/9de656e6-69c2-4e37-90f6-35d723a56c98.png" 
+              alt="Star" 
+              className="w-6 h-6 animate-spin-slow"
+            />
           </button>
 
           <div className="hidden md:flex items-center space-x-8">
