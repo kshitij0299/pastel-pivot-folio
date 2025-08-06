@@ -154,11 +154,27 @@ export const HeroSection = () => {
             };
           }
           if (sticker.id === 5) {
-            return {
-              ...sticker,
-              x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60,
-              y: window.innerWidth > 768 ? 300 : 400
-            };
+            // Profile picture positioning
+            if (window.innerWidth <= 768) {
+              // Mobile: Position next to "Kshitij" name
+              const profileX = Math.min(kshitijRect.right + 15, window.innerWidth - 80);
+              const profileY = kshitijRect.top + window.scrollY - 10;
+              
+              console.log('Mobile PROFILE positioning at:', profileX, profileY);
+              
+              return {
+                ...sticker,
+                x: profileX,
+                y: profileY
+              };
+            } else {
+              // Desktop positioning
+              return {
+                ...sticker,
+                x: window.innerWidth - 200,
+                y: 300
+              };
+            }
           }
           return sticker;
         }));
