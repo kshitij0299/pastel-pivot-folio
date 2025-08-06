@@ -10,16 +10,108 @@ const SimpleDesigner = () => {
   );
 };
 
+interface StickerData {
+  id: number;
+  src: string;
+  alt: string;
+  x: number;
+  y: number;
+  size: string;
+}
+
 export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
-  const sticker1Ref = useRef<HTMLImageElement>(null);
-  const sticker2Ref = useRef<HTMLImageElement>(null);
-  const sticker3Ref = useRef<HTMLImageElement>(null);
-  const sticker4Ref = useRef<HTMLImageElement>(null);
   const [scrollY, setScrollY] = useState(0);
+  const [draggedSticker, setDraggedSticker] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  // Initialize stickers with their default positions
+  const [stickers, setStickers] = useState<StickerData[]>([
+    {
+      id: 1,
+      src: "/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png",
+      alt: "Decorative sticker",
+      x: 40, // Default left position
+      y: 80, // Default top position
+      size: "w-20 h-20 md:w-24 md:h-24"
+    },
+    {
+      id: 2,
+      src: "/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png",
+      alt: "Decorative sticker",
+      x: window.innerWidth - 120, // Default right position
+      y: 128,
+      size: "w-20 h-20 md:w-24 md:h-24"
+    },
+    {
+      id: 3,
+      src: "/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png",
+      alt: "Decorative sticker",
+      x: 80,
+      y: window.innerHeight - 200, // Default bottom position
+      size: "w-18 h-18 md:w-22 md:h-22"
+    },
+    {
+      id: 4,
+      src: "/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png",
+      alt: "Decorative sticker",
+      x: window.innerWidth - 120,
+      y: window.innerHeight - 160,
+      size: "w-18 h-18 md:w-22 md:h-22"
+    }
+  ]);
+
+  // Drag handlers for stickers
+  const handleMouseDown = (e: React.MouseEvent, stickerId: number) => {
+    e.preventDefault();
+    const sticker = stickers.find(s => s.id === stickerId);
+    if (!sticker) return;
+
+    setDraggedSticker(stickerId);
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    setDragOffset({
+      x: e.clientX - sticker.x,
+      y: e.clientY - sticker.y
+    });
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (draggedSticker === null) return;
+
+    const newX = e.clientX - dragOffset.x;
+    const newY = e.clientY - dragOffset.y;
+
+    // Keep stickers within viewport bounds
+    const maxX = window.innerWidth - 100;
+    const maxY = window.innerHeight - 100;
+    const boundedX = Math.max(0, Math.min(newX, maxX));
+    const boundedY = Math.max(0, Math.min(newY, maxY));
+
+    setStickers(prev => prev.map(sticker => 
+      sticker.id === draggedSticker 
+        ? { ...sticker, x: boundedX, y: boundedY }
+        : sticker
+    ));
+  };
+
+  const handleMouseUp = () => {
+    setDraggedSticker(null);
+  };
+
+  useEffect(() => {
+    if (draggedSticker !== null) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [draggedSticker, dragOffset]);
 
   useEffect(() => {
     const tl = gsap.timeline();
@@ -43,36 +135,6 @@ export const HeroSection = () => {
       ease: 'power3.out'
     }, '-=0.8');
 
-    // Sticker fade animations (no spinning, permanent fade like arrow)
-    const stickers = [sticker1Ref.current, sticker2Ref.current, sticker3Ref.current, sticker4Ref.current];
-    
-    stickers.forEach((sticker, index) => {
-      if (sticker) {
-        gsap.to(sticker, {
-          opacity: 0,
-          duration: 1.5,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: "body",
-            start: "top top",
-            end: "400px top",
-            scrub: true,
-            onUpdate: (self) => {
-              const progress = self.progress;
-              // Start fading later than the arrow (after 50% scroll vs 30% for arrow)
-              const fadeStart = 0.5;
-              if (progress > fadeStart) {
-                const fadeProgress = (progress - fadeStart) / (1 - fadeStart);
-                gsap.set(sticker, { 
-                  opacity: Math.max(0, 1 - fadeProgress)
-                });
-              }
-            }
-          }
-        });
-      }
-    });
-
     // Handle scroll for arrow fade
     const handleScroll = () => {
       setScrollY(window.pageYOffset);
@@ -90,31 +152,27 @@ export const HeroSection = () => {
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
-      {/* Floating PNG stickers */}
-      <img 
-        ref={sticker1Ref}
-        src="/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png" 
-        alt="Decorative sticker"
-        className="floating-sticker w-20 h-20 md:w-24 md:h-24 top-20 left-4 md:left-10"
-      />
-      <img 
-        ref={sticker2Ref}
-        src="/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png" 
-        alt="Decorative sticker"
-        className="floating-sticker w-20 h-20 md:w-24 md:h-24 top-32 right-4 md:right-20"
-      />
-      <img 
-        ref={sticker3Ref}
-        src="/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png" 
-        alt="Decorative sticker"
-        className="floating-sticker w-18 h-18 md:w-22 md:h-22 bottom-32 left-8 md:left-20"
-      />
-      <img 
-        ref={sticker4Ref}
-        src="/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png" 
-        alt="Decorative sticker"
-        className="floating-sticker w-18 h-18 md:w-22 md:h-22 bottom-20 right-8 md:right-16"
-      />
+      {/* Draggable PNG stickers */}
+      {stickers.map((sticker) => (
+        <img 
+          key={sticker.id}
+          src={sticker.src} 
+          alt={sticker.alt}
+          className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''}`}
+          style={{
+            position: 'fixed',
+            left: `${sticker.x}px`,
+            top: `${sticker.y}px`,
+            zIndex: draggedSticker === sticker.id ? 50 : 20,
+            opacity: Math.max(0.3, 1 - scrollY / 400), // Fade on scroll
+            transform: draggedSticker === sticker.id ? 'scale(1.1)' : 'scale(1)',
+            transition: draggedSticker === sticker.id ? 'none' : 'transform 0.2s ease',
+            cursor: 'grab'
+          }}
+          onMouseDown={(e) => handleMouseDown(e, sticker.id)}
+          draggable={false}
+        />
+      ))}
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">

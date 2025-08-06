@@ -214,18 +214,28 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  /* Floating stickers */
-  .floating-sticker {
-    position: absolute;
+  /* Draggable stickers */
+  .draggable-sticker {
     animation: float 6s ease-in-out infinite;
-    pointer-events: none;
+    user-select: none;
     z-index: 20;
+    transition: transform 0.2s ease, opacity 0.3s ease;
   }
 
-  .floating-sticker:nth-child(1) { animation-delay: 0s; }
-  .floating-sticker:nth-child(2) { animation-delay: 1s; }
-  .floating-sticker:nth-child(3) { animation-delay: 2s; }
-  .floating-sticker:nth-child(4) { animation-delay: 3s; }
+  .draggable-sticker:hover {
+    transform: scale(1.05);
+  }
+
+  .draggable-sticker.dragging {
+    cursor: grabbing !important;
+    animation: none;
+    transform: scale(1.1);
+  }
+
+  .draggable-sticker:nth-child(1) { animation-delay: 0s; }
+  .draggable-sticker:nth-child(2) { animation-delay: 1s; }
+  .draggable-sticker:nth-child(3) { animation-delay: 2s; }
+  .draggable-sticker:nth-child(4) { animation-delay: 3s; }
 
   .glass-button::after {
     content: '';
