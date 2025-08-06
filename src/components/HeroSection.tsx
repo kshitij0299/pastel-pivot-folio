@@ -64,84 +64,104 @@ export const HeroSection = () => {
     }
   ]);
 
-  // Calculate mobile-safe positions for stickers
+  // Calculate responsive positions for stickers
   useEffect(() => {
-    const calculateMobileSafePositions = () => {
+    const calculateStickerPositions = () => {
       const isMobile = window.innerWidth < 768;
       const viewportHeight = window.innerHeight;
       const viewportWidth = window.innerWidth;
       
-      setStickers(prev => prev.map(sticker => {
-        if (isMobile) {
-          // Mobile-safe positioning: keep stickers in corners and margins
-          if (sticker.id === 1) {
-            return {
-              ...sticker,
-              x: 20, // Left margin
-              y: viewportHeight - 220 // Bottom area, above footer
-            };
+      // Wait for text to render before calculating positions
+      setTimeout(() => {
+        setStickers(prev => prev.map(sticker => {
+          if (isMobile) {
+            // Mobile-safe positioning: keep stickers in corners and margins
+            if (sticker.id === 1) {
+              return {
+                ...sticker,
+                x: 20,
+                y: viewportHeight - 220
+              };
+            }
+            if (sticker.id === 2) {
+              return {
+                ...sticker,
+                x: viewportWidth - 100,
+                y: 120
+              };
+            }
+            if (sticker.id === 3) {
+              return {
+                ...sticker,
+                x: viewportWidth - 80,
+                y: viewportHeight - 180
+              };
+            }
+            if (sticker.id === 5) {
+              return {
+                ...sticker,
+                x: viewportWidth / 2 - 40,
+                y: viewportHeight - 120
+              };
+            }
+          } else {
+            // Desktop: Text-relative positioning
+            const titleElement = document.getElementById('kshitij-text');
+            
+            if (titleElement) {
+              const titleRect = titleElement.getBoundingClientRect();
+              const scrollOffset = window.pageYOffset;
+              
+              if (sticker.id === 5) {
+                // Profile image: position to the right of "Kshitij" text
+                return {
+                  ...sticker,
+                  x: titleRect.right + 40, // 40px to the right of text
+                  y: titleRect.top + scrollOffset - 10 // Align with text top
+                };
+              }
+              if (sticker.id === 1) {
+                // Decorative sticker: top right area
+                return {
+                  ...sticker,
+                  x: titleRect.right + 120,
+                  y: titleRect.top + scrollOffset - 60
+                };
+              }
+              if (sticker.id === 2) {
+                // Decorative sticker: right side of text
+                return {
+                  ...sticker,
+                  x: titleRect.right + 80,
+                  y: titleRect.bottom + scrollOffset + 20
+                };
+              }
+              if (sticker.id === 3) {
+                // Decorative sticker: left side, below text
+                return {
+                  ...sticker,
+                  x: titleRect.left - 100,
+                  y: titleRect.bottom + scrollOffset + 80
+                };
+              }
+            } else {
+              // Fallback positioning if text element not found
+              if (sticker.id === 1) return { ...sticker, x: viewportWidth - 180, y: 200 };
+              if (sticker.id === 2) return { ...sticker, x: viewportWidth - 120, y: 300 };
+              if (sticker.id === 3) return { ...sticker, x: 80, y: viewportHeight - 200 };
+              if (sticker.id === 5) return { ...sticker, x: viewportWidth - 200, y: 250 };
+            }
           }
-          if (sticker.id === 2) {
-            return {
-              ...sticker,
-              x: viewportWidth - 100, // Right margin
-              y: 120 // Top area, below nav
-            };
-          }
-          if (sticker.id === 3) {
-            return {
-              ...sticker,
-              x: viewportWidth - 80, // Right corner
-              y: viewportHeight - 180 // Bottom area
-            };
-          }
-          if (sticker.id === 5) {
-            return {
-              ...sticker,
-              x: viewportWidth / 2 - 40, // Center horizontally
-              y: viewportHeight - 120 // Bottom, well below text
-            };
-          }
-        } else {
-          // Desktop positioning - more flexible around text
-          if (sticker.id === 1) {
-            return {
-              ...sticker,
-              x: viewportWidth - 180,
-              y: 200
-            };
-          }
-          if (sticker.id === 2) {
-            return {
-              ...sticker,
-              x: viewportWidth - 120,
-              y: 128
-            };
-          }
-          if (sticker.id === 3) {
-            return {
-              ...sticker,
-              x: 80,
-              y: viewportHeight - 200
-            };
-          }
-          if (sticker.id === 5) {
-            return {
-              ...sticker,
-              x: viewportWidth - 200,
-              y: 300
-            };
-          }
-        }
-        return sticker;
-      }));
+          return sticker;
+        }));
+      }, 100); // Small delay to ensure DOM is rendered
     };
 
-    calculateMobileSafePositions();
-    window.addEventListener('resize', calculateMobileSafePositions);
+    calculateStickerPositions();
+    window.addEventListener('resize', calculateStickerPositions);
     
     return () => {
-      window.removeEventListener('resize', calculateMobileSafePositions);
+      window.removeEventListener('resize', calculateStickerPositions);
     };
   }, []);
 
