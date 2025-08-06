@@ -47,6 +47,14 @@ export const HeroSection = () => {
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
+      id: 3,
+      src: "/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png",
+      alt: "Decorative sticker",
+      x: 80,
+      y: window.innerHeight - 200, // Default bottom position
+      size: "w-18 h-18 md:w-22 md:h-22"
+    },
+    {
       id: 4,
       src: "/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png",
       alt: "Decorative sticker",
