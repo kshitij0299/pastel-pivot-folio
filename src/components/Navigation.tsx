@@ -64,10 +64,10 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
                 key={item.label}
                 onClick={() => scrollToSection(item.href)}
                 className={cn(
-                  'font-rethink text-sm font-medium transition-colors cursor-hover',
+                  'font-playfair text-lg font-bold transition-colors cursor-hover tracking-[-0.06em]',
                   activeSection === item.href.slice(1)
                     ? 'text-link'
-                    : 'text-body hover:text-link'
+                    : 'text-heading hover:text-link'
                 )}
               >
                 {item.label}
@@ -133,10 +133,10 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
                   key={item.label}
                   onClick={() => scrollToSection(item.href)}
                   className={cn(
-                    'font-rethink text-sm font-medium transition-colors cursor-hover text-left',
+                    'font-playfair text-lg font-bold transition-colors cursor-hover text-left tracking-[-0.06em]',
                     activeSection === item.href.slice(1)
                       ? 'text-link'
-                      : 'text-body hover:text-link'
+                      : 'text-heading hover:text-link'
                   )}
                 >
                   {item.label}
