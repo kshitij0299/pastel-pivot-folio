@@ -34,8 +34,8 @@ export const HeroSection = () => {
       id: 1,
       src: "/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png",
       alt: "Decorative sticker",
-      x: 20, // Top left below navbar
-      y: 100, // Below navbar
+      x: window.innerWidth > 768 ? 650 : 280, // Next to "Kshitij" text on the right
+      y: window.innerWidth > 768 ? 250 : 200, // Aligned with the heading
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
