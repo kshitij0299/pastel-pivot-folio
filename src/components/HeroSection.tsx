@@ -34,8 +34,8 @@ export const HeroSection = () => {
       id: 1,
       src: "/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png",
       alt: "Decorative sticker",
-      x: window.innerWidth > 768 ? window.innerWidth - 160 : 20, // Bottom right on desktop, top left on mobile
-      y: window.innerWidth > 768 ? window.innerHeight - 180 : 120, // Bottom right on desktop, top left on mobile
+      x: 20, // Top left below navbar
+      y: 100, // Below navbar
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
