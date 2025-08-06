@@ -53,7 +53,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
         <div className="flex items-center justify-between">
           <button
             onClick={() => scrollToSection('#hero')}
-            className="font-playfair text-lg font-bold text-heading cursor-hover tracking-wide"
+            className="font-playfair text-lg font-bold text-heading cursor-hover tracking-[-0.06em]"
           >
             Kshitij's Design Portfolio
           </button>
