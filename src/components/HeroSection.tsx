@@ -55,14 +55,6 @@ export const HeroSection = () => {
       size: "w-18 h-18 md:w-22 md:h-22"
     },
     {
-      id: 4,
-      src: "/lovable-uploads/11f551e2-1441-4d62-b3f3-f9bcc1a071fa.png",
-      alt: "Decorative sticker",
-      x: window.innerWidth - 120,
-      y: window.innerHeight - 160,
-      size: "w-18 h-18 md:w-22 md:h-22"
-    },
-    {
       id: 5,
       src: "/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png",
       alt: "Kshitij's Profile",
