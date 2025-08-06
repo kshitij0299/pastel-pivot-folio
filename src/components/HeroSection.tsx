@@ -64,104 +64,78 @@ export const HeroSection = () => {
     }
   ]);
 
-  // Calculate responsive positions for stickers
+  // Calculate positions based on actual DOM elements
   useEffect(() => {
-    const calculateStickerPositions = () => {
-      const isMobile = window.innerWidth < 768;
-      const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
-      
-      // Wait for text to render before calculating positions
-      setTimeout(() => {
-        setStickers(prev => prev.map(sticker => {
-          if (isMobile) {
-            // Mobile-safe positioning: keep stickers in corners and margins
+    const calculatePositions = () => {
+      // Wait for DOM to be fully rendered
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const titleElement = titleRef.current;
+          if (!titleElement) return;
+
+          // Get the "Kshitij" text position
+          const titleRect = titleElement.getBoundingClientRect();
+          const kshitijText = titleElement.querySelector('span:last-child') as HTMLElement;
+          
+          console.log('Title element found:', !!titleElement);
+          console.log('Title rect:', titleRect);
+          console.log('Kshitij text found:', !!kshitijText);
+          
+          let kshitijRect = titleRect;
+          if (kshitijText) {
+            kshitijRect = kshitijText.getBoundingClientRect();
+            console.log('Kshitij text rect:', kshitijRect);
+          }
+
+          setStickers(prev => prev.map(sticker => {
             if (sticker.id === 1) {
+              // Position next to "Kshitij" text with offset
+              const offsetX = window.innerWidth > 768 ? 120 : 80;
+              const offsetY = window.innerWidth > 768 ? -20 : -10;
+              const newX = kshitijRect.right + offsetX;
+              const newY = kshitijRect.top + window.scrollY + offsetY;
+              
+              console.log('Sticker 1 positioned at:', newX, newY);
+              console.log('Calculated from Kshitij rect:', kshitijRect);
+              
               return {
                 ...sticker,
-                x: 20,
-                y: viewportHeight - 220
+                x: Math.max(0, Math.min(newX, window.innerWidth - 100)),
+                y: Math.max(0, newY)
               };
             }
             if (sticker.id === 2) {
               return {
                 ...sticker,
-                x: viewportWidth - 100,
-                y: 120
+                x: window.innerWidth - 120,
+                y: window.innerWidth > 768 ? 128 : 160
               };
             }
             if (sticker.id === 3) {
               return {
                 ...sticker,
-                x: viewportWidth - 80,
-                y: viewportHeight - 180
+                x: window.innerWidth > 768 ? 80 : 40,
+                y: window.innerHeight - 200
               };
             }
             if (sticker.id === 5) {
               return {
                 ...sticker,
-                x: viewportWidth / 2 - 40,
-                y: viewportHeight - 120
+                x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60,
+                y: window.innerWidth > 768 ? 300 : 400
               };
             }
-          } else {
-            // Desktop: Text-relative positioning
-            const titleElement = document.getElementById('kshitij-text');
-            
-            if (titleElement) {
-              const titleRect = titleElement.getBoundingClientRect();
-              const scrollOffset = window.pageYOffset;
-              
-              if (sticker.id === 5) {
-                // Profile image: position to the right of "Kshitij" text
-                return {
-                  ...sticker,
-                  x: titleRect.right + 40, // 40px to the right of text
-                  y: titleRect.top + scrollOffset - 10 // Align with text top
-                };
-              }
-              if (sticker.id === 1) {
-                // Decorative sticker: top right area
-                return {
-                  ...sticker,
-                  x: titleRect.right + 120,
-                  y: titleRect.top + scrollOffset - 60
-                };
-              }
-              if (sticker.id === 2) {
-                // Decorative sticker: right side of text
-                return {
-                  ...sticker,
-                  x: titleRect.right + 80,
-                  y: titleRect.bottom + scrollOffset + 20
-                };
-              }
-              if (sticker.id === 3) {
-                // Decorative sticker: left side, below text
-                return {
-                  ...sticker,
-                  x: titleRect.left - 100,
-                  y: titleRect.bottom + scrollOffset + 80
-                };
-              }
-            } else {
-              // Fallback positioning if text element not found
-              if (sticker.id === 1) return { ...sticker, x: viewportWidth - 180, y: 200 };
-              if (sticker.id === 2) return { ...sticker, x: viewportWidth - 120, y: 300 };
-              if (sticker.id === 3) return { ...sticker, x: 80, y: viewportHeight - 200 };
-              if (sticker.id === 5) return { ...sticker, x: viewportWidth - 200, y: 250 };
-            }
-          }
-          return sticker;
-        }));
-      }, 100); // Small delay to ensure DOM is rendered
+            return sticker;
+          }));
+        }, 100); // Small delay to ensure layout is complete
+      });
     };
 
-    calculateStickerPositions();
-    window.addEventListener('resize', calculateStickerPositions);
+    calculatePositions();
+    window.addEventListener('resize', calculatePositions);
     
     return () => {
-      window.removeEventListener('resize', calculateStickerPositions);
+      window.removeEventListener('resize', calculatePositions);
     };
   }, []);
 
@@ -253,7 +227,7 @@ export const HeroSection = () => {
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
-      {/* Mobile-safe positioned stickers */}
+      {/* Draggable PNG stickers and profile */}
       {stickers.map((sticker) => (
         <img 
           key={sticker.id}
@@ -261,17 +235,16 @@ export const HeroSection = () => {
           alt={sticker.alt}
           className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''} ${
             sticker.id === 5 ? 'rounded-full object-cover shadow-lg' : ''
-          } ${window.innerWidth < 768 ? 'md:block' : ''}`}
+          }`}
           style={{
-            position: 'absolute',
+            position: 'fixed',
             left: `${sticker.x}px`,
             top: `${sticker.y}px`,
-            zIndex: draggedSticker === sticker.id ? 50 : 10,
-            opacity: Math.max(0.4, 1 - scrollY / 400),
+            zIndex: draggedSticker === sticker.id ? 50 : 20,
+            opacity: Math.max(0.3, 1 - scrollY / 400), // Fade on scroll
             transform: draggedSticker === sticker.id ? 'scale(1.1)' : 'scale(1)',
             transition: draggedSticker === sticker.id ? 'none' : 'transform 0.2s ease',
-            cursor: 'grab',
-            pointerEvents: window.innerWidth < 768 ? 'auto' : 'auto'
+            cursor: 'grab'
           }}
           onMouseDown={(e) => handleMouseDown(e, sticker.id)}
           draggable={false}
