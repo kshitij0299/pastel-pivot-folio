@@ -75,20 +75,20 @@ export const WorkSection = () => {
           work.
         </h2>
 
-        <div ref={cardsRef} className="space-y-12 md:space-y-20">
-          {/* VLearn Project - Large Card */}
-          <div className="relative w-full">
-            <div className="bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-2xl md:rounded-3xl p-8 md:p-12 lg:p-16 min-h-[600px] md:min-h-[700px] relative overflow-hidden">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          {/* VLearn Project Card */}
+          <div className="group">
+            <div className="bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
               {/* Background decoration */}
-              <div className="absolute top-8 right-8 md:top-12 md:right-12 opacity-20">
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border border-white/30"></div>
+              <div className="absolute top-6 right-6 md:top-8 md:right-8 opacity-20">
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border border-white/30"></div>
               </div>
-              <div className="absolute top-16 right-16 md:top-24 md:right-24 opacity-10">
-                <div className="text-white/20 font-bold text-6xl md:text-8xl">VLearn</div>
+              <div className="absolute top-8 right-8 md:top-12 md:right-12 opacity-10">
+                <div className="text-white/20 font-bold text-4xl md:text-6xl">VLearn</div>
               </div>
               
               {/* Laptop mockup */}
-              <div className="absolute top-16 md:top-20 left-8 md:left-12 w-[280px] md:w-[400px] lg:w-[500px]">
+              <div className="absolute top-12 md:top-16 left-6 md:left-8 w-[200px] md:w-[280px] lg:w-[320px]">
                 <img 
                   src="/lovable-uploads/dee3e861-b91d-4cbf-a4c2-d12d0c7ca51d.png"
                   alt="VLearn Dashboard"
@@ -97,12 +97,12 @@ export const WorkSection = () => {
               </div>
 
               {/* Features list */}
-              <div className="absolute bottom-8 md:bottom-12 left-8 md:left-12 right-8 md:right-12 text-white">
-                <div className="space-y-3 md:space-y-4">
+              <div className="absolute bottom-6 md:bottom-8 left-6 md:left-8 right-6 md:right-8 text-white">
+                <div className="space-y-2 md:space-y-3">
                   {projects[0].features?.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="w-1 h-1 bg-white rounded-full mt-3 flex-shrink-0"></div>
-                      <p className="font-rethink text-sm md:text-base leading-relaxed">{feature}</p>
+                    <div key={index} className="flex items-start gap-2">
+                      <div className="w-1 h-1 bg-white rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="font-rethink text-xs md:text-sm leading-relaxed">{feature}</p>
                     </div>
                   ))}
                 </div>
@@ -110,35 +110,35 @@ export const WorkSection = () => {
             </div>
             
             {/* Project title below */}
-            <div className="mt-6 md:mt-8 space-y-2 md:space-y-3">
-              <h3 className="font-playfair text-2xl md:text-4xl lg:text-5xl font-light text-heading tracking-[-0.04em]">
+            <div className="space-y-1 md:space-y-2">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
                 {projects[0].title}
               </h3>
-              <p className="font-rethink text-sm md:text-lg text-body font-medium">
+              <p className="font-rethink text-sm md:text-base text-body font-medium">
                 {projects[0].category}
               </p>
-              <p className="font-rethink text-sm md:text-base text-body leading-relaxed max-w-2xl">
+              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
                 {projects[0].description}
               </p>
             </div>
           </div>
 
-          {/* ChikitSakhi Project - Large Card */}
-          <div className="relative w-full">
-            <div className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 rounded-2xl md:rounded-3xl p-8 md:p-12 lg:p-16 min-h-[500px] md:min-h-[600px] relative overflow-hidden">
+          {/* ChikitSakhi Project Card */}
+          <div className="group">
+            <div className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
               {/* Background decoration */}
-              <div className="absolute top-8 right-8 md:top-12 md:right-12">
-                <div className="w-20 h-20 md:w-32 md:h-32 bg-gradient-to-br from-blue-200 via-yellow-200 to-green-200 rounded-2xl opacity-60"></div>
+              <div className="absolute top-6 right-6 md:top-8 md:right-8">
+                <div className="w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-blue-200 via-yellow-200 to-green-200 rounded-2xl opacity-60"></div>
               </div>
-              <div className="absolute top-12 right-12 md:top-16 md:right-16 text-6xl md:text-8xl opacity-10 font-light">
+              <div className="absolute top-8 right-8 md:top-12 md:right-12 text-4xl md:text-6xl opacity-10 font-light">
                 chikitsakhi
               </div>
-              <div className="absolute top-16 right-16 md:top-20 md:right-20 text-sm md:text-base text-gray-400 font-medium">
+              <div className="absolute top-12 right-12 md:top-16 md:right-16 text-xs md:text-sm text-gray-400 font-medium">
                 a companion for your medical care
               </div>
               
               {/* Mobile mockups */}
-              <div className="absolute top-16 md:top-20 right-8 md:right-12 w-[200px] md:w-[300px]">
+              <div className="absolute top-12 md:top-16 right-6 md:right-8 w-[140px] md:w-[200px]">
                 <img 
                   src="/lovable-uploads/795238ff-66db-4d57-9f54-247cf4e90186.png"
                   alt="ChikitSakhi Mobile App"
@@ -148,14 +148,14 @@ export const WorkSection = () => {
             </div>
             
             {/* Project title below */}
-            <div className="mt-6 md:mt-8 space-y-2 md:space-y-3">
-              <h3 className="font-playfair text-2xl md:text-4xl lg:text-5xl font-light text-heading tracking-[-0.04em]">
+            <div className="space-y-1 md:space-y-2">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
                 {projects[1].title}
               </h3>
-              <p className="font-rethink text-sm md:text-lg text-body font-medium">
+              <p className="font-rethink text-sm md:text-base text-body font-medium">
                 {projects[1].category}
               </p>
-              <p className="font-rethink text-sm md:text-base text-body leading-relaxed max-w-2xl">
+              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
                 {projects[1].description}
               </p>
             </div>
