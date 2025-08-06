@@ -50,52 +50,56 @@ export const WorkSection = () => {
 
   const projects = [
     {
-      title: 'Opendoor/Mainstay',
-      category: 'Brand & website launch',
-      year: '2024',
-      description: 'Led the design of the public launch of Mainstay, Opendoor\'s enterprise branch, from the full website experience to brand identity.',
-      tags: ['Branding', 'Web Design', 'UI/UX'],
-      color: '#FFF8E1',
+      title: 'VLearn: Hero Vired Internship',
+      category: 'UX Research | Web Product Design',
+      description: 'a web based learning dashboard for upskilling courses',
+      mockupUrl: '/lovable-uploads/795238ff-66db-4d57-9f54-247cf4e90186.png',
+      bgColor: 'bg-gradient-to-br from-blue-400 to-blue-600'
     },
     {
-      title: 'Interactive Platform',
-      category: 'Product Design',
-      year: '2024',
-      description: 'Designing highly interactive platforms to storytelling microsites, we stand above the noise, creating engaging web experiences.',
-      tags: ['UI/UX', 'Interactive', 'Motion'],
-      color: '#E3FBE8',
-    },
-    {
-      title: 'Figma for Education',
-      category: 'Educational Tools',
-      year: '2023',
-      description: 'Comprehensive design system and learning platform for educational institutions using Figma.',
-      tags: ['Education', 'Design System', 'Personal'],
-      color: '#DDE9FB',
-    },
-    {
-      title: 'Coffee Shop Menu',
-      category: 'Print Design',
-      year: '2023',
-      description: 'Modern, clean menu design for a local coffee shop with focus on readability and brand consistency.',
-      tags: ['Print', 'Branding', 'Personal'],
-      color: '#FCE8F7',
-    },
+      title: 'ChikitSakhi',
+      category: 'Process Design | UX Design', 
+      description: 'designing processes in hospitals for better crowd management',
+      mockupUrl: '/lovable-uploads/795238ff-66db-4d57-9f54-247cf4e90186.png',
+      bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
+    }
   ];
 
   return (
-    <section id="work" ref={sectionRef} className="py-24 bg-white">
-      <div className="container mx-auto px-6">
+    <section id="work" ref={sectionRef} className="py-16 md:py-24 bg-white">
+      <div className="container mx-auto px-4 md:px-6">
         <h2
           ref={titleRef}
-          className="font-playfair text-4xl md:text-6xl font-light text-heading mb-16 text-center tracking-[-0.06em]"
+          className="font-playfair text-4xl md:text-6xl font-light text-heading mb-12 md:mb-16 text-left tracking-[-0.06em]"
         >
-          Selected Work
+          work.
         </h2>
 
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div ref={cardsRef} className="space-y-8 md:space-y-12 max-w-4xl">
           {projects.map((project, index) => (
-            <ProjectCard key={index} {...project} />
+            <div key={index} className="group cursor-pointer">
+              {/* Large mockup area */}
+              <div className={`relative w-full h-[300px] md:h-[500px] ${project.bgColor} rounded-2xl md:rounded-3xl overflow-hidden mb-6 md:mb-8`}>
+                <img 
+                  src={project.mockupUrl}
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Project info */}
+              <div className="space-y-2 md:space-y-3">
+                <h3 className="font-playfair text-xl md:text-3xl lg:text-4xl font-light text-heading tracking-[-0.04em]">
+                  {project.title}
+                </h3>
+                <p className="font-rethink text-sm md:text-lg text-body font-medium">
+                  {project.category}
+                </p>
+                <p className="font-rethink text-sm md:text-base text-body leading-relaxed max-w-2xl">
+                  {project.description}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
