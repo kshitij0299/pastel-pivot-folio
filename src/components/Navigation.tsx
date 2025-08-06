@@ -21,7 +21,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
   }, []);
 
   const navItems = [
-    { label: 'Selected Work', href: '#selected-work' },
+    { label: 'Work', href: '#work' },
     { label: 'Playground', href: '#playground' },
     { label: 'About', href: '#about' },
   ];
