@@ -67,36 +67,68 @@ export const HeroSection = () => {
   // Calculate positions based on actual DOM elements
   useEffect(() => {
     const calculatePositions = () => {
-      // Wait for DOM to be fully rendered
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          const titleElement = titleRef.current;
-          if (!titleElement) return;
-
-          // Get the "Kshitij" text position
-          const titleRect = titleElement.getBoundingClientRect();
-          const kshitijText = titleElement.querySelector('span:last-child') as HTMLElement;
-          
-          console.log('Title element found:', !!titleElement);
-          console.log('Title rect:', titleRect);
-          console.log('Kshitij text found:', !!kshitijText);
-          
-          let kshitijRect = titleRect;
-          if (kshitijText) {
-            kshitijRect = kshitijText.getBoundingClientRect();
-            console.log('Kshitij text rect:', kshitijRect);
+      // Multiple attempts to ensure DOM is ready
+      const attemptPositioning = (retryCount = 0) => {
+        const titleElement = titleRef.current;
+        if (!titleElement) {
+          if (retryCount < 5) {
+            setTimeout(() => attemptPositioning(retryCount + 1), 200);
           }
+          return;
+        }
 
-          setStickers(prev => prev.map(sticker => {
-            if (sticker.id === 1) {
-              // Position next to "Kshitij" text with offset
-              const offsetX = window.innerWidth > 768 ? 120 : 40; // Reduced mobile offset
-              const offsetY = window.innerWidth > 768 ? -20 : 20; // Move below text on mobile
-              const newX = window.innerWidth > 768 ? kshitijRect.right + offsetX : kshitijRect.right + offsetX;
-              const newY = window.innerWidth > 768 ? kshitijRect.top + window.scrollY + offsetY : kshitijRect.bottom + window.scrollY + offsetY;
+        // Get the "Kshitij" text position
+        const titleRect = titleElement.getBoundingClientRect();
+        const kshitijText = titleElement.querySelector('span:last-child') as HTMLElement;
+        
+        console.log('Title element found:', !!titleElement);
+        console.log('Title rect:', titleRect);
+        console.log('Kshitij text found:', !!kshitijText);
+        
+        // Check if we have valid dimensions
+        if (titleRect.width === 0 || titleRect.height === 0) {
+          if (retryCount < 5) {
+            console.log('Title not ready, retrying...', retryCount);
+            setTimeout(() => attemptPositioning(retryCount + 1), 300);
+            return;
+          }
+        }
+        
+        let kshitijRect = titleRect;
+        if (kshitijText) {
+          kshitijRect = kshitijText.getBoundingClientRect();
+          console.log('Kshitij text rect:', kshitijRect);
+          
+          // If Kshitij text rect is empty, use title rect as fallback
+          if (kshitijRect.width === 0 || kshitijRect.height === 0) {
+            kshitijRect = titleRect;
+            console.log('Using title rect as fallback');
+          }
+        }
+
+        setStickers(prev => prev.map(sticker => {
+          if (sticker.id === 1) {
+            // Mobile-specific positioning next to name
+            if (window.innerWidth <= 768) {
+              // For mobile, position to the right and slightly below the name
+              const mobileX = Math.min(kshitijRect.right + 20, window.innerWidth - 100);
+              const mobileY = kshitijRect.top + window.scrollY + 10;
               
-              console.log('Sticker 1 positioned at:', newX, newY);
-              console.log('Calculated from Kshitij rect:', kshitijRect);
+              console.log('Mobile positioning - Sticker 1 at:', mobileX, mobileY);
+              
+              return {
+                ...sticker,
+                x: Math.max(20, mobileX),
+                y: Math.max(100, mobileY)
+              };
+            } else {
+              // Desktop positioning
+              const offsetX = 120;
+              const offsetY = -20;
+              const newX = kshitijRect.right + offsetX;
+              const newY = kshitijRect.top + window.scrollY + offsetY;
+              
+              console.log('Desktop positioning - Sticker 1 at:', newX, newY);
               
               return {
                 ...sticker,
@@ -104,31 +136,34 @@ export const HeroSection = () => {
                 y: Math.max(0, newY)
               };
             }
-            if (sticker.id === 2) {
-              return {
-                ...sticker,
-                x: window.innerWidth - 120,
-                y: window.innerWidth > 768 ? 128 : 160
-              };
-            }
-            if (sticker.id === 3) {
-              return {
-                ...sticker,
-                x: window.innerWidth > 768 ? 80 : 40,
-                y: window.innerHeight - 200
-              };
-            }
-            if (sticker.id === 5) {
-              return {
-                ...sticker,
-                x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60,
-                y: window.innerWidth > 768 ? 300 : 400
-              };
-            }
-            return sticker;
-          }));
-        }, 100); // Small delay to ensure layout is complete
-      });
+          }
+          if (sticker.id === 2) {
+            return {
+              ...sticker,
+              x: window.innerWidth - 120,
+              y: window.innerWidth > 768 ? 128 : 160
+            };
+          }
+          if (sticker.id === 3) {
+            return {
+              ...sticker,
+              x: window.innerWidth > 768 ? 80 : 40,
+              y: window.innerHeight - 200
+            };
+          }
+          if (sticker.id === 5) {
+            return {
+              ...sticker,
+              x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60,
+              y: window.innerWidth > 768 ? 300 : 400
+            };
+          }
+          return sticker;
+        }));
+      };
+      
+      // Start positioning attempts
+      attemptPositioning();
     };
 
     calculatePositions();
