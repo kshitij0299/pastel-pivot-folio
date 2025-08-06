@@ -28,85 +28,41 @@ export const HeroSection = () => {
   const [draggedSticker, setDraggedSticker] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
-  // Initialize stickers with their default positions - using useEffect to set proper positions
+  // Initialize stickers with their default positions
   const [stickers, setStickers] = useState<StickerData[]>([
     {
       id: 1,
       src: "/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png",
       alt: "Decorative sticker",
-      x: 20, // Will be updated in useEffect
-      y: 120, // Will be updated in useEffect
+      x: window.innerWidth > 768 ? window.innerWidth - 160 : 20, // Bottom right on desktop, top left on mobile
+      y: window.innerWidth > 768 ? window.innerHeight - 180 : 120, // Bottom right on desktop, top left on mobile
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
       id: 2,
       src: "/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png",
       alt: "Decorative sticker",
-      x: 200, // Will be updated in useEffect
-      y: 160, // Will be updated in useEffect
+      x: window.innerWidth - 120, // Upper right on both
+      y: window.innerWidth > 768 ? 128 : 160,
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
       id: 3,
       src: "/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png",
       alt: "Decorative sticker",
-      x: 40, // Will be updated in useEffect
-      y: 400, // Will be updated in useEffect
+      x: window.innerWidth > 768 ? 80 : 40, // Bottom left on both
+      y: window.innerHeight - 200,
       size: "w-18 h-18 md:w-22 md:h-22"
     },
     {
       id: 5,
       src: "/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png",
       alt: "Kshitij's Profile",
-      x: 300, // Will be updated in useEffect
-      y: 350, // Will be updated in useEffect
+      x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60, // Right side on desktop, center on mobile
+      y: window.innerWidth > 768 ? 300 : 400,
       size: "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
     }
   ]);
-
-  // Set initial positions based on screen size
-  useEffect(() => {
-    const updatePositions = () => {
-      const isMobile = window.innerWidth <= 768;
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
-
-      setStickers(prev => prev.map(sticker => {
-        switch (sticker.id) {
-          case 1: // Purple face - upper left on both mobile and desktop
-            return {
-              ...sticker,
-              x: isMobile ? 120 : 120,
-              y: isMobile ? 300 : 300
-            };
-          case 2: // Tags - lower right on desktop, bottom right on mobile  
-            return {
-              ...sticker,
-              x: screenWidth - 120,
-              y: isMobile ? screenHeight - 250 : screenHeight - 180
-            };
-          case 3: // Bone - bottom left on both
-            return {
-              ...sticker,
-              x: isMobile ? 80 : 120,
-              y: screenHeight - 180
-            };
-          case 5: // Profile - center-right on desktop, right side on mobile
-            return {
-              ...sticker,
-              x: isMobile ? screenWidth - 140 : screenWidth / 2 + 50,
-              y: isMobile ? 480 : 420
-            };
-          default:
-            return sticker;
-        }
-      }));
-    };
-
-    updatePositions();
-    window.addEventListener('resize', updatePositions);
-    return () => window.removeEventListener('resize', updatePositions);
-  }, []);
 
   // Drag handlers for stickers
   const handleMouseDown = (e: React.MouseEvent, stickerId: number) => {
