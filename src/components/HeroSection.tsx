@@ -67,13 +67,17 @@ export const HeroSection = () => {
   // Update positions after component mounts
   useEffect(() => {
     const updatePositions = () => {
+      console.log('Updating positions, window size:', window.innerWidth, window.innerHeight);
       setStickers(prev => prev.map(sticker => {
         if (sticker.id === 1) {
           // Position next to "Kshitij" text
+          const newX = window.innerWidth > 768 ? 650 : 280;
+          const newY = window.innerWidth > 768 ? 250 : 200;
+          console.log('Sticker 1 new position:', newX, newY);
           return {
             ...sticker,
-            x: window.innerWidth > 768 ? 650 : 280,
-            y: window.innerWidth > 768 ? 250 : 200
+            x: newX,
+            y: newY
           };
         }
         if (sticker.id === 2) {
