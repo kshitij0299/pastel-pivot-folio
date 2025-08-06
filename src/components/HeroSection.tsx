@@ -73,29 +73,29 @@ export const HeroSection = () => {
 
       setStickers(prev => prev.map(sticker => {
         switch (sticker.id) {
-          case 1: // Purple face - bottom right on desktop, upper left on mobile
+          case 1: // Purple face - upper left on both mobile and desktop
             return {
               ...sticker,
-              x: isMobile ? 40 : screenWidth - 160,
-              y: isMobile ? 180 : screenHeight - 180
+              x: isMobile ? 120 : 120,
+              y: isMobile ? 300 : 300
             };
-          case 2: // Tags - upper right
+          case 2: // Tags - lower right on desktop, bottom right on mobile  
             return {
               ...sticker,
               x: screenWidth - 120,
-              y: isMobile ? 160 : 128
+              y: isMobile ? screenHeight - 250 : screenHeight - 180
             };
-          case 3: // Bone - bottom left
+          case 3: // Bone - bottom left on both
             return {
               ...sticker,
-              x: isMobile ? 40 : 80,
-              y: screenHeight - 200
+              x: isMobile ? 80 : 120,
+              y: screenHeight - 180
             };
-          case 5: // Profile - center-right on desktop, center on mobile
+          case 5: // Profile - center-right on desktop, right side on mobile
             return {
               ...sticker,
-              x: isMobile ? screenWidth / 2 - 60 : screenWidth / 2 + 100,
-              y: isMobile ? 480 : 380
+              x: isMobile ? screenWidth - 140 : screenWidth / 2 + 50,
+              y: isMobile ? 480 : 420
             };
           default:
             return sticker;
