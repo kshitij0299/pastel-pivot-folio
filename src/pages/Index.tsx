@@ -38,7 +38,7 @@ const Index = () => {
       
       <main>
         <HeroSection />
-        <SelectedWorkSection />
+        <WorkSection />
         <PlaygroundSection />
         <AboutSection />
         <Footer />
