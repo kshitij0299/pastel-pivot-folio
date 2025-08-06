@@ -34,32 +34,32 @@ export const HeroSection = () => {
       id: 1,
       src: "/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png",
       alt: "Decorative sticker",
-      x: 40, // Default left position
-      y: 80, // Default top position
+      x: window.innerWidth > 768 ? window.innerWidth - 160 : 20, // Bottom right on desktop, top left on mobile
+      y: window.innerWidth > 768 ? window.innerHeight - 180 : 120, // Bottom right on desktop, top left on mobile
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
       id: 2,
       src: "/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png",
       alt: "Decorative sticker",
-      x: window.innerWidth - 120, // Default right position
-      y: 128,
+      x: window.innerWidth - 120, // Upper right on both
+      y: window.innerWidth > 768 ? 128 : 160,
       size: "w-20 h-20 md:w-24 md:h-24"
     },
     {
       id: 3,
       src: "/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png",
       alt: "Decorative sticker",
-      x: 80,
-      y: window.innerHeight - 200, // Default bottom position
+      x: window.innerWidth > 768 ? 80 : 40, // Bottom left on both
+      y: window.innerHeight - 200,
       size: "w-18 h-18 md:w-22 md:h-22"
     },
     {
       id: 5,
       src: "/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png",
       alt: "Kshitij's Profile",
-      x: window.innerWidth - 200, // Default profile position
-      y: 300,
+      x: window.innerWidth > 768 ? window.innerWidth - 200 : window.innerWidth / 2 - 60, // Right side on desktop, center on mobile
+      y: window.innerWidth > 768 ? 300 : 400,
       size: "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
     }
   ]);
