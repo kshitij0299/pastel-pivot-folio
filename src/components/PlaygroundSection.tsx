@@ -62,7 +62,7 @@ export const PlaygroundSection = () => {
       <div className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
         <div className="frosted-glass p-8 md:p-12">
           <div className="text-center mb-16 md:mb-24">
-            <h2 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-heading mb-6 md:mb-8 tracking-[-0.06em]">
+            <h2 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-heading mb-6 md:mb-8 tracking-wide">
               Playground
             </h2>
             <p className="font-rethink text-base md:text-lg lg:text-xl text-body max-w-full md:max-w-4xl mx-auto leading-relaxed">
@@ -74,7 +74,7 @@ export const PlaygroundSection = () => {
             {playgroundItems.map((item, index) => (
               <div key={index} className="border-b border-gray-200 pb-6 md:pb-8 cursor-hover group">
                 <div className="flex items-center justify-between mb-2 md:mb-3">
-                  <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
+                  <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-normal group-hover:text-link transition-colors duration-500">
                     {item.title}
                   </h3>
                   <span className="text-2xl md:text-4xl">{item.icon}</span>

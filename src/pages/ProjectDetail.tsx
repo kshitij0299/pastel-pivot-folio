@@ -125,7 +125,7 @@ export const ProjectDetail = () => {
                 <span className="text-body/60">•</span>
                 <span className="text-body font-rethink">{project.category}</span>
               </div>
-              <h1 className="font-playfair text-4xl md:text-6xl font-light text-heading mb-4 tracking-[-0.06em]">
+              <h1 className="font-playfair text-4xl md:text-6xl font-light text-heading mb-4 tracking-wide">
                 {project.title}
               </h1>
               <h2 className="font-playfair text-xl md:text-2xl text-body/80 mb-6">

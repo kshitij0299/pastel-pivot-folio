@@ -55,7 +55,7 @@ export const ShopSection = () => {
     <section id="shop" ref={sectionRef} className="py-24 bg-gray-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="font-playfair text-4xl md:text-6xl font-light text-heading mb-4 tracking-[-0.06em]">
+          <h2 className="font-playfair text-4xl md:text-6xl font-light text-heading mb-4 tracking-wide">
             Shop
           </h2>
           <p className="font-rethink text-lg text-body max-w-2xl mx-auto">
@@ -71,14 +71,14 @@ export const ShopSection = () => {
               style={{ backgroundColor: item.color }}
             >
               <div className="relative z-10">
-                <h3 className="font-playfair text-xl font-semibold text-heading mb-3 tracking-[-0.06em]">
+                <h3 className="font-playfair text-xl font-semibold text-heading mb-3 tracking-normal">
                   {item.title}
                 </h3>
                 <p className="font-rethink text-body mb-6 leading-relaxed">
                   {item.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="font-playfair text-lg font-semibold text-heading tracking-[-0.06em]">
+                  <span className="font-playfair text-lg font-semibold text-heading tracking-normal">
                     {item.price}
                   </span>
                   <button className="font-rethink bg-white/80 hover:bg-white text-heading px-4 py-2 rounded-full text-sm font-medium transition-colors">

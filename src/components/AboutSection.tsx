@@ -28,7 +28,7 @@ export const AboutSection = () => {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
           <div ref={textRef}>
-            <h2 className="font-playfair text-4xl md:text-5xl font-light text-heading mb-8 tracking-[-0.06em]">
+            <h2 className="font-playfair text-4xl md:text-5xl font-light text-heading mb-8 tracking-wide">
               About Me
             </h2>
             <div className="space-y-6 text-body leading-relaxed">
@@ -47,7 +47,7 @@ export const AboutSection = () => {
               
               
               
-              <p className="font-playfair italic text-lg md:text-xl tracking-[-0.06em]">
+              <p className="font-playfair italic text-lg md:text-xl tracking-wide">
                 Let's make something <em>lovely</em>.
               </p>
             </div>

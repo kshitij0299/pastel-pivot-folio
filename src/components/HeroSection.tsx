@@ -119,11 +119,11 @@ export const HeroSection = () => {
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="flex-1">
-            <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-4 md:mb-6 leading-none tracking-[-0.06em]">
+            <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-4 md:mb-6 leading-none tracking-wide">
               <span className="gradient-text cursor-hover">Hi !</span><span className="text-heading">, I'm Kshitij</span>
             </h1>
             
-            <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl text-body max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-[-0.06em]">
+            <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl text-body max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-wide">
               a <SimpleDesigner /> who believes in the power of warmth, wit,
               <br className="hidden sm:block" />
               and good visual storytelling.
@@ -198,7 +198,7 @@ export const SelectedWorkSection = () => {
       onMouseMove={(e) => setMousePosition({ x: e.clientX, y: e.clientY })}
     >
       <div className="w-full max-w-6xl mx-auto frosted-glass p-8 md:p-12">
-        <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-heading mb-12 md:mb-16 tracking-[-0.06em] text-center">
+        <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-heading mb-12 md:mb-16 tracking-wide text-center">
           Selected Work
         </h2>
         
@@ -214,7 +214,7 @@ export const SelectedWorkSection = () => {
                 onMouseLeave={() => setHoveredProject(null)}
               >
                 <div className="flex items-center justify-between mb-2 md:mb-3">
-                  <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-[-0.06em] group-hover:text-link transition-colors duration-500">
+                  <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-wide group-hover:text-link transition-colors duration-500">
                     {project.title}
                   </h3>
                   <span className="font-rethink text-sm md:text-base text-body">{project.year}</span>

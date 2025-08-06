@@ -37,7 +37,7 @@ export const ProjectCard = ({
 
       {/* Project info */}
       <div className="mb-6">
-        <h3 className="font-playfair text-2xl font-semibold text-heading mb-2 tracking-[-0.06em]">{title}</h3>
+        <h3 className="font-playfair text-2xl font-semibold text-heading mb-2 tracking-normal">{title}</h3>
         <p className="font-rethink text-body text-sm font-medium mb-4">{category}</p>
         <p className="font-rethink text-body leading-relaxed">{description}</p>
       </div>

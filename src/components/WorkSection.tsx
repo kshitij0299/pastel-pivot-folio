@@ -80,7 +80,7 @@ export const WorkSection = () => {
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <h2
           ref={titleRef}
-          className="font-playfair text-4xl md:text-6xl lg:text-7xl font-light text-heading mb-12 md:mb-20 text-left tracking-[-0.06em]"
+          className="font-playfair text-4xl md:text-6xl lg:text-7xl font-light text-heading mb-12 md:mb-20 text-left tracking-wide"
         >
           work.
         </h2>
@@ -121,7 +121,7 @@ export const WorkSection = () => {
             
             {/* Project title below */}
             <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-normal">
                 {projects[0].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
@@ -159,7 +159,7 @@ export const WorkSection = () => {
             
             {/* Project title below */}
             <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-normal">
                 {projects[1].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
@@ -192,7 +192,7 @@ export const WorkSection = () => {
             
             {/* Project title below */}
             <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-normal">
                 {projects[2].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
@@ -225,7 +225,7 @@ export const WorkSection = () => {
             
             {/* Project title below */}
             <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-normal">
                 {projects[3].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">

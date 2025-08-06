@@ -34,7 +34,7 @@ export const Footer = () => {
         <div className="max-w-4xl mx-auto">
           {/* Contact Section */}
           <div className="text-center mb-12">
-            <h2 className="font-playfair text-3xl md:text-4xl font-light text-heading mb-6 tracking-[-0.06em]">
+            <h2 className="font-playfair text-3xl md:text-4xl font-light text-heading mb-6 tracking-wide">
               Let's work together
             </h2>
             <p className="font-rethink text-lg text-body mb-8 max-w-2xl mx-auto">
