@@ -110,16 +110,18 @@ export const HeroSection = () => {
           if (sticker.id === 1) {
             // Mobile-specific positioning next to name
             if (window.innerWidth <= 768) {
-              // For mobile, position to the right and slightly below the name
-              const mobileX = Math.min(kshitijRect.right + 20, window.innerWidth - 100);
-              const mobileY = kshitijRect.top + window.scrollY + 10;
+              // FORCE TEST: Move to center of screen on mobile to test if positioning works
+              const mobileX = 50; // Far left
+              const mobileY = 200; // Near top
               
-              console.log('Mobile positioning - Sticker 1 at:', mobileX, mobileY);
+              console.log('FORCE TEST - Mobile positioning - Sticker 1 at:', mobileX, mobileY);
+              console.log('Window width:', window.innerWidth);
+              console.log('kshitijRect:', kshitijRect);
               
               return {
                 ...sticker,
-                x: Math.max(20, mobileX),
-                y: Math.max(100, mobileY)
+                x: mobileX,
+                y: mobileY
               };
             } else {
               // Desktop positioning
