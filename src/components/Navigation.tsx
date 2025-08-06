@@ -43,13 +43,13 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-40 transition-all duration-300',
-        isScrolled
-          ? 'bg-white/80 backdrop-blur-md border-b border-gray-100'
-          : 'bg-transparent'
+        'fixed top-4 left-1/2 transform -translate-x-1/2 z-40 transition-all duration-300 rounded-2xl',
+        'bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg',
+        'px-6 py-3 max-w-5xl w-[95%]',
+        isScrolled ? 'bg-white/30' : 'bg-white/20'
       )}
     >
-      <div className="container mx-auto px-6 py-4">
+      <div className="w-full">
         <div className="flex items-center justify-between">
           <button
             onClick={() => scrollToSection('#hero')}
@@ -130,8 +130,8 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-md border-b border-gray-100">
-          <div className="container mx-auto px-6 py-4">
+        <div className="md:hidden bg-white/90 backdrop-blur-lg rounded-2xl mt-2 border border-white/30 shadow-lg">
+          <div className="px-6 py-4">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <button
