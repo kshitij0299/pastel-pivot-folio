@@ -61,6 +61,14 @@ export const HeroSection = () => {
       x: window.innerWidth - 120,
       y: window.innerHeight - 160,
       size: "w-18 h-18 md:w-22 md:h-22"
+    },
+    {
+      id: 5,
+      src: "/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png",
+      alt: "Kshitij's Profile",
+      x: window.innerWidth - 200, // Default profile position
+      y: 300,
+      size: "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
     }
   ]);
 
@@ -152,13 +160,15 @@ export const HeroSection = () => {
       {/* Animated gradient background */}
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
-      {/* Draggable PNG stickers */}
+      {/* Draggable PNG stickers and profile */}
       {stickers.map((sticker) => (
         <img 
           key={sticker.id}
           src={sticker.src} 
           alt={sticker.alt}
-          className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''}`}
+          className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''} ${
+            sticker.id === 5 ? 'rounded-full object-cover shadow-lg' : ''
+          }`}
           style={{
             position: 'fixed',
             left: `${sticker.x}px`,
@@ -186,18 +196,6 @@ export const HeroSection = () => {
               <br className="hidden sm:block" />
               and good visual storytelling.
             </p>
-          </div>
-          
-          {/* Floating profile image */}
-          <div 
-            ref={profileRef}
-            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 cursor-hover md:ml-8 mx-auto md:mx-0 mt-6 md:mt-0"
-          >
-            <img 
-              src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" 
-              alt="Kshitij"
-              className="w-full h-full rounded-full object-cover animate-float shadow-lg"
-            />
           </div>
         </div>
       </div>
