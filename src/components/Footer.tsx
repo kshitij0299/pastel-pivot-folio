@@ -55,6 +55,7 @@ export const Footer = () => {
           {/* Social Links */}
           <div className="flex justify-center space-x-8 mb-12">
             {[
+              { name: 'Resume', href: 'https://drive.google.com/file/d/1m2vRcxbBCQuKy8IRmiIR_w2os0u2X2Ql/view?usp=sharing' },
               { name: 'Instagram', href: 'https://www.instagram.com/0texture/' },
               { name: 'LinkedIn', href: 'https://www.linkedin.com/in/0texture' },
               { name: 'Behance', href: 'https://www.behance.net/0texture' },

@@ -60,6 +60,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
   };
 
   const socialLinks = [
+    { name: 'Resume', href: 'https://drive.google.com/file/d/1m2vRcxbBCQuKy8IRmiIR_w2os0u2X2Ql/view?usp=sharing', icon: '📄' },
     { name: 'Instagram', href: 'https://www.instagram.com/0texture/', icon: '📷' },
     { name: 'LinkedIn', href: 'https://www.linkedin.com/in/0texture', icon: '💼' },
     { name: 'Behance', href: 'https://www.behance.net/0texture', icon: '🎨' },
