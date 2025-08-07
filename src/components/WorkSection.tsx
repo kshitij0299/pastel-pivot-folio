@@ -41,7 +41,7 @@ export const WorkSection = () => {
     }
   }, []);
   const projects = [{
-    title: 'VLearn: Hero Vired Internship',
+    title: 'Plentum – Social Media Visual & Content Direction',
     category: 'UX Research | Web Product Design',
     description: 'a web based learning dashboard for upskilling courses',
     features: ['Curriculum designed by Industry leaders for maximum impact.', 'Track your growth instantly with personalized dashboards.', 'Master skills through interactive and immersive learning.']
