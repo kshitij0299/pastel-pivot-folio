@@ -55,7 +55,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
             onClick={() => scrollToSection('#hero')}
             className="font-playfair text-lg font-bold text-heading cursor-hover tracking-[-0.06em] flex items-center gap-2"
           >
-            Kshitij's <span className="italic">Design</span> Portfolio
+            Kshitij's <span>Design</span> Portfolio
             <img 
               src="/lovable-uploads/b451c05e-b40b-4835-95cb-e0a32957dfc7.png" 
               alt="Star" 
