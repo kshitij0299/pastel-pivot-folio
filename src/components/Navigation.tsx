@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
-import { ScrambleText } from './ScrambleText';
 
 interface NavigationProps {
   activeSection?: string;
@@ -56,7 +55,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
             onClick={() => scrollToSection('#hero')}
             className="font-playfair text-lg font-bold text-heading cursor-hover tracking-[-0.06em] flex items-center gap-2"
           >
-            Kshitij's <ScrambleText text="Designer" className="font-playfair text-lg font-bold text-heading tracking-[-0.06em]" /> Portfolio
+            Kshitij's Design Portfolio
             <img 
               src="/lovable-uploads/b451c05e-b40b-4835-95cb-e0a32957dfc7.png" 
               alt="Star" 
