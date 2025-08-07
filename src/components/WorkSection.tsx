@@ -42,7 +42,7 @@ export const WorkSection = () => {
   }, []);
   const projects = [{
     title: 'Plentum',
-    category: 'UX Research | Web Product Design',
+    category: 'Social Media Visual and Content Direction',
     description: 'a web based learning dashboard for upskilling courses',
     features: ['Curriculum designed by Industry leaders for maximum impact.', 'Track your growth instantly with personalized dashboards.', 'Master skills through interactive and immersive learning.']
   }, {
