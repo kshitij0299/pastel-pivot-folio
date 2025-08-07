@@ -90,7 +90,7 @@ export const WorkSection = () => {
                 {projects[0].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[0].category}
+                Social Media Visual and Content Direction
               </p>
               <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
                 {projects[0].description}
