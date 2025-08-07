@@ -50,7 +50,7 @@ export const WorkSection = () => {
     category: 'Brand Identity | Visual Design',
     description: 'Creative branding and visual identity design for advertising club from Bengaluru'
   }, {
-    title: 'Timeless beauty secrets',
+    title: 'Timeless Beauty Secrets',
     category: 'Design | Creative Direction | Social Media Strategy',
     description: 'comprehensive branding and social media strategy for skincare brand from Bengaluru'
   }, {
