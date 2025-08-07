@@ -10,10 +10,35 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
+  const [starSpeed, setStarSpeed] = useState(8);
 
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let scrollVelocity = 0;
+    let ticking = false;
+
+    const updateStarSpeed = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+      
+      // Calculate velocity with smoothing
+      scrollVelocity = scrollVelocity * 0.8 + scrollDelta * 0.2;
+      
+      // Map velocity to speed (1-8 seconds, faster scroll = lower duration)
+      const newSpeed = Math.max(1, 8 - scrollVelocity * 0.1);
+      setStarSpeed(newSpeed);
+      
+      lastScrollY = currentScrollY;
+      ticking = false;
+    };
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      
+      if (!ticking) {
+        requestAnimationFrame(updateStarSpeed);
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -59,7 +84,13 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
             <img 
               src="/lovable-uploads/b451c05e-b40b-4835-95cb-e0a32957dfc7.png" 
               alt="Star" 
-              className="w-6 h-6 animate-spin-slow"
+              className="w-6 h-6 animate-spin-slow transition-all duration-300"
+              style={{ 
+                animationDuration: `${starSpeed}s`,
+                animationTimingFunction: 'linear',
+                animationIterationCount: 'infinite',
+                animationName: 'spin-slow'
+              }}
             />
           </button>
 
