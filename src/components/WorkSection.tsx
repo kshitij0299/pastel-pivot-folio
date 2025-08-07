@@ -147,23 +147,14 @@ export const WorkSection = () => {
             </div>
           </div>
 
-          {/* Coffee Shop Menu Project Card */}
+          {/* Wishy Project Card */}
           <div className="group">
-            <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
-              {/* Background decoration */}
-              <div className="absolute top-6 right-6 md:top-8 md:right-8 opacity-20">
-                <div className="w-20 h-28 md:w-24 md:h-32 bg-white/20 rounded-lg"></div>
-              </div>
-              <div className="absolute top-8 right-8 md:top-12 md:right-12 opacity-10">
-                <div className="text-white/20 font-bold text-2xl md:text-4xl">MENU</div>
-              </div>
-              
-              {/* Menu elements */}
-              <div className="absolute top-12 md:top-16 left-6 md:left-8 space-y-2">
-                <div className="w-20 h-3 md:w-24 md:h-4 bg-white/30 rounded"></div>
-                <div className="w-16 h-2 md:w-20 md:h-3 bg-white/20 rounded"></div>
-                <div className="w-24 h-2 md:w-28 md:h-3 bg-white/25 rounded"></div>
-              </div>
+            <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
+              <img 
+                src="/lovable-uploads/3f8cf9b6-c198-4abe-9efe-03f62d74befb.png" 
+                alt="Wishy webapp branding"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
             
             {/* Project title below */}
