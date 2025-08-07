@@ -54,9 +54,9 @@ export const WorkSection = () => {
     category: 'Design | Creative Direction | Social Media Strategy',
     description: 'comprehensive branding and social media strategy for skincare brand from Bengaluru'
   }, {
-    title: 'Coffee Shop Menu',
-    category: 'Print Design | Branding',
-    description: 'modern, clean menu design for a local coffee shop with focus on readability'
+    title: 'Wishy',
+    category: 'Web Development | UI/UX Design',
+    description: 'comprehensive shopping utility webapp with intuitive user interface and seamless user experience'
   }];
   return <section id="work" ref={sectionRef} className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
