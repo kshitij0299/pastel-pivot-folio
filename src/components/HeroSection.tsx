@@ -27,9 +27,6 @@ export const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const [draggedSticker, setDraggedSticker] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [entranceComplete, setEntranceComplete] = useState(false);
-  const [entranceProgress, setEntranceProgress] = useState(0);
 
   // Initialize stickers with placeholder positions (will be calculated)
   const [stickers, setStickers] = useState<StickerData[]>([
@@ -282,38 +279,6 @@ export const HeroSection = () => {
   // Pre-calculate convergence point and curve data to avoid recalculation
   const convergencePoint = { x: typeof window !== 'undefined' ? window.innerWidth - 50 : 0, y: 50 };
   
-  // Calculate entrance position (reverse of scroll animation)
-  const calculateEntrancePosition = (sticker: StickerData, progress: number) => {
-    const { x: convergenceX, y: convergenceY } = convergencePoint;
-    const startX = sticker.x;
-    const startY = sticker.y;
-    
-    // Same curve calculation but reversed (progress goes from 0 to 1, moving from convergence to default)
-    const curveIntensity = 0.3 + (sticker.id * 0.1);
-    const midpointX = startX + (convergenceX - startX) * 0.6 + (Math.sin(sticker.id) * 100 * curveIntensity);
-    const midpointY = startY + (convergenceY - startY) * 0.4 - (50 * curveIntensity);
-    
-    // Reverse the progress (1 - progress) to move from convergence point to default position
-    const t = Math.min(1 - progress, 1);
-    const easeT = 1 - Math.pow(1 - (1 - t), 2.5);
-    
-    const oneMinusT = 1 - easeT;
-    const x = oneMinusT * oneMinusT * startX + 
-              2 * oneMinusT * easeT * midpointX + 
-              easeT * easeT * convergenceX;
-              
-    const y = oneMinusT * oneMinusT * startY + 
-              2 * oneMinusT * easeT * midpointY + 
-              easeT * easeT * convergenceY;
-    
-    // Entrance opacity and scale (fade in and scale up)
-    const opacity = Math.min(1, progress * 2);
-    const scale = Math.max(0.2, 0.2 + (progress * 0.8));
-    const rotation = (1 - progress) * 180 * (sticker.id % 2 === 0 ? 1 : -1);
-    
-    return { x, y, opacity, scale, rotation };
-  };
-  
   // Calculate curved path for each sticker to convergence point (optimized)
   const calculateStickerPosition = (sticker: StickerData, scrollProgress: number) => {
     if (draggedSticker === sticker.id) {
@@ -374,23 +339,7 @@ export const HeroSection = () => {
       y: 0,
       duration: 1.2,
       ease: 'power3.out'
-    }, '-=0.8')
-    // Start sticker entrance animation after text animations
-    .call(() => {
-      setHasLoaded(true);
-      // Animate entrance progress from 0 to 1
-      gsap.to({ progress: 0 }, {
-        progress: 1,
-        duration: 2,
-        ease: 'power3.out',
-        onUpdate: function() {
-          setEntranceProgress(this.targets()[0].progress);
-        },
-        onComplete: () => {
-          setEntranceComplete(true);
-        }
-      });
-    }, null, '+=0.5');
+    }, '-=0.8');
 
     // Optimized scroll handler with requestAnimationFrame throttling
     let ticking = false;
@@ -430,16 +379,9 @@ export const HeroSection = () => {
       
       {/* Draggable PNG stickers and profile */}
       {stickers.map((sticker) => {
-        let stickerPos;
-        
-        // Use entrance animation if not complete, otherwise use scroll animation
-        if (!entranceComplete) {
-          stickerPos = calculateEntrancePosition(sticker, entranceProgress);
-        } else {
-          // Calculate scroll progress (0 to 1 over first 800px of scroll)
-          const scrollProgress = Math.min(scrollY / 800, 1);
-          stickerPos = calculateStickerPosition(sticker, scrollProgress);
-        }
+        // Calculate scroll progress (0 to 1 over first 800px of scroll)
+        const scrollProgress = Math.min(scrollY / 800, 1);
+        const stickerPos = calculateStickerPosition(sticker, scrollProgress);
         
         return (
           <img 
