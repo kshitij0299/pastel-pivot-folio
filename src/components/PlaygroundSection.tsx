@@ -92,7 +92,7 @@ export const PlaygroundSection = () => {
             <img 
               src="/lovable-uploads/fee9ce56-bed3-4324-90c2-e342b05498eb.png" 
               alt="Work in Progress"
-              className="max-w-xs md:max-w-md opacity-90"
+              className="max-w-32 md:max-w-xs opacity-90"
             />
           </div>
         </div>
