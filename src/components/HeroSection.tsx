@@ -276,43 +276,45 @@ export const HeroSection = () => {
     };
   }, [draggedSticker, dragOffset]);
 
-  // Calculate curved path for each sticker to convergence point
+  // Pre-calculate convergence point and curve data to avoid recalculation
+  const convergencePoint = { x: typeof window !== 'undefined' ? window.innerWidth - 50 : 0, y: 50 };
+  
+  // Calculate curved path for each sticker to convergence point (optimized)
   const calculateStickerPosition = (sticker: StickerData, scrollProgress: number) => {
     if (draggedSticker === sticker.id) {
       return { x: sticker.x, y: sticker.y, opacity: 1, scale: 1.1, rotation: 0 };
     }
 
-    // Convergence point at top-right (where arrow points)
-    const convergenceX = window.innerWidth - 50;
-    const convergenceY = 50;
+    // Use pre-calculated convergence point
+    const { x: convergenceX, y: convergenceY } = convergencePoint;
     
     // Original position (initial position)
     const startX = sticker.x;
     const startY = sticker.y;
     
-    // Create curved path using bezier-like calculation
-    // Each sticker gets different curve characteristics
-    const curveIntensity = 0.3 + (sticker.id * 0.1); // Different curves for each sticker
+    // Create curved path using optimized bezier calculation
+    const curveIntensity = 0.3 + (sticker.id * 0.1);
     const midpointX = startX + (convergenceX - startX) * 0.6 + (Math.sin(sticker.id) * 100 * curveIntensity);
     const midpointY = startY + (convergenceY - startY) * 0.4 - (50 * curveIntensity);
     
-    // Calculate position along the curved path
-    const t = Math.min(scrollProgress, 1); // Clamp to 1
-    const easeT = 1 - Math.pow(1 - t, 3); // Ease-out cubic for smooth acceleration
+    // Optimized easing - use GSAP's power3 easing equivalent
+    const t = Math.min(scrollProgress, 1);
+    const easeT = 1 - Math.pow(1 - t, 2.5); // Smooth ease-out
     
-    // Quadratic bezier curve: P = (1-t)²P₀ + 2(1-t)tP₁ + t²P₂
-    const x = Math.pow(1 - easeT, 2) * startX + 
-              2 * (1 - easeT) * easeT * midpointX + 
-              Math.pow(easeT, 2) * convergenceX;
+    // Optimized quadratic bezier curve calculation
+    const oneMinusT = 1 - easeT;
+    const x = oneMinusT * oneMinusT * startX + 
+              2 * oneMinusT * easeT * midpointX + 
+              easeT * easeT * convergenceX;
               
-    const y = Math.pow(1 - easeT, 2) * startY + 
-              2 * (1 - easeT) * easeT * midpointY + 
-              Math.pow(easeT, 2) * convergenceY;
+    const y = oneMinusT * oneMinusT * startY + 
+              2 * oneMinusT * easeT * midpointY + 
+              easeT * easeT * convergenceY;
     
-    // Calculate effects based on progress
-    const opacity = Math.max(0, 1 - (scrollProgress * 1.2)); // Fade out faster
-    const scale = Math.max(0.3, 1 - (scrollProgress * 0.7)); // Scale down
-    const rotation = scrollProgress * 360 * (sticker.id % 2 === 0 ? 1 : -1); // Rotate alternating directions
+    // Smoother opacity and scale transitions
+    const opacity = Math.max(0, Math.pow(1 - scrollProgress, 1.5));
+    const scale = Math.max(0.2, 1 - (scrollProgress * 0.8));
+    const rotation = scrollProgress * 180 * (sticker.id % 2 === 0 ? 1 : -1);
     
     return { x, y, opacity, scale, rotation };
   };
@@ -339,12 +341,31 @@ export const HeroSection = () => {
       ease: 'power3.out'
     }, '-=0.8');
 
-    // Handle scroll for arrow fade and sticker convergence animations
+    // Optimized scroll handler with requestAnimationFrame throttling
+    let ticking = false;
     const handleScroll = () => {
-      setScrollY(window.pageYOffset);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrollY(window.pageYOffset);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // Use GSAP ScrollTrigger for smooth sticker animations
+    ScrollTrigger.create({
+      trigger: heroRef.current,
+      start: "top top",
+      end: "bottom top",
+      scrub: 0.5, // Smooth scrubbing
+      onUpdate: (self) => {
+        // Update scroll position for sticker calculations
+        setScrollY(window.pageYOffset);
+      }
+    });
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
@@ -370,16 +391,17 @@ export const HeroSection = () => {
             className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''} ${
               sticker.id === 5 ? 'rounded-full object-cover shadow-lg' : ''
             }`}
-            style={{
-              position: 'fixed',
-              left: `${stickerPos.x}px`,
-              top: `${stickerPos.y}px`,
-              zIndex: draggedSticker === sticker.id ? 50 : 20,
-              opacity: stickerPos.opacity,
-              transform: `scale(${stickerPos.scale}) rotate(${stickerPos.rotation}deg)`,
-              transition: draggedSticker === sticker.id ? 'none' : 'all 0.1s ease-out',
-              cursor: 'grab'
-            }}
+              style={{
+                position: 'fixed',
+                left: `${stickerPos.x}px`,
+                top: `${stickerPos.y}px`,
+                zIndex: draggedSticker === sticker.id ? 50 : 20,
+                opacity: stickerPos.opacity,
+                transform: `translate3d(0, 0, 0) scale(${stickerPos.scale}) rotate(${stickerPos.rotation}deg)`,
+                willChange: 'transform, opacity',
+                transition: draggedSticker === sticker.id ? 'none' : 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.1s ease-out',
+                cursor: 'grab'
+              }}
             onMouseDown={(e) => handleMouseDown(e, sticker.id)}
             onTouchStart={(e) => handleTouchStart(e, sticker.id)}
             draggable={false}
