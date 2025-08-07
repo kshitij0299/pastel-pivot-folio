@@ -43,7 +43,7 @@ export const WorkSection = () => {
   const projects = [{
     title: 'Plentum',
     category: 'Social Media Visual | Content Direction',
-    description: 'a web based learning dashboard for upskilling courses',
+    description: 'A web-based learning dashboard designed for an interview assessment - featuring upskilling courses with industry-led curriculum',
     features: ['Curriculum designed by Industry leaders for maximum impact.', 'Track your growth instantly with personalized dashboards.', 'Master skills through interactive and immersive learning.']
   }, {
     title: 'The Ad Club',
