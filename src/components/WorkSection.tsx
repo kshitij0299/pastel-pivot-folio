@@ -67,15 +67,13 @@ export const WorkSection = () => {
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {/* VLearn Project Card */}
           <div className="group">
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
               {/* Plentum project image */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/ee03460e-9aed-4104-b034-c34d269412f7.png" 
-                  alt="Plentum project showcase"
-                  className="w-full h-full object-contain p-8 md:p-12"
-                />
-              </div>
+              <img 
+                src="/lovable-uploads/ee03460e-9aed-4104-b034-c34d269412f7.png" 
+                alt="Plentum project showcase"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
             
             {/* Project title below */}
