@@ -192,25 +192,23 @@ export const HeroSection = () => {
     };
   }, []);
 
-  // Drag handlers for stickers
-  const handleMouseDown = (e: React.MouseEvent, stickerId: number) => {
-    e.preventDefault();
+  // Unified drag handlers for both mouse and touch
+  const startDrag = (clientX: number, clientY: number, stickerId: number) => {
     const sticker = stickers.find(s => s.id === stickerId);
     if (!sticker) return;
 
     setDraggedSticker(stickerId);
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
     setDragOffset({
-      x: e.clientX - sticker.x,
-      y: e.clientY - sticker.y
+      x: clientX - sticker.x,
+      y: clientY - sticker.y
     });
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const updateDrag = (clientX: number, clientY: number) => {
     if (draggedSticker === null) return;
 
-    const newX = e.clientX - dragOffset.x;
-    const newY = e.clientY - dragOffset.y;
+    const newX = clientX - dragOffset.x;
+    const newY = clientY - dragOffset.y;
 
     // Keep stickers within viewport bounds
     const maxX = window.innerWidth - 100;
@@ -225,19 +223,56 @@ export const HeroSection = () => {
     ));
   };
 
-  const handleMouseUp = () => {
+  const endDrag = () => {
     setDraggedSticker(null);
+  };
+
+  // Mouse event handlers
+  const handleMouseDown = (e: React.MouseEvent, stickerId: number) => {
+    e.preventDefault();
+    startDrag(e.clientX, e.clientY, stickerId);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    updateDrag(e.clientX, e.clientY);
+  };
+
+  const handleMouseUp = () => {
+    endDrag();
+  };
+
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent, stickerId: number) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY, stickerId);
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    updateDrag(touch.clientX, touch.clientY);
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    e.preventDefault();
+    endDrag();
   };
 
   useEffect(() => {
     if (draggedSticker !== null) {
+      // Add both mouse and touch event listeners
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
     }
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
     };
   }, [draggedSticker, dragOffset]);
 
@@ -304,6 +339,7 @@ export const HeroSection = () => {
             cursor: 'grab'
           }}
           onMouseDown={(e) => handleMouseDown(e, sticker.id)}
+          onTouchStart={(e) => handleTouchStart(e, sticker.id)}
           draggable={false}
         />
       ))}
