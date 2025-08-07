@@ -6,11 +6,6 @@ export const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
-  // Don't render cursor on mobile devices
-  if (isMobile) {
-    return null;
-  }
-
   useEffect(() => {
     const updateCursorPosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
@@ -40,6 +35,11 @@ export const CustomCursor = () => {
       document.removeEventListener('mouseleave', handleMouseLeave, true);
     };
   }, []);
+
+  // Don't render cursor on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div
