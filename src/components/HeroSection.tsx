@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrambleText } from './ScrambleText';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const SimpleDesigner = () => {
+  return (
+    <span className="font-pixelify text-body">designer</span>
+  );
+};
 
 interface StickerData {
   id: number;
@@ -479,7 +484,7 @@ export const HeroSection = () => {
             </h1>
             
             <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl text-body max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-wide">
-              a <ScrambleText text="designer" className="font-pixelify text-body" /> who believes in the power of warmth, wit,
+              a <SimpleDesigner /> who believes in the power of warmth, wit,
               <br className="hidden sm:block" />
               and good visual storytelling.
             </p>
