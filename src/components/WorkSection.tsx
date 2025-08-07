@@ -42,7 +42,7 @@ export const WorkSection = () => {
   }, []);
   const projects = [{
     title: 'Plentum',
-    category: 'UX Research | Web Product Design',
+    category: 'Plentum – Social Media Visual & Content Direction',
     description: 'a web based learning dashboard for upskilling courses',
     features: ['Curriculum designed by Industry leaders for maximum impact.', 'Track your growth instantly with personalized dashboards.', 'Master skills through interactive and immersive learning.']
   }, {
@@ -90,7 +90,7 @@ export const WorkSection = () => {
                 {projects[0].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
-                Social Media Visual and Content Direction
+                {projects[0].category}
               </p>
               <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
                 {projects[0].description}
