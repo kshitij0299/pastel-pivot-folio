@@ -276,6 +276,47 @@ export const HeroSection = () => {
     };
   }, [draggedSticker, dragOffset]);
 
+  // Calculate curved path for each sticker to convergence point
+  const calculateStickerPosition = (sticker: StickerData, scrollProgress: number) => {
+    if (draggedSticker === sticker.id) {
+      return { x: sticker.x, y: sticker.y, opacity: 1, scale: 1.1, rotation: 0 };
+    }
+
+    // Convergence point at top-right (where arrow points)
+    const convergenceX = window.innerWidth - 50;
+    const convergenceY = 50;
+    
+    // Original position (initial position)
+    const startX = sticker.x;
+    const startY = sticker.y;
+    
+    // Create curved path using bezier-like calculation
+    // Each sticker gets different curve characteristics
+    const curveIntensity = 0.3 + (sticker.id * 0.1); // Different curves for each sticker
+    const midpointX = startX + (convergenceX - startX) * 0.6 + (Math.sin(sticker.id) * 100 * curveIntensity);
+    const midpointY = startY + (convergenceY - startY) * 0.4 - (50 * curveIntensity);
+    
+    // Calculate position along the curved path
+    const t = Math.min(scrollProgress, 1); // Clamp to 1
+    const easeT = 1 - Math.pow(1 - t, 3); // Ease-out cubic for smooth acceleration
+    
+    // Quadratic bezier curve: P = (1-t)²P₀ + 2(1-t)tP₁ + t²P₂
+    const x = Math.pow(1 - easeT, 2) * startX + 
+              2 * (1 - easeT) * easeT * midpointX + 
+              Math.pow(easeT, 2) * convergenceX;
+              
+    const y = Math.pow(1 - easeT, 2) * startY + 
+              2 * (1 - easeT) * easeT * midpointY + 
+              Math.pow(easeT, 2) * convergenceY;
+    
+    // Calculate effects based on progress
+    const opacity = Math.max(0, 1 - (scrollProgress * 1.2)); // Fade out faster
+    const scale = Math.max(0.3, 1 - (scrollProgress * 0.7)); // Scale down
+    const rotation = scrollProgress * 360 * (sticker.id % 2 === 0 ? 1 : -1); // Rotate alternating directions
+    
+    return { x, y, opacity, scale, rotation };
+  };
+
   useEffect(() => {
     const tl = gsap.timeline();
     
@@ -298,7 +339,7 @@ export const HeroSection = () => {
       ease: 'power3.out'
     }, '-=0.8');
 
-    // Handle scroll for arrow fade and sticker/profile animations
+    // Handle scroll for arrow fade and sticker convergence animations
     const handleScroll = () => {
       setScrollY(window.pageYOffset);
     };
@@ -316,33 +357,35 @@ export const HeroSection = () => {
       <div className="absolute inset-0 hero-gradient opacity-60" />
       
       {/* Draggable PNG stickers and profile */}
-      {stickers.map((sticker) => (
-        <img 
-          key={sticker.id}
-          src={sticker.src} 
-          alt={sticker.alt}
-          className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''} ${
-            sticker.id === 5 ? 'rounded-full object-cover shadow-lg' : ''
-          }`}
-          style={{
-            position: 'fixed',
-            left: `${draggedSticker === sticker.id ? sticker.x : 
-              sticker.x + (scrollY * 0.5) // Move right with scroll
-            }px`,
-            top: `${draggedSticker === sticker.id ? sticker.y : 
-              Math.max(0, sticker.y - (scrollY * 0.3)) // Move up with scroll
-            }px`,
-            zIndex: draggedSticker === sticker.id ? 50 : 20,
-            opacity: draggedSticker === sticker.id ? 1 : Math.max(0, 1 - scrollY / 300), // Complete fade out
-            transform: `scale(${draggedSticker === sticker.id ? 1.1 : Math.max(0.8, 1 - scrollY / 800)})`, // Scale down
-            transition: draggedSticker === sticker.id ? 'none' : 'all 0.3s ease-out',
-            cursor: 'grab'
-          }}
-          onMouseDown={(e) => handleMouseDown(e, sticker.id)}
-          onTouchStart={(e) => handleTouchStart(e, sticker.id)}
-          draggable={false}
-        />
-      ))}
+      {stickers.map((sticker) => {
+        // Calculate scroll progress (0 to 1 over first 800px of scroll)
+        const scrollProgress = Math.min(scrollY / 800, 1);
+        const stickerPos = calculateStickerPosition(sticker, scrollProgress);
+        
+        return (
+          <img 
+            key={sticker.id}
+            src={sticker.src} 
+            alt={sticker.alt}
+            className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''} ${
+              sticker.id === 5 ? 'rounded-full object-cover shadow-lg' : ''
+            }`}
+            style={{
+              position: 'fixed',
+              left: `${stickerPos.x}px`,
+              top: `${stickerPos.y}px`,
+              zIndex: draggedSticker === sticker.id ? 50 : 20,
+              opacity: stickerPos.opacity,
+              transform: `scale(${stickerPos.scale}) rotate(${stickerPos.rotation}deg)`,
+              transition: draggedSticker === sticker.id ? 'none' : 'all 0.1s ease-out',
+              cursor: 'grab'
+            }}
+            onMouseDown={(e) => handleMouseDown(e, sticker.id)}
+            onTouchStart={(e) => handleTouchStart(e, sticker.id)}
+            draggable={false}
+          />
+        );
+      })}
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
