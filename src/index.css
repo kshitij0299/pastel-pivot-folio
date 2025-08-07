@@ -117,12 +117,21 @@
 @layer base {
   * {
     @apply border-border;
-    cursor: none;
+  }
+
+  /* Hide default cursor only on devices with fine pointer (desktop) */
+  @media (hover: hover) and (pointer: fine) {
+    * {
+      cursor: none;
+    }
+
+    body {
+      cursor: none;
+    }
   }
 
   body {
     @apply bg-background text-foreground font-rethink overflow-x-hidden;
-    cursor: none;
   }
   
   html {
@@ -131,18 +140,20 @@
 }
 
 @layer components {
-  /* Custom Cursor Styles */
-  .custom-cursor {
-    @apply fixed top-0 left-0 w-6 h-6 rounded-full pointer-events-none z-50 mix-blend-difference;
-    background: rgba(255, 255, 255, 0.8);
-    transition: transform 0.1s ease-out, scale 0.2s ease-out;
-    backdrop-filter: blur(10px);
-  }
-  
-  .custom-cursor.link-hover {
-    transform: scale(2);
-    background: hsl(var(--accent-purple));
-    mix-blend-mode: normal;
+  /* Custom Cursor Styles - only show on devices with fine pointer */
+  @media (hover: hover) and (pointer: fine) {
+    .custom-cursor {
+      @apply fixed top-0 left-0 w-6 h-6 rounded-full pointer-events-none z-50 mix-blend-difference;
+      background: rgba(255, 255, 255, 0.8);
+      transition: transform 0.1s ease-out, scale 0.2s ease-out;
+      backdrop-filter: blur(10px);
+    }
+    
+    .custom-cursor.link-hover {
+      transform: scale(2);
+      background: hsl(var(--accent-purple));
+      mix-blend-mode: normal;
+    }
   }
 
   /* Frosted Glass Button Effect - Animation Only on Hover */
