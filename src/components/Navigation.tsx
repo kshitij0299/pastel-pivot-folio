@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 
@@ -10,62 +10,14 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
-  const [rotationSpeed, setRotationSpeed] = useState(8); // Base rotation speed in seconds
-  
-  const lastScrollY = useRef(0);
-  const lastScrollTime = useRef(Date.now());
-  const velocityRef = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const currentTime = Date.now();
-      
-      // Calculate scroll velocity
-      const deltaY = Math.abs(currentScrollY - lastScrollY.current);
-      const deltaTime = currentTime - lastScrollTime.current;
-      const velocity = deltaTime > 0 ? deltaY / deltaTime : 0;
-      
-      // Smooth velocity with exponential moving average
-      velocityRef.current = velocityRef.current * 0.7 + velocity * 0.3;
-      
-      // Map velocity to rotation speed (faster scroll = faster rotation)
-      // Base speed: 8s, min speed: 0.3s, max multiplier based on velocity
-      const speedMultiplier = Math.min(1 + velocityRef.current * 15, 25);
-      const newRotationSpeed = Math.max(8 / speedMultiplier, 0.3);
-      
-      setIsScrolled(currentScrollY > 50);
-      setRotationSpeed(newRotationSpeed);
-      
-      lastScrollY.current = currentScrollY;
-      lastScrollTime.current = currentTime;
+      setIsScrolled(window.scrollY > 50);
     };
 
-    // Gradually return to base speed when not scrolling
-    const returnToBaseSpeed = () => {
-      velocityRef.current *= 0.95; // Decay velocity
-      if (velocityRef.current > 0.001) {
-        const speedMultiplier = Math.min(1 + velocityRef.current * 15, 25);
-        const newRotationSpeed = Math.max(8 / speedMultiplier, 0.3);
-        setRotationSpeed(newRotationSpeed);
-        requestAnimationFrame(returnToBaseSpeed);
-      } else {
-        setRotationSpeed(8); // Return to base speed
-      }
-    };
-
-    let timeoutId: NodeJS.Timeout;
-    const throttledScroll = () => {
-      handleScroll();
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(returnToBaseSpeed, 150);
-    };
-
-    window.addEventListener('scroll', throttledScroll);
-    return () => {
-      window.removeEventListener('scroll', throttledScroll);
-      clearTimeout(timeoutId);
-    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navItems = [
@@ -107,10 +59,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
             <img 
               src="/lovable-uploads/b451c05e-b40b-4835-95cb-e0a32957dfc7.png" 
               alt="Star" 
-              className="w-6 h-6 transition-all duration-300 ease-out"
-              style={{
-                animation: `spin ${rotationSpeed}s linear infinite`,
-              }}
+              className="w-6 h-6 animate-spin-slow"
             />
           </button>
 
