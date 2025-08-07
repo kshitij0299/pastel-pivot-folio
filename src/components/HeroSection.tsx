@@ -27,6 +27,11 @@ export const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const [draggedSticker, setDraggedSticker] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  
+  // Entrance animation states
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [entranceProgress, setEntranceProgress] = useState(0);
+  const [entranceComplete, setEntranceComplete] = useState(false);
 
   // Initialize stickers with placeholder positions (will be calculated)
   const [stickers, setStickers] = useState<StickerData[]>([
@@ -279,6 +284,44 @@ export const HeroSection = () => {
   // Pre-calculate convergence point and curve data to avoid recalculation
   const convergencePoint = { x: typeof window !== 'undefined' ? window.innerWidth - 50 : 0, y: 50 };
   
+  // Calculate entrance position (from convergence point to default position)
+  const calculateEntrancePosition = (sticker: StickerData) => {
+    if (!entranceComplete) {
+      // Interpolate from convergence point to target position
+      const targetX = sticker.x;
+      const targetY = sticker.y;
+      const { x: convergenceX, y: convergenceY } = convergencePoint;
+      
+      // Create curved path for entrance (reverse of scroll-away animation)
+      const curveIntensity = 0.3 + (sticker.id * 0.1);
+      const midpointX = convergenceX + (targetX - convergenceX) * 0.6 + (Math.sin(sticker.id) * 100 * curveIntensity);
+      const midpointY = convergenceY + (targetY - convergenceY) * 0.4 + (50 * curveIntensity);
+      
+      // Use GSAP's power3.out easing equivalent
+      const t = entranceProgress;
+      const easeT = 1 - Math.pow(1 - t, 3);
+      
+      // Quadratic bezier curve calculation
+      const oneMinusT = 1 - easeT;
+      const x = oneMinusT * oneMinusT * convergenceX + 
+                2 * oneMinusT * easeT * midpointX + 
+                easeT * easeT * targetX;
+                
+      const y = oneMinusT * oneMinusT * convergenceY + 
+                2 * oneMinusT * easeT * midpointY + 
+                easeT * easeT * targetY;
+      
+      // Entrance animation properties
+      const opacity = Math.min(1, entranceProgress * 1.5);
+      const scale = 0.2 + (entranceProgress * 0.8);
+      const rotation = (1 - entranceProgress) * 45 * (sticker.id % 2 === 0 ? 1 : -1);
+      
+      return { x, y, opacity, scale, rotation };
+    }
+    
+    return { x: sticker.x, y: sticker.y, opacity: 1, scale: 1, rotation: 0 };
+  };
+  
   // Calculate curved path for each sticker to convergence point (optimized)
   const calculateStickerPosition = (sticker: StickerData, scrollProgress: number) => {
     if (draggedSticker === sticker.id) {
@@ -339,7 +382,25 @@ export const HeroSection = () => {
       y: 0,
       duration: 1.2,
       ease: 'power3.out'
-    }, '-=0.8');
+    }, '-=0.8').call(() => {
+      // Trigger sticker entrance after text animations
+      setTimeout(() => {
+        setHasLoaded(true);
+        
+        // Animate entrance progress from 0 to 1
+        gsap.to({ progress: 0 }, {
+          progress: 1,
+          duration: 2,
+          ease: 'power3.out',
+          onUpdate: function() {
+            setEntranceProgress(this.targets()[0].progress);
+          },
+          onComplete: () => {
+            setEntranceComplete(true);
+          }
+        });
+      }, 500);
+    });
 
     // Optimized scroll handler with requestAnimationFrame throttling
     let ticking = false;
@@ -379,9 +440,15 @@ export const HeroSection = () => {
       
       {/* Draggable PNG stickers and profile */}
       {stickers.map((sticker) => {
-        // Calculate scroll progress (0 to 1 over first 800px of scroll)
-        const scrollProgress = Math.min(scrollY / 800, 1);
-        const stickerPos = calculateStickerPosition(sticker, scrollProgress);
+        // Use entrance animation if not complete, otherwise use scroll animation
+        let stickerPos;
+        if (!entranceComplete) {
+          stickerPos = calculateEntrancePosition(sticker);
+        } else {
+          // Calculate scroll progress (0 to 1 over first 800px of scroll)
+          const scrollProgress = Math.min(scrollY / 800, 1);
+          stickerPos = calculateStickerPosition(sticker, scrollProgress);
+        }
         
         return (
           <img 
