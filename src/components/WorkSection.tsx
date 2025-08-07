@@ -50,9 +50,9 @@ export const WorkSection = () => {
     category: 'Brand Identity | Visual Design',
     description: 'Creative branding and visual identity design for advertising club from Bengaluru'
   }, {
-    title: 'Figma for Education',
-    category: 'Educational Tools | Design System',
-    description: 'comprehensive design system and learning platform for educational institutions'
+    title: 'Timeless beauty secrets',
+    category: 'Design | Creative Direction | Social Media Strategy',
+    description: 'comprehensive branding and social media strategy for skincare brand from Bengaluru'
   }, {
     title: 'Coffee Shop Menu',
     category: 'Print Design | Branding',
