@@ -65,16 +65,22 @@ export const WorkSection = () => {
         </h2>
 
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          {/* Plentum Project Card */}
+          {/* VLearn Project Card */}
           <div className="group">
-            <div className="bg-gradient-to-br from-purple-100 via-purple-50 to-white rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
-              {/* Plentum preview image */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/2c557dba-d69d-4014-aa55-7d62ab117ae9.png" 
-                  alt="Plentum brand design"
-                  className="w-full h-full object-contain opacity-90"
-                />
+            <div className="bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
+              {/* Background decoration */}
+              <div className="absolute top-6 right-6 md:top-8 md:right-8 opacity-20">
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-lg border border-white/30"></div>
+              </div>
+              <div className="absolute top-8 right-8 md:top-12 md:right-12 opacity-10">
+                <div className="text-white/20 font-bold text-2xl md:text-4xl">VLearn</div>
+              </div>
+              
+              {/* Learning elements */}
+              <div className="absolute top-12 md:top-16 left-6 md:left-8 space-y-3">
+                <div className="w-16 h-3 md:w-20 md:h-4 bg-white/30 rounded"></div>
+                <div className="w-12 h-3 md:w-16 md:h-4 bg-white/20 rounded"></div>
+                <div className="w-20 h-3 md:w-24 md:h-4 bg-white/25 rounded"></div>
               </div>
             </div>
             
