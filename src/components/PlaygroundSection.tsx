@@ -58,30 +58,42 @@ export const PlaygroundSection = () => {
   ];
 
   return (
-    <section id="playground" ref={sectionRef} className="min-h-screen py-16 md:py-24 bg-background">
+    <section id="playground" ref={sectionRef} className="min-h-screen py-16 md:py-24 bg-background relative">
       <div className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
-        <div className="frosted-glass p-8 md:p-12">
-          <div className="text-center mb-16 md:mb-24">
-            <h2 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-heading mb-6 md:mb-8 tracking-wide">
-              Playground
-            </h2>
-            <p className="font-rethink text-base md:text-lg lg:text-xl text-body max-w-full md:max-w-4xl mx-auto leading-relaxed">
-              A space for experimentation, personal projects, and creative exploration.
-            </p>
+        <div className="frosted-glass p-8 md:p-12 relative">
+          {/* Blurred content */}
+          <div className="filter blur-sm">
+            <div className="text-center mb-16 md:mb-24">
+              <h2 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-heading mb-6 md:mb-8 tracking-wide">
+                Playground
+              </h2>
+              <p className="font-rethink text-base md:text-lg lg:text-xl text-body max-w-full md:max-w-4xl mx-auto leading-relaxed">
+                A space for experimentation, personal projects, and creative exploration.
+              </p>
+            </div>
+
+            <div ref={itemsRef} className="space-y-6 md:space-y-8">
+              {playgroundItems.map((item, index) => (
+                <div key={index} className="border-b border-gray-200 pb-6 md:pb-8 cursor-hover group">
+                  <div className="flex items-center justify-between mb-2 md:mb-3">
+                    <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-normal group-hover:text-link transition-colors duration-500">
+                      {item.title}
+                    </h3>
+                    <span className="text-2xl md:text-4xl">{item.icon}</span>
+                  </div>
+                  <p className="font-rethink text-body leading-relaxed text-sm md:text-base max-w-full md:max-w-4xl">{item.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div ref={itemsRef} className="space-y-6 md:space-y-8">
-            {playgroundItems.map((item, index) => (
-              <div key={index} className="border-b border-gray-200 pb-6 md:pb-8 cursor-hover group">
-                <div className="flex items-center justify-between mb-2 md:mb-3">
-                  <h3 className="font-playfair text-xl sm:text-2xl md:text-3xl font-semibold text-heading tracking-normal group-hover:text-link transition-colors duration-500">
-                    {item.title}
-                  </h3>
-                  <span className="text-2xl md:text-4xl">{item.icon}</span>
-                </div>
-                <p className="font-rethink text-body leading-relaxed text-sm md:text-base max-w-full md:max-w-4xl">{item.description}</p>
-              </div>
-            ))}
+          {/* W.I.P Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/fee9ce56-bed3-4324-90c2-e342b05498eb.png" 
+              alt="Work in Progress"
+              className="max-w-xs md:max-w-md opacity-90"
+            />
           </div>
         </div>
       </div>
