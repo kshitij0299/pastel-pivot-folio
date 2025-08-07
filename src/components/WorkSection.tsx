@@ -48,7 +48,7 @@ export const WorkSection = () => {
   }, {
     title: 'The Ad Club',
     category: 'Brand Identity | Visual Design',
-    description: 'creative branding and visual identity design for advertising collective'
+    description: 'creative branding and visual identity design for advertising club from Bengaluru'
   }, {
     title: 'Figma for Education',
     category: 'Educational Tools | Design System',
