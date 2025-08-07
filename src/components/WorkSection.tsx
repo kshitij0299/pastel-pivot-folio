@@ -46,9 +46,9 @@ export const WorkSection = () => {
     description: 'a web based learning dashboard for upskilling courses',
     features: ['Curriculum designed by Industry leaders for maximum impact.', 'Track your growth instantly with personalized dashboards.', 'Master skills through interactive and immersive learning.']
   }, {
-    title: 'ChikitSakhi',
-    category: 'Process Design | UX Design',
-    description: 'designing processes in hospitals for better crowd management'
+    title: 'The Ad Club',
+    category: 'Brand Identity | Visual Design',
+    description: 'creative branding and visual identity design for advertising collective'
   }, {
     title: 'Figma for Education',
     category: 'Educational Tools | Design System',
@@ -90,20 +90,14 @@ export const WorkSection = () => {
             </div>
           </div>
 
-          {/* ChikitSakhi Project Card */}
+          {/* The Ad Club Project Card */}
           <div className="group">
-            <div className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
-              {/* Background decoration */}
-              <div className="absolute top-6 right-6 md:top-8 md:right-8">
-                
-              </div>
-              
-              
-              
-              {/* Mobile mockups */}
-              <div className="absolute top-12 md:top-16 right-6 md:right-8 w-[140px] md:w-[200px]">
-                
-              </div>
+            <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6">
+              <img 
+                src="/lovable-uploads/ddff190e-68d3-4994-9abd-27a98cafec8e.png" 
+                alt="The Ad Club branding project"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
             
             {/* Project title below */}
