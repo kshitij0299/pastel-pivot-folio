@@ -43,7 +43,7 @@ export const WorkSection = () => {
   const projects = [{
     title: 'Plentum',
     category: 'Social Media Post | Interview Assessment | Content Direction',
-    description: 'A social media post design for an interview assessment - showcasing a web-based learning platform with modern visual identity',
+    description: 'A social media post for the interview assessment with content direction',
     features: ['Curriculum designed by Industry leaders for maximum impact.', 'Track your growth instantly with personalized dashboards.', 'Master skills through interactive and immersive learning.']
   }, {
     title: 'The Ad Club',
