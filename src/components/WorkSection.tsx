@@ -66,7 +66,15 @@ export const WorkSection = () => {
 
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {/* Plentum Project Card */}
-          <div className="group cursor-pointer" onClick={() => window.open('/Plentum.pdf', '_blank')}>
+          <div className="group cursor-pointer" onClick={() => {
+            try {
+              window.open('/Plentum.pdf', '_blank');
+            } catch (error) {
+              console.error('Error opening PDF:', error);
+              // Fallback: try direct link
+              window.location.href = '/Plentum.pdf';
+            }
+          }}>
             <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
               {/* Plentum project image */}
               <img src="/lovable-uploads/ee03460e-9aed-4104-b034-c34d269412f7.png" alt="Plentum project showcase" className="absolute inset-0 w-full h-full object-cover" />
@@ -87,7 +95,15 @@ export const WorkSection = () => {
           </div>
 
           {/* The Ad Club Project Card */}
-          <div className="group cursor-pointer" onClick={() => window.open('/the-ad-club.pdf', '_blank')}>
+          <div className="group cursor-pointer" onClick={() => {
+            try {
+              window.open('/the-ad-club.pdf', '_blank');
+            } catch (error) {
+              console.error('Error opening PDF:', error);
+              // Fallback: try direct link
+              window.location.href = '/the-ad-club.pdf';
+            }
+          }}>
             <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
               <img src="/lovable-uploads/ddff190e-68d3-4994-9abd-27a98cafec8e.png" alt="The Ad Club branding project" className="absolute inset-0 w-full h-full object-cover" />
             </div>
