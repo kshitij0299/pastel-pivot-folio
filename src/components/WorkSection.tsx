@@ -66,17 +66,10 @@ export const WorkSection = () => {
 
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {/* Plentum Project Card */}
-          <div 
-            className="group cursor-pointer"
-            onClick={() => window.open('/pdfs/Plentum.pdf', '_blank')}
-          >
+          <div className="group cursor-pointer" onClick={() => window.open('/pdfs/Plentum.pdf', '_blank')}>
             <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
               {/* Plentum project image */}
-              <img 
-                src="/lovable-uploads/ee03460e-9aed-4104-b034-c34d269412f7.png" 
-                alt="Plentum project showcase"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <img src="/lovable-uploads/ee03460e-9aed-4104-b034-c34d269412f7.png" alt="Plentum project showcase" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             
             {/* Project title below */}
@@ -94,16 +87,9 @@ export const WorkSection = () => {
           </div>
 
           {/* The Ad Club Project Card */}
-          <div 
-            className="group cursor-pointer"
-            onClick={() => window.open('/pdfs/The Ad Club.pdf', '_blank')}
-          >
+          <div className="group cursor-pointer" onClick={() => window.open('/pdfs/The Ad Club.pdf', '_blank')}>
             <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img 
-                src="/lovable-uploads/ddff190e-68d3-4994-9abd-27a98cafec8e.png" 
-                alt="The Ad Club branding project"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <img src="/lovable-uploads/ddff190e-68d3-4994-9abd-27a98cafec8e.png" alt="The Ad Club branding project" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             
             {/* Project title below */}
@@ -123,16 +109,10 @@ export const WorkSection = () => {
           {/* Timeless Beauty Secrets Project Card */}
           <div className="group">
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img 
-                src="/lovable-uploads/2711c5dc-8e65-449b-9e96-084aacf9128d.png" 
-                alt="Timeless Beauty Secrets branding"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <img src="/lovable-uploads/2711c5dc-8e65-449b-9e96-084aacf9128d.png" alt="Timeless Beauty Secrets branding" className="absolute inset-0 w-full h-full object-cover" />
               {/* Overlay button */}
               <div className="absolute top-4 right-4">
-                <span className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm text-body text-xs font-medium rounded-full border border-white/20 shadow-sm">
-                  Currently Working
-                </span>
+                <span className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm text-body text-xs font-medium rounded-full border border-white/20 shadow-sm">Currently Working Here</span>
               </div>
             </div>
             
@@ -153,11 +133,7 @@ export const WorkSection = () => {
           {/* Wishy Project Card */}
           <div className="group">
             <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img 
-                src="/lovable-uploads/3f8cf9b6-c198-4abe-9efe-03f62d74befb.png" 
-                alt="Wishy webapp branding"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <img src="/lovable-uploads/3f8cf9b6-c198-4abe-9efe-03f62d74befb.png" alt="Wishy webapp branding" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             
             {/* Project title below */}
