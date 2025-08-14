@@ -112,26 +112,33 @@ export const HeroSection = () => {
                 y: mobileY
               };
             } else {
-              // Desktop: Center-left area
+              // Desktop: Keep original position (next to name)
+              const offsetX = 120;
+              const offsetY = -20;
+              const newX = kshitijRect.right + offsetX;
+              const newY = kshitijRect.top + window.scrollY + offsetY;
+              
               return {
                 ...sticker,
-                x: window.innerWidth * 0.25,
-                y: window.innerHeight * 0.4
+                x: Math.max(0, Math.min(newX, window.innerWidth - 100)),
+                y: Math.max(0, newY)
               };
             }
           }
           if (sticker.id === 2) {
+            // Keep original positioning - this stays at top-right
             return {
               ...sticker,
-              x: window.innerWidth > 768 ? window.innerWidth * 0.6 : window.innerWidth - 120,
-              y: window.innerWidth > 768 ? window.innerHeight * 0.2 : 160
+              x: window.innerWidth - 120,
+              y: window.innerWidth > 768 ? 128 : 160
             };
           }
           if (sticker.id === 3) {
+            // Ball sticker - move to center on desktop only
             return {
               ...sticker,
               x: window.innerWidth > 768 ? window.innerWidth * 0.3 : 40,
-              y: window.innerHeight - (window.innerWidth > 768 ? 150 : 200)
+              y: window.innerWidth > 768 ? window.innerHeight * 0.6 : window.innerHeight - 200
             };
           }
           if (sticker.id === 5) {
