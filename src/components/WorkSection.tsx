@@ -52,7 +52,7 @@ export const WorkSection = () => {
   }, {
     title: 'Timeless Beauty Secrets',
     category: 'Design | Creative Direction | Social Media Strategy',
-    description: 'Comprehensive branding and social media strategy for skincare brand from Bengaluru'
+    description: 'Comprehensive branding and social media strategy for skincare brand from Bengaluru (currently working here)'
   }, {
     title: 'Wishy',
     category: 'Web Development | UI/UX Design',
