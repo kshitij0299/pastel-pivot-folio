@@ -90,7 +90,7 @@ export const PlaygroundSection = () => {
           {/* W.I.P Overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
             <img 
-              src="/lovable-uploads/fee9ce56-bed3-4324-90c2-e342b05498eb.png" 
+              src="/lovable-uploads/b87e3267-a49b-4b33-8c35-5d533116df7d.png" 
               alt="Work in Progress"
               className="max-w-32 md:max-w-xs opacity-90"
             />
