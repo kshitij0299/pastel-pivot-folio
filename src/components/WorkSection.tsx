@@ -68,7 +68,7 @@ export const WorkSection = () => {
           {/* Plentum Project Card */}
           <div 
             className="group cursor-pointer"
-            onClick={() => window.open('https://drive.google.com/file/d/1Uh8cZ3S55eub1fIGuFeZ6hFEQj2AlQ_W/view?usp=drive_link', '_blank')}
+            onClick={() => window.open('/pdfs/plentum-project.pdf', '_blank')}
           >
             <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
               {/* Plentum project image */}
@@ -96,7 +96,7 @@ export const WorkSection = () => {
           {/* The Ad Club Project Card */}
           <div 
             className="group cursor-pointer"
-            onClick={() => window.open('https://drive.google.com/file/d/1aTk9PepcOYNaZjmD3Geg3RzMxcENEVD4/view?usp=drive_link', '_blank')}
+            onClick={() => window.open('/pdfs/ad-club-project.pdf', '_blank')}
           >
             <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
               <img 
