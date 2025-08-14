@@ -81,9 +81,14 @@ export const HeroSection = () => {
         const titleRect = titleElement.getBoundingClientRect();
         const kshitijText = titleElement.querySelector('span:last-child') as HTMLElement;
         
+        console.log('Title element found:', !!titleElement);
+        console.log('Title rect:', titleRect);
+        console.log('Kshitij text found:', !!kshitijText);
+        
         // Check if we have valid dimensions
         if (titleRect.width === 0 || titleRect.height === 0) {
           if (retryCount < 5) {
+            console.log('Title not ready, retrying...', retryCount);
             setTimeout(() => attemptPositioning(retryCount + 1), 300);
             return;
           }
@@ -92,19 +97,26 @@ export const HeroSection = () => {
         let kshitijRect = titleRect;
         if (kshitijText) {
           kshitijRect = kshitijText.getBoundingClientRect();
+          console.log('Kshitij text rect:', kshitijRect);
           
           // If Kshitij text rect is empty, use title rect as fallback
           if (kshitijRect.width === 0 || kshitijRect.height === 0) {
             kshitijRect = titleRect;
+            console.log('Using title rect as fallback');
           }
         }
 
         setStickers(prev => prev.map(sticker => {
           if (sticker.id === 1) {
+            // Mobile-specific positioning next to name
             if (window.innerWidth <= 768) {
-              // Mobile: Position next to name
-              const mobileX = Math.min(kshitijRect.right + 15, window.innerWidth - 80);
-              const mobileY = kshitijRect.top + window.scrollY - 10;
+              // FORCE TEST: Move to center of screen on mobile to test if positioning works
+              const mobileX = 50; // Far left
+              const mobileY = 200; // Near top
+              
+              console.log('FORCE TEST - Mobile positioning - Sticker 1 at:', mobileX, mobileY);
+              console.log('Window width:', window.innerWidth);
+              console.log('kshitijRect:', kshitijRect);
               
               return {
                 ...sticker,
@@ -112,11 +124,13 @@ export const HeroSection = () => {
                 y: mobileY
               };
             } else {
-              // Desktop: Keep original position (next to name)
+              // Desktop positioning
               const offsetX = 120;
               const offsetY = -20;
               const newX = kshitijRect.right + offsetX;
               const newY = kshitijRect.top + window.scrollY + offsetY;
+              
+              console.log('Desktop positioning - Sticker 1 at:', newX, newY);
               
               return {
                 ...sticker,
@@ -126,7 +140,6 @@ export const HeroSection = () => {
             }
           }
           if (sticker.id === 2) {
-            // Keep original positioning - this stays at top-right
             return {
               ...sticker,
               x: window.innerWidth - 120,
@@ -134,18 +147,20 @@ export const HeroSection = () => {
             };
           }
           if (sticker.id === 3) {
-            // Ball sticker - move to center on desktop only
             return {
               ...sticker,
-              x: window.innerWidth > 768 ? window.innerWidth * 0.3 : 40,
-              y: window.innerWidth > 768 ? window.innerHeight * 0.6 : window.innerHeight - 200
+              x: window.innerWidth > 768 ? 80 : 40,
+              y: window.innerHeight - 200
             };
           }
           if (sticker.id === 5) {
+            // Profile picture positioning
             if (window.innerWidth <= 768) {
               // Mobile: Position next to "Kshitij" name
               const profileX = Math.min(kshitijRect.right + 15, window.innerWidth - 80);
               const profileY = kshitijRect.top + window.scrollY - 10;
+              
+              console.log('Mobile PROFILE positioning at:', profileX, profileY);
               
               return {
                 ...sticker,
@@ -153,11 +168,11 @@ export const HeroSection = () => {
                 y: profileY
               };
             } else {
-              // Desktop: Center-right area
+              // Desktop positioning
               return {
                 ...sticker,
-                x: window.innerWidth * 0.7,
-                y: window.innerHeight * 0.45
+                x: window.innerWidth - 200,
+                y: 300
               };
             }
           }
