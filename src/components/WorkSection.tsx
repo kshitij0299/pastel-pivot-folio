@@ -134,6 +134,10 @@ export const WorkSection = () => {
           <div className="group">
             <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
               <img src="/lovable-uploads/3f8cf9b6-c198-4abe-9efe-03f62d74befb.png" alt="Wishy webapp branding" className="absolute inset-0 w-full h-full object-cover" />
+              {/* Overlay button */}
+              <div className="absolute top-4 right-4">
+                <span className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm text-body text-xs font-medium rounded-full border border-white/20 shadow-sm">Beta Coming Soon!</span>
+              </div>
             </div>
             
             {/* Project title below */}
