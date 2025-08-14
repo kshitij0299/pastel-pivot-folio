@@ -112,7 +112,7 @@ export const WorkSection = () => {
               <img src="/lovable-uploads/2711c5dc-8e65-449b-9e96-084aacf9128d.png" alt="Timeless Beauty Secrets branding" className="absolute inset-0 w-full h-full object-cover" />
               {/* Overlay button */}
               <div className="absolute top-4 right-4">
-                <span className="inline-flex items-center px-3 py-1.5 bg-white/10 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/30 shadow-lg shadow-black/10">Currently Working Here</span>
+                <span className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm text-body text-xs font-medium rounded-full border border-white/20 shadow-sm">Currently Working Here</span>
               </div>
             </div>
             
