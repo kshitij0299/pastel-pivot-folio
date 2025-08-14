@@ -19,8 +19,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Explicitly include PDF files as static assets
-  assetsInclude: ['**/*.pdf'],
-  // Ensure PDFs are copied to dist during build
-  publicDir: 'public',
 }));
