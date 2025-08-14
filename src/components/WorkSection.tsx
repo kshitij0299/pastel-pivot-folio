@@ -128,6 +128,12 @@ export const WorkSection = () => {
                 alt="Timeless Beauty Secrets branding"
                 className="absolute inset-0 w-full h-full object-cover"
               />
+              {/* Overlay button */}
+              <div className="absolute top-4 right-4">
+                <span className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm text-body text-xs font-medium rounded-full border border-white/20 shadow-sm">
+                  Currently Working
+                </span>
+              </div>
             </div>
             
             {/* Project title below */}
