@@ -54,9 +54,9 @@ export const WorkSection = () => {
     category: 'Design | Creative Direction | Social Media Strategy',
     description: 'Comprehensive branding and social media strategy for skincare brand from Bengaluru (currently working here)'
   }, {
-    title: 'Wishy',
-    category: 'Web Development | UI/UX Design',
-    description: 'Comprehensive shopping utility webapp with intuitive user interface and seamless user experience'
+    title: 'Bay Nature',
+    category: 'Editorial | Layout Design',
+    description: 'Editorial layout design assessment for magazine featuring nature content and storytelling'
   }];
   return <section id="work" ref={sectionRef} className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -130,14 +130,10 @@ export const WorkSection = () => {
             </div>
           </div>
 
-          {/* Wishy Project Card */}
-          <div className="group">
-            <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img src="/lovable-uploads/3f8cf9b6-c198-4abe-9efe-03f62d74befb.png" alt="Wishy webapp branding" className="absolute inset-0 w-full h-full object-cover" />
-              {/* Overlay button */}
-              <div className="absolute top-4 right-4">
-                <span className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm text-body text-xs font-medium rounded-full border border-white/20 shadow-sm">Beta Coming Soon!</span>
-              </div>
+          {/* Bay Nature Project Card */}
+          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1Gm2wgeyTUzbo5oEwnWq4ka0imtqv1XmC/view?usp=drive_link', '_blank')}>
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+              <img src="/lovable-uploads/7fe75674-f948-425c-8974-41752de61f6c.png" alt="Bay Nature editorial design" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             
             {/* Project title below */}
