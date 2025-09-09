@@ -42,7 +42,7 @@ export const WorkSection = () => {
   }, []);
   const projects = [{
     title: 'Plentum',
-    category: 'Social Media Post | Interview Assessment | Content Direction',
+    category: 'Social Media Post | Content Direction',
     description: 'Direct-to-consumer health supplements brand focused on premium wellness products and lifestyle enhancement',
     features: ['Curriculum designed by Industry leaders for maximum impact.', 'Track your growth instantly with personalized dashboards.', 'Master skills through interactive and immersive learning.']
   }, {
