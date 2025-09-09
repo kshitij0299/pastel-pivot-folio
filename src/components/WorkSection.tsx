@@ -113,7 +113,7 @@ export const WorkSection = () => {
               <img src="/lovable-uploads/2711c5dc-8e65-449b-9e96-084aacf9128d.png" alt="Timeless Beauty Secrets branding" className="absolute inset-0 w-full h-full object-cover" />
               
               {/* Animated Arrow pointing to badge */}
-              <div className="absolute top-2 left-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1">
+              <div className="absolute top-4 right-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-2">
                 <ArrowUpRight className="w-6 h-6 text-white bg-black/50 rounded-full p-1 backdrop-blur-sm" />
               </div>
               
