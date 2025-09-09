@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowUpRight } from 'lucide-react';
 gsap.registerPlugin(ScrollTrigger);
 export const WorkSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -108,8 +109,14 @@ export const WorkSection = () => {
 
           {/* Timeless Beauty Secrets Project Card */}
           <div className="group">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-all duration-300 hover:scale-105 grayscale-[50%] opacity-75 hover:grayscale-0 hover:opacity-100">
               <img src="/lovable-uploads/2711c5dc-8e65-449b-9e96-084aacf9128d.png" alt="Timeless Beauty Secrets branding" className="absolute inset-0 w-full h-full object-cover" />
+              
+              {/* Animated Arrow pointing to badge */}
+              <div className="absolute top-2 left-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1">
+                <ArrowUpRight className="w-6 h-6 text-white bg-black/50 rounded-full p-1 backdrop-blur-sm" />
+              </div>
+              
               {/* Overlay button */}
               <div className="absolute top-4 right-4">
                 <span className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm text-body text-xs font-medium rounded-full border border-white/20 shadow-sm">Currently Working Here</span>
@@ -117,7 +124,7 @@ export const WorkSection = () => {
             </div>
             
             {/* Project title below */}
-            <div className="space-y-1 md:space-y-2">
+            <div className="space-y-1 md:space-y-2 opacity-75 group-hover:opacity-100 transition-opacity duration-300">
               <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
                 {projects[2].title}
               </h3>
