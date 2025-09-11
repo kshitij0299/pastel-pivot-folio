@@ -166,15 +166,7 @@ export const WorkSection = () => {
           {/* Logos & Case Studies Project Card */}
           <div className="group cursor-pointer" onClick={() => navigate('/logos-case-studies')}>
             <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img 
-                src="/lovable-uploads/dee3e861-b91d-4cbf-a4c2-d12d0c7ca51d.png" 
-                alt="Logos and case studies showcase" 
-                className="absolute inset-0 w-full h-full object-cover"
-                onError={(e) => {
-                  console.error('Image failed to load:', e.currentTarget.src);
-                  (e.currentTarget as HTMLImageElement).src = '/placeholder.svg';
-                }}
-              />
+              <img src="/lovable-uploads/61d07919-b22a-493a-846e-74119d6f8dc7.png" alt="Logos and case studies showcase" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             
             {/* Project title below */}
