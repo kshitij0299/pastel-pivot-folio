@@ -37,22 +37,22 @@ export const LogosCaseStudies = () => {
 
   const caseStudyImages = [
     {
-      src: '/lovable-uploads/89ced496-1dcf-4b50-a9a0-bb0b8ae5124c.png',
+      src: '/lovable-uploads/ee03460e-9aed-4104-b034-c34d269412f7.png',
       alt: 'Skincare.science branding case study',
       title: 'Skincare.science'
     },
     {
-      src: '/lovable-uploads/d8fad1de-ba8b-4fa7-a732-7f9c6775ea38.png',
-      alt: 'Northern branding case study',
-      title: 'Northern'
-    },
-    {
-      src: '/lovable-uploads/0e8936c3-9461-4cbd-9d44-97dcda4d6d38.png',
+      src: '/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png',
       alt: 'Tornado branding case study',
       title: 'Tornado'
     },
     {
-      src: '/lovable-uploads/5988630a-1e3e-497d-ad5c-b7df23be7f9f.png',
+      src: '/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png',
+      alt: 'Northern branding case study',
+      title: 'Northern'
+    },
+    {
+      src: '/lovable-uploads/fee9ce56-bed3-4324-90c2-e342b05498eb.png',
       alt: 'Sandy branding case study',
       title: 'Sandy'
     }
