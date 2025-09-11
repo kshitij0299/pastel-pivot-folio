@@ -115,7 +115,7 @@ export const WorkSection = () => {
 
           {/* Logos & Case Studies Project Card */}
           <div className="group cursor-pointer" onClick={() => navigate('/logos-case-studies')}>
-            <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-[0_20px_40px_-12px_rgba(168,85,247,0.25)] hover:shadow-purple-400/20">
+            <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-all duration-300 hover:scale-105 shadow-[0_10px_25px_-5px_rgba(168,85,247,0.4),0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(168,85,247,0.6),0_0_40px_rgba(236,72,153,0.5)]">
               <img src="/lovable-uploads/f4f28388-07b6-4ef1-9f2b-d0bdc6b0a79e.png" alt="Logos and case studies showcase" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             
