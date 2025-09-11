@@ -457,7 +457,7 @@ export const HeroSection = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="flex-1">
             <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-4 md:mb-6 leading-none tracking-wide">
-              <span className="gradient-text cursor-hover"> I'm Kshitij</span><span className="text-heading" id="kshitij-text">, I'm Kshitij</span>
+              <span className="gradient-text cursor-hover">Hi</span><span className="text-heading" id="kshitij-text">, I'm Kshitij</span>
             </h1>
             
             <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl text-body max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-wide">
