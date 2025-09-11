@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { CustomCursor } from '@/components/CustomCursor';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,22 +33,22 @@ export const LogosCaseStudies = () => {
 
   const caseStudyImages = [
     {
-      src: '/lovable-uploads/89ced496-1dcf-4b50-a9a0-bb0b8ae5124c.png',
+      src: '/lovable-uploads/4f9bc25d-0f58-4c59-b21f-d8757fd39a7a.png',
       alt: 'Skincare.science branding case study',
       title: 'Skincare.science'
     },
     {
-      src: '/lovable-uploads/d8fad1de-ba8b-4fa7-a732-7f9c6775ea38.png',
-      alt: 'Northern branding case study',
-      title: 'Northern'
-    },
-    {
-      src: '/lovable-uploads/0e8936c3-9461-4cbd-9d44-97dcda4d6d38.png',
+      src: '/lovable-uploads/a64230d6-3f91-4108-879c-00e4143e695c.png',
       alt: 'Tornado branding case study',
       title: 'Tornado'
     },
     {
-      src: '/lovable-uploads/5988630a-1e3e-497d-ad5c-b7df23be7f9f.png',
+      src: '/lovable-uploads/1eea1f78-34fc-47a6-b344-31f2e511797b.png',
+      alt: 'Northern branding case study',
+      title: 'Northern'
+    },
+    {
+      src: '/lovable-uploads/48ef0dfe-125f-4cf6-9e81-4d01ef1c800b.png',
       alt: 'Sandy branding case study',
       title: 'Sandy'
     }
@@ -55,6 +56,7 @@ export const LogosCaseStudies = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <CustomCursor />
       {/* Header with back button */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl py-4">
