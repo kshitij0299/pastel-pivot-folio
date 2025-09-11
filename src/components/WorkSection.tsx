@@ -2,8 +2,10 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 gsap.registerPlugin(ScrollTrigger);
 export const WorkSection = () => {
+  const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
@@ -58,6 +60,10 @@ export const WorkSection = () => {
     title: 'Bay Nature',
     category: 'Editorial | Layout Design',
     description: 'Editorial layout design assessment for magazine featuring nature content and storytelling'
+  }, {
+    title: 'Logos & Case Studies',
+    category: 'Brand Identity | Logo Design | Case Studies',
+    description: 'Collection of brand identity designs and logo creation projects showcasing strategic thinking and creative execution'
   }];
   return <section id="work" ref={sectionRef} className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -153,6 +159,26 @@ export const WorkSection = () => {
               </p>
               <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
                 {projects[3].description}
+              </p>
+            </div>
+          </div>
+
+          {/* Logos & Case Studies Project Card */}
+          <div className="group cursor-pointer" onClick={() => navigate('/logos-case-studies')}>
+            <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+              <img src="/lovable-uploads/61d07919-b22a-493a-846e-74119d6f8dc7.png" alt="Logos and case studies showcase" className="absolute inset-0 w-full h-full object-cover" />
+            </div>
+            
+            {/* Project title below */}
+            <div className="space-y-1 md:space-y-2">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
+                {projects[4].title}
+              </h3>
+              <p className="font-rethink text-sm md:text-base text-body font-medium">
+                {projects[4].category}
+              </p>
+              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
+                {projects[4].description}
               </p>
             </div>
           </div>
