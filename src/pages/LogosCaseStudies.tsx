@@ -1,30 +1,35 @@
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const LogosCaseStudies = () => {
-  const navigate = useNavigate();
+  
 
   useEffect(() => {
+    // SEO
+    document.title = 'Logos & Case Studies | Portfolio';
+    const desc = 'Logos & case studies — brand identity and logo design showcase.';
+    let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    if (meta) {
+      meta.setAttribute('content', desc);
+    } else {
+      meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = desc;
+      document.head.appendChild(meta);
+    }
+
     // Animate images on scroll
     const images = document.querySelectorAll('.case-study-image');
     images.forEach((img, index) => {
-      gsap.fromTo(img, {
-        opacity: 0,
-        y: 80
-      }, {
+      gsap.fromTo(img, { opacity: 0, y: 80 }, {
         opacity: 1,
         y: 0,
         duration: 1,
         ease: 'power3.out',
-        scrollTrigger: {
-          trigger: img,
-          start: 'top 85%'
-        },
+        scrollTrigger: { trigger: img, start: 'top 85%' },
         delay: index * 0.1
       });
     });
@@ -54,47 +59,26 @@ export const LogosCaseStudies = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header with back button */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-        <div className="container mx-auto px-4 md:px-6 max-w-7xl py-4">
-          <button 
-            onClick={() => navigate('/')}
-            className="inline-flex items-center gap-2 text-heading hover:text-primary transition-colors duration-300 font-rethink font-medium"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Back to Portfolio
-          </button>
-        </div>
-      </header>
-
-      {/* Title Section */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-          <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-light text-heading tracking-[-0.06em] text-center">
-            Logos & Case Studies
-          </h1>
-          <p className="font-rethink text-lg md:text-xl text-body text-center mt-6 max-w-3xl mx-auto leading-relaxed">
-            A collection of brand identity designs and logo creation projects showcasing strategic thinking and creative execution.
-          </p>
-        </div>
-      </section>
-
-      {/* Case Studies Images - No spacing between */}
-      <section className="pb-16">
+    <main className="min-h-screen bg-white">
+      <h1 className="sr-only">Logos & Case Studies</h1>
+      <section>
         <div className="max-w-full">
           {caseStudyImages.map((image, index) => (
             <div key={index} className="case-study-image w-full">
-              <img 
-                src={image.src} 
+              <img
+                src={image.src}
                 alt={image.alt}
-                className="w-full h-auto object-cover block"
+                className="block w-full h-auto object-cover"
                 loading={index === 0 ? 'eager' : 'lazy'}
+                onError={(e) => {
+                  console.error('Image failed to load:', image.src);
+                  (e.currentTarget as HTMLImageElement).src = '/placeholder.svg';
+                }}
               />
             </div>
           ))}
         </div>
       </section>
-    </div>
+    </main>
   );
 };
