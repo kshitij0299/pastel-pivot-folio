@@ -53,6 +53,10 @@ export const WorkSection = () => {
     category: 'Brand Identity | Visual Design',
     description: 'Creative branding and visual identity design for advertising club from Bengaluru'
   }, {
+    title: 'Logos & Case Studies',
+    category: 'Brand Identity | Logo Design | Case Studies',
+    description: 'Collection of brand identity designs and logo creation projects showcasing strategic thinking and creative execution'
+  }, {
     title: 'Timeless Beauty Secrets',
     category: 'Design | Creative Direction | Social Media Strategy',
     description: 'Comprehensive branding and social media strategy for skincare brand from Bengaluru (currently working here)'
@@ -60,10 +64,6 @@ export const WorkSection = () => {
     title: 'Bay Nature',
     category: 'Editorial | Layout Design',
     description: 'Editorial layout design assessment for magazine featuring nature content and storytelling'
-  }, {
-    title: 'Logos & Case Studies',
-    category: 'Brand Identity | Logo Design | Case Studies',
-    description: 'Collection of brand identity designs and logo creation projects showcasing strategic thinking and creative execution'
   }];
   return <section id="work" ref={sectionRef} className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -113,6 +113,26 @@ export const WorkSection = () => {
             </div>
           </div>
 
+          {/* Logos & Case Studies Project Card */}
+          <div className="group cursor-pointer" onClick={() => navigate('/logos-case-studies')}>
+            <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+              <img src="/lovable-uploads/f4f28388-07b6-4ef1-9f2b-d0bdc6b0a79e.png" alt="Logos and case studies showcase" className="absolute inset-0 w-full h-full object-cover" />
+            </div>
+            
+            {/* Project title below */}
+            <div className="space-y-1 md:space-y-2">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
+                {projects[2].title}
+              </h3>
+              <p className="font-rethink text-sm md:text-base text-body font-medium">
+                {projects[2].category}
+              </p>
+              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
+                {projects[2].description}
+              </p>
+            </div>
+          </div>
+
           {/* Timeless Beauty Secrets Project Card */}
           <div className="group">
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-all duration-300 hover:scale-105 grayscale-[50%] opacity-75 hover:grayscale-0 hover:opacity-100">
@@ -132,26 +152,6 @@ export const WorkSection = () => {
             {/* Project title below */}
             <div className="space-y-1 md:space-y-2 opacity-75 group-hover:opacity-100 transition-opacity duration-300">
               <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[2].title}
-              </h3>
-              <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[2].category}
-              </p>
-              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[2].description}
-              </p>
-            </div>
-          </div>
-
-          {/* Bay Nature Project Card */}
-          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1Gm2wgeyTUzbo5oEwnWq4ka0imtqv1XmC/view?usp=drive_link', '_blank')}>
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img src="/lovable-uploads/7fe75674-f948-425c-8974-41752de61f6c.png" alt="Bay Nature editorial design" className="absolute inset-0 w-full h-full object-cover" />
-            </div>
-            
-            {/* Project title below */}
-            <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
                 {projects[3].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
@@ -163,10 +163,10 @@ export const WorkSection = () => {
             </div>
           </div>
 
-          {/* Logos & Case Studies Project Card */}
-          <div className="group cursor-pointer" onClick={() => navigate('/logos-case-studies')}>
-            <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img src="/lovable-uploads/61d07919-b22a-493a-846e-74119d6f8dc7.png" alt="Logos and case studies showcase" className="absolute inset-0 w-full h-full object-cover" />
+          {/* Bay Nature Project Card */}
+          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1Gm2wgeyTUzbo5oEwnWq4ka0imtqv1XmC/view?usp=drive_link', '_blank')}>
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+              <img src="/lovable-uploads/7fe75674-f948-425c-8974-41752de61f6c.png" alt="Bay Nature editorial design" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             
             {/* Project title below */}
