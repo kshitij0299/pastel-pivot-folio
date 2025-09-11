@@ -61,6 +61,10 @@ export const WorkSection = () => {
     category: 'Design | Creative Direction | Social Media Strategy',
     description: 'Comprehensive branding and social media strategy for skincare brand from Bengaluru (currently working here)'
   }, {
+    title: 'The Hiring Company',
+    category: 'UI/UX • Web App • 0→1',
+    description: 'Complete UI/UX design for an AI-powered Applicant Tracking System (ATS) web application. End-to-end design process from concept to implementation, focusing on user experience optimization for both recruiters and candidates in the modern hiring landscape.'
+  }, {
     title: 'Bay Nature',
     category: 'Editorial | Layout Design',
     description: 'Editorial layout design assessment for magazine featuring nature content and storytelling'
@@ -163,10 +167,17 @@ export const WorkSection = () => {
             </div>
           </div>
 
-          {/* Bay Nature Project Card */}
-          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1Gm2wgeyTUzbo5oEwnWq4ka0imtqv1XmC/view?usp=drive_link', '_blank')}>
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img src="/lovable-uploads/7fe75674-f948-425c-8974-41752de61f6c.png" alt="Bay Nature editorial design" className="absolute inset-0 w-full h-full object-cover" />
+          {/* The Hiring Company Project Card */}
+          <div className="group">
+            <div className="bg-white rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105 border border-gray-100">
+              <img src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" alt="The Hiring Company AI ATS project" className="absolute inset-0 w-full h-full object-contain p-8" />
+              
+              {/* Floating WIP Button */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 transition-transform duration-300 group-hover:-translate-y-1">
+                <span className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg text-body text-xs font-medium rounded-full">
+                  WIP
+                </span>
+              </div>
             </div>
             
             {/* Project title below */}
@@ -179,6 +190,26 @@ export const WorkSection = () => {
               </p>
               <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
                 {projects[4].description}
+              </p>
+            </div>
+          </div>
+
+          {/* Bay Nature Project Card */}
+          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1Gm2wgeyTUzbo5oEwnWq4ka0imtqv1XmC/view?usp=drive_link', '_blank')}>
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+              <img src="/lovable-uploads/7fe75674-f948-425c-8974-41752de61f6c.png" alt="Bay Nature editorial design" className="absolute inset-0 w-full h-full object-cover" />
+            </div>
+            
+            {/* Project title below */}
+            <div className="space-y-1 md:space-y-2">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
+                {projects[5].title}
+              </h3>
+              <p className="font-rethink text-sm md:text-base text-body font-medium">
+                {projects[5].category}
+              </p>
+              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
+                {projects[5].description}
               </p>
             </div>
           </div>
