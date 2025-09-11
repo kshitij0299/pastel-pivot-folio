@@ -170,7 +170,7 @@ export const WorkSection = () => {
           {/* The Hiring Company Project Card */}
           <div className="group">
             <div className="bg-white rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105 border border-gray-100">
-              <img src="/lovable-uploads/7170204f-c286-4e3c-90bf-a25b115092f4.png" alt="The Hiring Company AI ATS project" className="absolute inset-0 w-full h-full object-contain p-8" />
+              <img src="/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png" alt="The Hiring Company AI ATS project" className="absolute inset-0 w-full h-full object-contain p-8" />
               
               {/* Floating WIP Button */}
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 transition-transform duration-300 group-hover:-translate-y-1">
