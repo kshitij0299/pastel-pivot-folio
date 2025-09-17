@@ -97,6 +97,26 @@ export const WorkSection = () => {
             </div>
           </div>
 
+          {/* Defog Project Card (New - Second) */}
+          <div className="group cursor-pointer">
+            <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+              <video
+                src="/lovable-uploads/defog_kinda_corrected.mp4"
+                className="absolute inset-0 w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            </div>
+            {/* Project title below */}
+            <div className="space-y-1 md:space-y-2">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">Defog</h3>
+              <p className="font-rethink text-sm md:text-base text-body font-medium">UI/UX • Web App • Branding • 0→1</p>
+              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">A unique daily task management app</p>
+            </div>
+          </div>
+
           {/* The Ad Club Project Card */}
           <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1aTk9PepcOYNaZjmD3Geg3RzMxcENEVD4/preview', '_blank')}>
             <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
