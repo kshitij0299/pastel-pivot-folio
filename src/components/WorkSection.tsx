@@ -49,6 +49,10 @@ export const WorkSection = () => {
     description: 'Direct-to-consumer health supplements brand focused on premium wellness products and lifestyle enhancement',
     features: ['Curriculum designed by Industry leaders for maximum impact.', 'Track your growth instantly with personalized dashboards.', 'Master skills through interactive and immersive learning.']
   }, {
+    title: 'Defog',
+    category: 'UI/UX • Web App • Branding • 0→1',
+    description: 'A unique daily task management app'
+  }, {
     title: 'The Ad Club',
     category: 'Brand Identity | Visual Design',
     description: 'Creative branding and visual identity design for advertising club from Bengaluru'
@@ -97,10 +101,22 @@ export const WorkSection = () => {
             </div>
           </div>
 
-          {/* The Ad Club Project Card */}
-          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1aTk9PepcOYNaZjmD3Geg3RzMxcENEVD4/preview', '_blank')}>
-            <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img src="/lovable-uploads/ddff190e-68d3-4994-9abd-27a98cafec8e.png" alt="The Ad Club branding project" className="absolute inset-0 w-full h-full object-cover" />
+          {/* Defog Project Card */}
+          <div className="group cursor-pointer">
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+              <video 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <source src="/lovable-uploads/defog-video.mp4" type="video/mp4" />
+                {/* Fallback for when video doesn't load */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                  <span className="text-4xl font-playfair text-heading">Defog</span>
+                </div>
+              </video>
             </div>
             
             {/* Project title below */}
@@ -117,10 +133,10 @@ export const WorkSection = () => {
             </div>
           </div>
 
-          {/* Logos & Case Studies Project Card */}
-          <div className="group cursor-pointer" onClick={() => navigate('/logos-case-studies')}>
-            <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-all duration-300 hover:scale-105 shadow-[0_10px_25px_-5px_rgba(168,85,247,0.4),0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(168,85,247,0.6),0_0_40px_rgba(236,72,153,0.5)]">
-              <img src="/lovable-uploads/f4f28388-07b6-4ef1-9f2b-d0bdc6b0a79e.png" alt="Logos and case studies showcase" className="absolute inset-0 w-full h-full object-cover" />
+          {/* The Ad Club Project Card */}
+          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1aTk9PepcOYNaZjmD3Geg3RzMxcENEVD4/preview', '_blank')}>
+            <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
+              <img src="/lovable-uploads/ddff190e-68d3-4994-9abd-27a98cafec8e.png" alt="The Ad Club branding project" className="absolute inset-0 w-full h-full object-cover" />
             </div>
             
             {/* Project title below */}
@@ -133,6 +149,26 @@ export const WorkSection = () => {
               </p>
               <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
                 {projects[2].description}
+              </p>
+            </div>
+          </div>
+
+          {/* Logos & Case Studies Project Card */}
+          <div className="group cursor-pointer" onClick={() => navigate('/logos-case-studies')}>
+            <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-all duration-300 hover:scale-105 shadow-[0_10px_25px_-5px_rgba(168,85,247,0.4),0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(168,85,247,0.6),0_0_40px_rgba(236,72,153,0.5)]">
+              <img src="/lovable-uploads/f4f28388-07b6-4ef1-9f2b-d0bdc6b0a79e.png" alt="Logos and case studies showcase" className="absolute inset-0 w-full h-full object-cover" />
+            </div>
+            
+            {/* Project title below */}
+            <div className="space-y-1 md:space-y-2">
+              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
+                {projects[3].title}
+              </h3>
+              <p className="font-rethink text-sm md:text-base text-body font-medium">
+                {projects[3].category}
+              </p>
+              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
+                {projects[3].description}
               </p>
             </div>
           </div>
@@ -156,13 +192,13 @@ export const WorkSection = () => {
             {/* Project title below */}
             <div className="space-y-1 md:space-y-2 opacity-75 group-hover:opacity-100 transition-opacity duration-300">
               <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[3].title}
+                {projects[4].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[3].category}
+                {projects[4].category}
               </p>
               <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[3].description}
+                {projects[4].description}
               </p>
             </div>
           </div>
@@ -176,13 +212,13 @@ export const WorkSection = () => {
             {/* Project title below */}
             <div className="space-y-1 md:space-y-2">
               <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[4].title}
+                {projects[5].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[4].category}
+                {projects[5].category}
               </p>
               <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[4].description}
+                {projects[5].description}
               </p>
             </div>
           </div>
@@ -196,13 +232,13 @@ export const WorkSection = () => {
             {/* Project title below */}
             <div className="space-y-1 md:space-y-2">
               <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[5].title}
+                {projects[6].title}
               </h3>
               <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[5].category}
+                {projects[6].category}
               </p>
               <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[5].description}
+                {projects[6].description}
               </p>
             </div>
           </div>
