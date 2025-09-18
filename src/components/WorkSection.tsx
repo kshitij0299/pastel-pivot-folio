@@ -98,7 +98,7 @@ export const WorkSection = () => {
           </div>
 
           {/* Defog Project Card (New - Second) */}
-          <div className="group cursor-pointer">
+          <div className="group cursor-pointer" onClick={() => window.open('https://heat-dingy-30135284.figma.site', '_blank')}>
             <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
               <video
                 src="/lovable-uploads/defog_kinda_corrected.mp4"
