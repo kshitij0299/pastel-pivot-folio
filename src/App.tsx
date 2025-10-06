@@ -7,8 +7,23 @@ import Index from "./pages/Index";
 import { ProjectDetail } from "./pages/ProjectDetail";
 import { LogosCaseStudies } from "./pages/LogosCaseStudies";
 import NotFound from "./pages/NotFound";
+import { useFacebookPixel } from "./hooks/useFacebookPixel";
 
 const queryClient = new QueryClient();
+
+const AppContent = () => {
+  useFacebookPixel();
+  
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/project/:id" element={<ProjectDetail />} />
+      <Route path="/logos-case-studies" element={<LogosCaseStudies />} />
+      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -16,13 +31,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/project/:id" element={<ProjectDetail />} />
-          <Route path="/logos-case-studies" element={<LogosCaseStudies />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppContent />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
