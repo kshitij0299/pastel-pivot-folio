@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { CustomCursor } from '@/components/CustomCursor';
 import { Navigation } from '@/components/Navigation';
 import { HeroSection, SelectedWorkSection } from '@/components/HeroSection';
 import { WorkSection } from '@/components/WorkSection';
 import { PlaygroundSection } from '@/components/PlaygroundSection';
 import { AboutSection } from '@/components/AboutSection';
 import { Footer } from '@/components/Footer';
+import ClickSpark from '@/components/ClickSpark';
+import CustomCursor from '@/components/CustomCursor';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('hero');
@@ -32,18 +33,21 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <CustomCursor />
-      <Navigation activeSection={activeSection} />
-      
-      <main>
-        <HeroSection />
-        <WorkSection />
-        <PlaygroundSection />
-        <AboutSection />
-        <Footer />
-      </main>
-    </div>
+    <CustomCursor>
+      <ClickSpark>
+        <div className="min-h-screen bg-background">
+          <Navigation activeSection={activeSection} />
+          
+          <main>
+            <HeroSection />
+            <WorkSection />
+            <PlaygroundSection />
+            <AboutSection />
+            <Footer />
+          </main>
+        </div>
+      </ClickSpark>
+    </CustomCursor>
   );
 };
 

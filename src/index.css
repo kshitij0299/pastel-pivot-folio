@@ -119,16 +119,7 @@
     @apply border-border;
   }
 
-  /* Hide default cursor only on devices with fine pointer (desktop) */
-  @media (hover: hover) and (pointer: fine) {
-    * {
-      cursor: none;
-    }
-
-    body {
-      cursor: none;
-    }
-  }
+  /* Default cursor behavior restored (custom cursor removed) */
 
   body {
     @apply bg-background text-foreground font-rethink overflow-x-hidden;
@@ -137,24 +128,20 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Pointer cursor for clickable elements */
+  button,
+  a,
+  [role="button"],
+  .cursor-pointer,
+  .cursor-hover,
+  [onclick] {
+    cursor: pointer;
+  }
 }
 
 @layer components {
-  /* Custom Cursor Styles - only show on devices with fine pointer */
-  @media (hover: hover) and (pointer: fine) {
-    .custom-cursor {
-      @apply fixed top-0 left-0 w-6 h-6 rounded-full pointer-events-none z-50 mix-blend-difference;
-      background: rgba(255, 255, 255, 0.8);
-      transition: transform 0.1s ease-out, scale 0.2s ease-out;
-      backdrop-filter: blur(10px);
-    }
-    
-    .custom-cursor.link-hover {
-      transform: scale(2);
-      background: hsl(var(--accent-purple));
-      mix-blend-mode: normal;
-    }
-  }
+  /* Custom cursor styles removed */
 
   /* Frosted Glass Button Effect - Animation Only on Hover */
   .glass-button {
@@ -261,6 +248,59 @@
     animation: noise-move 50s linear infinite;
   }
 
+  /* Nav glass hover effect - same as glass-button hover */
+  .nav-glass-hover {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--gradient-pink) / 0.3),
+      hsl(var(--accent-purple) / 0.35),
+      hsl(var(--gradient-blue) / 0.3),
+      hsl(var(--accent-aqua) / 0.32),
+      hsl(var(--gradient-mint) / 0.3),
+      hsl(var(--gradient-lavender) / 0.33),
+      hsl(var(--accent-blush) / 0.3)
+    ) !important;
+    background-size: 400% 400% !important;
+    backdrop-filter: blur(20px);
+    border: none !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    animation: gradient-move 8s ease-in-out infinite, glass-shimmer 6s ease-in-out infinite;
+    transform: scale(1.03);
+    transition: all 0.6s ease-out;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-glass-hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(255, 255, 255, 0.2) 50%, 
+      transparent 100%);
+    animation: glass-sweep 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .nav-glass-hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.1"/></svg>');
+    opacity: 0.2;
+    pointer-events: none;
+    animation: noise-move 50s linear infinite;
+    z-index: 1;
+  }
+
   @keyframes glass-shimmer {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -340,6 +380,24 @@
   .gradient-text:hover {
     font-style: italic;
   }
+
+  /* Improve text and media rendering during transforms */
+  .scroll-stack-card,
+  .scroll-stack-card * {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .work-card img,
+  .work-card video {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Category bubble palette (OKLCH-inspired, subtle translucent) */
+  .pill-oklch-1 { background-color: oklch(82% 0.09 250 / 0.25); border: 1px solid oklch(88% 0.03 250 / 0.4); }
+  .pill-oklch-2 { background-color: oklch(78% 0.09 210 / 0.25); border: 1px solid oklch(84% 0.03 210 / 0.4); }
+  .pill-oklch-3 { background-color: oklch(80% 0.08 340 / 0.25); border: 1px solid oklch(86% 0.03 340 / 0.4); }
+  .pill-oklch-4 { background-color: oklch(82% 0.08 150 / 0.25); border: 1px solid oklch(88% 0.03 150 / 0.4); }
   
   @keyframes gradient-move {
     0%, 100% { background-position: 0% 50%; }
@@ -403,5 +461,45 @@
   .text-link:hover {
     color: hsl(var(--text-link));
     opacity: 0.8;
+  }
+
+  /* Sticky Card Scroll Styles */
+  .cards-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    padding-top: calc(50vh - 43.5vh);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 
+      repeat(6, calc(87vh + 4vw)) 
+      calc(87vh + 4vw + 100vh);
+    gap: 4vw;
+    width: 100%;
+    padding-bottom: 100vh;
+  }
+
+  .card {
+    position: sticky;
+    top: calc(50vh - 43.5vh);
+    padding-top: 0;
+    display: block;
+    height: fit-content;
+  }
+
+  .card:last-child {
+    padding-top: 0;
+  }
+
+  .card-body {
+    box-sizing: border-box;
+    padding: 0;
+    border-radius: 20px;
+    height: 87vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s;
+    width: 100%;
   }
 }

@@ -3,7 +3,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { CustomCursor } from '@/components/CustomCursor';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,7 +55,6 @@ export const LogosCaseStudies = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <CustomCursor />
       {/* Header with back button */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl py-4">

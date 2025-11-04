@@ -1,48 +1,11 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-gsap.registerPlugin(ScrollTrigger);
+import WorkCard from '@/components/WorkCard';
 export const WorkSection = () => {
   const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (titleRef.current) {
-      gsap.fromTo(titleRef.current, {
-        opacity: 0,
-        y: 50
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: 'top 80%'
-        }
-      });
-    }
-    if (cardsRef.current) {
-      const cards = cardsRef.current.children;
-      gsap.fromTo(cards, {
-        opacity: 0,
-        y: 60
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.3,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: cardsRef.current,
-          start: 'top 80%'
-        }
-      });
-    }
-  }, []);
+  const cardsContainerRef = useRef<HTMLUListElement>(null);
   const projects = [{
     title: 'Plentum',
     category: 'Social Media Post | Content Direction',
@@ -69,164 +32,100 @@ export const WorkSection = () => {
     category: 'Editorial | Layout Design',
     description: 'Editorial layout design assessment for magazine featuring nature content and storytelling'
   }];
-  return <section id="work" ref={sectionRef} className="py-16 md:py-24 bg-white">
-      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-        <h2 ref={titleRef} className="font-playfair text-4xl md:text-6xl lg:text-7xl font-light text-heading mb-12 md:mb-20 text-left tracking-[-0.06em]">
-          work.
-        </h2>
-
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          {/* Plentum Project Card */}
-          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1Uh8cZ3S55eub1fIGuFeZ6hFEQj2AlQ_W/preview', '_blank')}>
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              {/* Plentum project image */}
-              <img src="/lovable-uploads/ee03460e-9aed-4104-b034-c34d269412f7.png" alt="Plentum project showcase" className="absolute inset-0 w-full h-full object-cover" />
-            </div>
-            
-            {/* Project title below */}
-            <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[0].title}
-              </h3>
-              <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[0].category}
-              </p>
-              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[0].description}
-              </p>
-            </div>
-          </div>
-
-          {/* Defog Project Card (New - Second) */}
-          <div className="group cursor-pointer" onClick={() => window.open('https://heat-dingy-30135284.figma.site', '_blank')}>
-            <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <video
-                src="/lovable-uploads/defog_kinda_corrected.mp4"
-                className="absolute inset-0 w-full h-full object-cover"
-                autoPlay
-                loop
-                muted
-                playsInline
+  return <section id="work" ref={sectionRef} className="bg-white">
+      <div className="mx-auto max-w-5xl w-[95%]">
+        <ul ref={cardsContainerRef} id="cards" className="cards-list">
+          <li className="card" id="card1" style={{ '--index': 1 } as React.CSSProperties}>
+            <div className="card-body">
+              <WorkCard
+                title={projects[0].title}
+                description={projects[0].description}
+                categories={projects[0].category.split(/\s*[•|]\s*/).filter(Boolean)}
+                media={{ type: 'image', src: '/lovable-uploads/ee03460e-9aed-4104-b034-c34d269412f7.png' }}
+                backgroundColor="#e4dbea"
+                buttonColor="#dca8ff"
               />
             </div>
-            {/* Project title below */}
-            <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">Defog</h3>
-              <p className="font-rethink text-sm md:text-base text-body font-medium">UI/UX • Web App • Branding • 0→1</p>
-              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">A unique daily task management app</p>
-            </div>
-          </div>
+          </li>
 
-          {/* The Ad Club Project Card */}
-          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1aTk9PepcOYNaZjmD3Geg3RzMxcENEVD4/preview', '_blank')}>
-            <div className="bg-black rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img src="/lovable-uploads/ddff190e-68d3-4994-9abd-27a98cafec8e.png" alt="The Ad Club branding project" className="absolute inset-0 w-full h-full object-cover" />
+          <li className="card" id="card2" style={{ '--index': 2 } as React.CSSProperties}>
+            <div className="card-body">
+              <WorkCard
+                title={'Defog'}
+                description={'A unique daily task management app'}
+                categories={'UI/UX • Web App • Branding • 0→1'.split(/\s*[•|]\s*/)}
+                media={{ type: 'video', src: '/lovable-uploads/defog_kinda_corrected.mp4' }}
+                backgroundColor="#dbe5f0"
+                buttonColor="#a8d0ff"
+              />
             </div>
-            
-            {/* Project title below */}
-            <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[1].title}
-              </h3>
-              <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[1].category}
-              </p>
-              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[1].description}
-              </p>
-            </div>
-          </div>
+          </li>
 
-          {/* Logos & Case Studies Project Card */}
-          <div className="group cursor-pointer" onClick={() => navigate('/logos-case-studies')}>
-            <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-all duration-300 hover:scale-105 shadow-[0_10px_25px_-5px_rgba(168,85,247,0.4),0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(168,85,247,0.6),0_0_40px_rgba(236,72,153,0.5)]">
-              <img src="/lovable-uploads/f4f28388-07b6-4ef1-9f2b-d0bdc6b0a79e.png" alt="Logos and case studies showcase" className="absolute inset-0 w-full h-full object-cover" />
+          <li className="card" id="card3" style={{ '--index': 3 } as React.CSSProperties}>
+            <div className="card-body">
+              <WorkCard
+                title={projects[1].title}
+                description={projects[1].description}
+                categories={projects[1].category.split(/\s*[•|]\s*/)}
+                media={{ type: 'image', src: '/lovable-uploads/ddff190e-68d3-4994-9abd-27a98cafec8e.png' }}
+                backgroundColor="#dbeadc"
+                buttonColor="#a8ffa8"
+              />
             </div>
-            
-            {/* Project title below */}
-            <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[2].title}
-              </h3>
-              <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[2].category}
-              </p>
-              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[2].description}
-              </p>
-            </div>
-          </div>
+          </li>
 
-          {/* Timeless Beauty Secrets Project Card */}
-          <div className="group">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-all duration-300 hover:scale-105 grayscale-[50%] opacity-75 hover:grayscale-0 hover:opacity-100">
-              <img src="/lovable-uploads/2711c5dc-8e65-449b-9e96-084aacf9128d.png" alt="Timeless Beauty Secrets branding" className="absolute inset-0 w-full h-full object-cover" />
-              
-              {/* Animated Arrow pointing to badge */}
-              <div className="absolute top-4 right-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-2">
-                <ArrowUpRight className="w-6 h-6 text-white bg-black/50 rounded-full p-1 backdrop-blur-sm" />
-              </div>
-              
-              {/* Overlay button */}
-              <div className="absolute top-4 right-4">
-                <span className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm text-body text-xs font-medium rounded-full border border-white/20 shadow-sm">Currently Working Here</span>
-              </div>
+          <li className="card" id="card4" style={{ '--index': 4 } as React.CSSProperties}>
+            <div className="card-body">
+              <WorkCard
+                title={projects[2].title}
+                description={projects[2].description}
+                categories={projects[2].category.split(/\s*[•|]\s*/)}
+                media={{ type: 'image', src: '/lovable-uploads/f4f28388-07b6-4ef1-9f2b-d0bdc6b0a79e.png' }}
+                backgroundColor="#f0e5db"
+                buttonColor="#ffd0a8"
+              />
             </div>
-            
-            {/* Project title below */}
-            <div className="space-y-1 md:space-y-2 opacity-75 group-hover:opacity-100 transition-opacity duration-300">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[3].title}
-              </h3>
-              <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[3].category}
-              </p>
-              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[3].description}
-              </p>
-            </div>
-          </div>
+          </li>
 
-          {/* The Hiring Company Project Card */}
-          <div className="group">
-            <div className="bg-white rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105 border border-gray-100">
-              <img src="/lovable-uploads/16a24bcb-dd11-479f-aa7e-8b7bf9db1672.png" alt="The Hiring Company AI ATS project" className="absolute inset-0 w-full h-full object-cover" />
+          <li className="card" id="card5" style={{ '--index': 5 } as React.CSSProperties}>
+            <div className="card-body">
+              <WorkCard
+                title={projects[3].title}
+                description={projects[3].description}
+                categories={projects[3].category.split(/\s*[•|]\s*/)}
+                media={{ type: 'image', src: '/lovable-uploads/2711c5dc-8e65-449b-9e96-084aacf9128d.png' }}
+                backgroundColor="#eadbe5"
+                buttonColor="#ffa8dc"
+              />
             </div>
-            
-            {/* Project title below */}
-            <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[4].title}
-              </h3>
-              <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[4].category}
-              </p>
-              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[4].description}
-              </p>
-            </div>
-          </div>
+          </li>
 
-          {/* Bay Nature Project Card */}
-          <div className="group cursor-pointer" onClick={() => window.open('https://drive.google.com/file/d/1Gm2wgeyTUzbo5oEwnWq4ka0imtqv1XmC/view?usp=drive_link', '_blank')}>
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl md:rounded-3xl min-h-[400px] md:min-h-[500px] relative overflow-hidden mb-6 transition-transform duration-300 hover:scale-105">
-              <img src="/lovable-uploads/7fe75674-f948-425c-8974-41752de61f6c.png" alt="Bay Nature editorial design" className="absolute inset-0 w-full h-full object-cover" />
+          <li className="card" id="card6" style={{ '--index': 6 } as React.CSSProperties}>
+            <div className="card-body">
+              <WorkCard
+                title={projects[4].title}
+                description={projects[4].description}
+                categories={projects[4].category.split(/\s*[•|]\s*/)}
+                media={{ type: 'image', src: '/lovable-uploads/16a24bcb-dd11-479f-aa7e-8b7bf9db1672.png' }}
+                backgroundColor="#dbeae5"
+                buttonColor="#a8ffdc"
+              />
             </div>
-            
-            {/* Project title below */}
-            <div className="space-y-1 md:space-y-2">
-              <h3 className="font-playfair text-xl md:text-2xl lg:text-3xl font-light text-heading tracking-[-0.04em]">
-                {projects[5].title}
-              </h3>
-              <p className="font-rethink text-sm md:text-base text-body font-medium">
-                {projects[5].category}
-              </p>
-              <p className="font-rethink text-xs md:text-sm text-body leading-relaxed">
-                {projects[5].description}
-              </p>
+          </li>
+
+          <li className="card" id="card7" style={{ '--index': 7 } as React.CSSProperties}>
+            <div className="card-body">
+              <WorkCard
+                title={projects[5].title}
+                description={projects[5].description}
+                categories={projects[5].category.split(/\s*[•|]\s*/)}
+                media={{ type: 'image', src: '/lovable-uploads/7fe75674-f948-425c-8974-41752de61f6c.png' }}
+                backgroundColor="#f0eadb"
+                buttonColor="#ffdca8"
+              />
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
     </section>;
 };
