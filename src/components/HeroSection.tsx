@@ -1,397 +1,71 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import GradualBlur from '@/components/GradualBlur';
+import ColorBends from '@/components/ColorBends';
+import GradientText from '@/components/GradientText';
+import SplitText from '@/components/SplitText';
+import GlassSurface from '@/components/GlassSurface';
 gsap.registerPlugin(ScrollTrigger);
-interface StickerData {
-  id: number;
-  src: string;
-  alt: string;
-  x: number;
-  y: number;
-  size: string;
-}
+
 export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const profileRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
-  const [draggedSticker, setDraggedSticker] = useState<number | null>(null);
-  const [dragOffset, setDragOffset] = useState({
-    x: 0,
-    y: 0
-  });
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Entrance animation states
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [entranceProgress, setEntranceProgress] = useState(0);
-  const [entranceComplete, setEntranceComplete] = useState(false);
-
-  // Initialize stickers with placeholder positions (will be calculated)
-  const [stickers, setStickers] = useState<StickerData[]>([{
-    id: 1,
-    src: "/lovable-uploads/f2c4c868-233a-4093-a243-41fe24f44a1b.png",
-    alt: "Decorative sticker",
-    x: 0,
-    y: 0,
-    size: "w-20 h-20 md:w-24 md:h-24"
-  }, {
-    id: 2,
-    src: "/lovable-uploads/26129708-a75e-4069-b7c3-ae0c75f09b00.png",
-    alt: "Decorative sticker",
-    x: 0,
-    y: 0,
-    size: "w-20 h-20 md:w-24 md:h-24"
-  }, {
-    id: 3,
-    src: "/lovable-uploads/19dad77f-e13e-4f9d-b410-b68a7d608120.png",
-    alt: "Decorative sticker",
-    x: 0,
-    y: 0,
-    size: "w-18 h-18 md:w-22 md:h-22"
-  }, {
-    id: 5,
-    src: "/lovable-uploads/f9a0e36c-e31d-4b2a-86a3-59d438849944.png",
-    alt: "Kshitij's Profile",
-    x: 0,
-    y: 0,
-    size: "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
-  }]);
-
-  // Calculate positions based on actual DOM elements
-  useEffect(() => {
-    const calculatePositions = () => {
-      // Multiple attempts to ensure DOM is ready
-      const attemptPositioning = (retryCount = 0) => {
-        const titleElement = titleRef.current;
-        if (!titleElement) {
-          if (retryCount < 5) {
-            setTimeout(() => attemptPositioning(retryCount + 1), 200);
-          }
-          return;
-        }
-
-        // Get the "Kshitij" text position
-        const titleRect = titleElement.getBoundingClientRect();
-        const kshitijText = titleElement.querySelector('span:last-child') as HTMLElement;
-        console.log('Title element found:', !!titleElement);
-        console.log('Title rect:', titleRect);
-        console.log('Kshitij text found:', !!kshitijText);
-
-        // Check if we have valid dimensions
-        if (titleRect.width === 0 || titleRect.height === 0) {
-          if (retryCount < 5) {
-            console.log('Title not ready, retrying...', retryCount);
-            setTimeout(() => attemptPositioning(retryCount + 1), 300);
-            return;
-          }
-        }
-        let kshitijRect = titleRect;
-        if (kshitijText) {
-          kshitijRect = kshitijText.getBoundingClientRect();
-          console.log('Kshitij text rect:', kshitijRect);
-
-          // If Kshitij text rect is empty, use title rect as fallback
-          if (kshitijRect.width === 0 || kshitijRect.height === 0) {
-            kshitijRect = titleRect;
-            console.log('Using title rect as fallback');
-          }
-        }
-        setStickers(prev => prev.map(sticker => {
-          if (sticker.id === 1) {
-            // Mobile-specific positioning next to name
-            if (window.innerWidth <= 768) {
-              // FORCE TEST: Move to center of screen on mobile to test if positioning works
-              const mobileX = 50; // Far left
-              const mobileY = 200; // Near top
-
-              console.log('FORCE TEST - Mobile positioning - Sticker 1 at:', mobileX, mobileY);
-              console.log('Window width:', window.innerWidth);
-              console.log('kshitijRect:', kshitijRect);
-              return {
-                ...sticker,
-                x: mobileX,
-                y: mobileY
-              };
-            } else {
-              // Desktop positioning
-              const offsetX = 120;
-              const offsetY = -20;
-              const newX = kshitijRect.right + offsetX;
-              const newY = kshitijRect.top + window.scrollY + offsetY;
-              console.log('Desktop positioning - Sticker 1 at:', newX, newY);
-              return {
-                ...sticker,
-                x: Math.max(0, Math.min(newX, window.innerWidth - 100)),
-                y: Math.max(0, newY)
-              };
-            }
-          }
-          if (sticker.id === 2) {
-            return {
-              ...sticker,
-              x: window.innerWidth - 120,
-              y: window.innerWidth > 768 ? 128 : 160
-            };
-          }
-          if (sticker.id === 3) {
-            return {
-              ...sticker,
-              x: window.innerWidth > 768 ? 80 : 40,
-              y: window.innerHeight - 200
-            };
-          }
-          if (sticker.id === 5) {
-            // Profile picture positioning
-            if (window.innerWidth <= 768) {
-              // Mobile: Position next to "Kshitij" name
-              const profileX = Math.min(kshitijRect.right + 15, window.innerWidth - 80);
-              const profileY = kshitijRect.top + window.scrollY - 10;
-              console.log('Mobile PROFILE positioning at:', profileX, profileY);
-              return {
-                ...sticker,
-                x: profileX,
-                y: profileY
-              };
-            } else {
-              // Desktop positioning
-              return {
-                ...sticker,
-                x: window.innerWidth - 200,
-                y: 300
-              };
-            }
-          }
-          return sticker;
-        }));
-      };
-
-      // Start positioning attempts
-      attemptPositioning();
-    };
-    calculatePositions();
-    window.addEventListener('resize', calculatePositions);
-    return () => {
-      window.removeEventListener('resize', calculatePositions);
-    };
-  }, []);
-
-  // Unified drag handlers for both mouse and touch
-  const startDrag = (clientX: number, clientY: number, stickerId: number) => {
-    const sticker = stickers.find(s => s.id === stickerId);
-    if (!sticker) return;
-    setDraggedSticker(stickerId);
-    setDragOffset({
-      x: clientX - sticker.x,
-      y: clientY - sticker.y
-    });
-  };
-  const updateDrag = (clientX: number, clientY: number) => {
-    if (draggedSticker === null) return;
-    const newX = clientX - dragOffset.x;
-    const newY = clientY - dragOffset.y;
-
-    // Keep stickers within viewport bounds
-    const maxX = window.innerWidth - 100;
-    const maxY = window.innerHeight - 100;
-    const boundedX = Math.max(0, Math.min(newX, maxX));
-    const boundedY = Math.max(0, Math.min(newY, maxY));
-    setStickers(prev => prev.map(sticker => sticker.id === draggedSticker ? {
-      ...sticker,
-      x: boundedX,
-      y: boundedY
-    } : sticker));
-  };
-  const endDrag = () => {
-    setDraggedSticker(null);
-  };
-
-  // Mouse event handlers
-  const handleMouseDown = (e: React.MouseEvent, stickerId: number) => {
-    e.preventDefault();
-    startDrag(e.clientX, e.clientY, stickerId);
-  };
-  const handleMouseMove = (e: MouseEvent) => {
-    updateDrag(e.clientX, e.clientY);
-  };
-  const handleMouseUp = () => {
-    endDrag();
-  };
-
-  // Touch event handlers
-  const handleTouchStart = (e: React.TouchEvent, stickerId: number) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    startDrag(touch.clientX, touch.clientY, stickerId);
-  };
-  const handleTouchMove = (e: TouchEvent) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    updateDrag(touch.clientX, touch.clientY);
-  };
-  const handleTouchEnd = (e: TouchEvent) => {
-    e.preventDefault();
-    endDrag();
-  };
-  useEffect(() => {
-    if (draggedSticker !== null) {
-      // Add both mouse and touch event listeners
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      document.addEventListener('touchmove', handleTouchMove, {
-        passive: false
-      });
-      document.addEventListener('touchend', handleTouchEnd);
-    }
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [draggedSticker, dragOffset]);
-
-  // Pre-calculate convergence point and curve data to avoid recalculation
-  const convergencePoint = {
-    x: typeof window !== 'undefined' ? window.innerWidth - 50 : 0,
-    y: 50
-  };
-
-  // Calculate entrance position (from convergence point to default position)
-  const calculateEntrancePosition = (sticker: StickerData) => {
-    if (!entranceComplete) {
-      // Interpolate from convergence point to target position
-      const targetX = sticker.x;
-      const targetY = sticker.y;
-      const {
-        x: convergenceX,
-        y: convergenceY
-      } = convergencePoint;
-
-      // Create curved path for entrance (reverse of scroll-away animation)
-      const curveIntensity = 0.3 + sticker.id * 0.1;
-      const midpointX = convergenceX + (targetX - convergenceX) * 0.6 + Math.sin(sticker.id) * 100 * curveIntensity;
-      const midpointY = convergenceY + (targetY - convergenceY) * 0.4 + 50 * curveIntensity;
-
-      // Use GSAP's power3.out easing equivalent
-      const t = entranceProgress;
-      const easeT = 1 - Math.pow(1 - t, 3);
-
-      // Quadratic bezier curve calculation
-      const oneMinusT = 1 - easeT;
-      const x = oneMinusT * oneMinusT * convergenceX + 2 * oneMinusT * easeT * midpointX + easeT * easeT * targetX;
-      const y = oneMinusT * oneMinusT * convergenceY + 2 * oneMinusT * easeT * midpointY + easeT * easeT * targetY;
-
-      // Entrance animation properties
-      const opacity = Math.min(1, entranceProgress * 1.5);
-      const scale = 0.2 + entranceProgress * 0.8;
-      const rotation = (1 - entranceProgress) * 45 * (sticker.id % 2 === 0 ? 1 : -1);
-      return {
-        x,
-        y,
-        opacity,
-        scale,
-        rotation
-      };
-    }
-    return {
-      x: sticker.x,
-      y: sticker.y,
-      opacity: 1,
-      scale: 1,
-      rotation: 0
-    };
-  };
-
-  // Calculate curved path for each sticker to convergence point (optimized)
-  const calculateStickerPosition = (sticker: StickerData, scrollProgress: number) => {
-    if (draggedSticker === sticker.id) {
-      return {
-        x: sticker.x,
-        y: sticker.y,
+  const handleTitleAnimationComplete = () => {
+    // Animate subtitle after title animation completes
+    if (subtitleRef.current) {
+      gsap.fromTo(subtitleRef.current, {
+        opacity: 0,
+        y: 30
+      }, {
         opacity: 1,
-        scale: 1.1,
-        rotation: 0
-      };
+        y: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        onComplete: () => {
+          // Dispatch event to trigger navigation animation
+          window.dispatchEvent(new CustomEvent('subtitleAnimationComplete'));
+        }
+      });
     }
-
-    // Use pre-calculated convergence point
-    const {
-      x: convergenceX,
-      y: convergenceY
-    } = convergencePoint;
-
-    // Original position (initial position)
-    const startX = sticker.x;
-    const startY = sticker.y;
-
-    // Create curved path using optimized bezier calculation
-    const curveIntensity = 0.3 + sticker.id * 0.1;
-    const midpointX = startX + (convergenceX - startX) * 0.6 + Math.sin(sticker.id) * 100 * curveIntensity;
-    const midpointY = startY + (convergenceY - startY) * 0.4 - 50 * curveIntensity;
-
-    // Optimized easing - use GSAP's power3 easing equivalent
-    const t = Math.min(scrollProgress, 1);
-    const easeT = 1 - Math.pow(1 - t, 2.5); // Smooth ease-out
-
-    // Optimized quadratic bezier curve calculation
-    const oneMinusT = 1 - easeT;
-    const x = oneMinusT * oneMinusT * startX + 2 * oneMinusT * easeT * midpointX + easeT * easeT * convergenceX;
-    const y = oneMinusT * oneMinusT * startY + 2 * oneMinusT * easeT * midpointY + easeT * easeT * convergenceY;
-
-    // Smoother opacity and scale transitions
-    const opacity = Math.max(0, Math.pow(1 - scrollProgress, 1.5));
-    const scale = Math.max(0.2, 1 - scrollProgress * 0.8);
-    const rotation = scrollProgress * 180 * (sticker.id % 2 === 0 ? 1 : -1);
-    return {
-      x,
-      y,
-      opacity,
-      scale,
-      rotation
-    };
   };
+
   useEffect(() => {
-    const tl = gsap.timeline();
+    // Only set up button animation on mobile
+    if (!isMobile) return;
 
-    // Initial hero animations
-    tl.fromTo(titleRef.current, {
-      opacity: 0,
-      y: 50
-    }, {
-      opacity: 1,
-      y: 0,
-      duration: 1.5,
-      ease: 'power3.out'
-    }).fromTo(subtitleRef.current, {
-      opacity: 0,
-      y: 30
-    }, {
-      opacity: 1,
-      y: 0,
-      duration: 1.2,
-      ease: 'power3.out'
-    }, '-=0.8').call(() => {
-      // Trigger sticker entrance after text animations
-      setTimeout(() => {
-        setHasLoaded(true);
-
-        // Animate entrance progress from 0 to 1
-        gsap.to({
-          progress: 0
-        }, {
-          progress: 1,
-          duration: 2,
-          ease: 'power3.out',
-          onUpdate: function () {
-            setEntranceProgress(this.targets()[0].progress);
-          },
-          onComplete: () => {
-            setEntranceComplete(true);
-          }
+    // Listen for subtitle animation complete to animate button
+    const handleSubtitleComplete = () => {
+      // Animate button up from bottom - 2.5x slower than before (1.33 * 2.5 = 3.325)
+      // Only animate y position, no opacity fade, no easing
+      if (buttonRef.current) {
+        gsap.to(buttonRef.current, {
+          y: 0,
+          duration: 3.325,
+          ease: 'none'
         });
-      }, 500);
-    });
+      }
+    };
+
+    window.addEventListener('subtitleAnimationComplete', handleSubtitleComplete as EventListener);
+    
+    return () => {
+      window.removeEventListener('subtitleAnimationComplete', handleSubtitleComplete as EventListener);
+    };
+  }, [isMobile]);
+
+  useEffect(() => {
+    // Set initial subtitle state
+    if (subtitleRef.current) {
+      gsap.set(subtitleRef.current, {
+        opacity: 0,
+        y: 30
+      });
+    }
 
     // Optimized scroll handler with requestAnimationFrame throttling
     let ticking = false;
@@ -405,78 +79,125 @@ export const HeroSection = () => {
       }
     };
 
-    // Use GSAP ScrollTrigger for smooth sticker animations
-    ScrollTrigger.create({
-      trigger: heroRef.current,
-      start: "top top",
-      end: "bottom top",
-      scrub: 0.5,
-      // Smooth scrubbing
-      onUpdate: self => {
-        // Update scroll position for sticker calculations
-        setScrollY(window.pageYOffset);
-      }
-    });
     window.addEventListener('scroll', handleScroll, {
       passive: true
     });
+
+    // Check if mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', checkMobile);
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
-  return <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 hero-gradient opacity-60" />
-      
-      {/* Draggable PNG stickers and profile */}
-      {stickers.map(sticker => {
-      // Use entrance animation if not complete, otherwise use scroll animation
-      let stickerPos;
-      if (!entranceComplete) {
-        stickerPos = calculateEntrancePosition(sticker);
-      } else {
-        // Calculate scroll progress (0 to 1 over first 800px of scroll)
-        const scrollProgress = Math.min(scrollY / 800, 1);
-        stickerPos = calculateStickerPosition(sticker, scrollProgress);
-      }
-      return <img key={sticker.id} src={sticker.src} alt={sticker.alt} className={`draggable-sticker ${sticker.size} ${draggedSticker === sticker.id ? 'dragging' : ''} ${sticker.id === 5 ? 'rounded-full object-cover shadow-lg' : ''}`} style={{
-        position: 'fixed',
-        left: `${stickerPos.x}px`,
-        top: `${stickerPos.y}px`,
-        zIndex: draggedSticker === sticker.id ? 50 : 20,
-        opacity: stickerPos.opacity,
-        transform: `translate3d(0, 0, 0) scale(${stickerPos.scale}) rotate(${stickerPos.rotation}deg)`,
-        willChange: 'transform, opacity',
-        transition: draggedSticker === sticker.id ? 'none' : 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.1s ease-out',
-        cursor: 'grab'
-      }} onMouseDown={e => handleMouseDown(e, sticker.id)} onTouchStart={e => handleTouchStart(e, sticker.id)} draggable={false} />;
-    })}
+
+  // Set initial button state only on mobile
+  useEffect(() => {
+    if (!isMobile || !buttonRef.current) return;
+    
+    // Set initial button state (hidden below viewport, but fully visible for glass effects)
+    const startY = window.innerHeight * 0.5 + 100; // Half viewport + extra margin
+    gsap.set(buttonRef.current, {
+      opacity: 1,
+      y: startY
+    });
+  }, [isMobile]);
+  return (
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20 bg-black">
+      {/* ColorBends background */}
+      <div className="absolute inset-0 w-full h-full z-0" style={{ width: '100%', height: '100%' }}>
+        <ColorBends
+          colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
+          rotation={0}
+          autoRotate={0}
+          speed={0.2}
+          scale={1}
+          frequency={1}
+          warpStrength={1}
+          mouseInfluence={1}
+          parallax={0.5}
+          noise={0.1}
+          transparent
+          className="w-full h-full"
+          style={{ width: '100%', height: '100%' }}
+        />
+      </div>
 
       <div ref={heroRef} className="w-full px-4 sm:px-6 md:px-12 lg:px-16 relative z-10 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col items-center justify-center text-center">
           <div className="flex-1">
-            <h1 ref={titleRef} className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-4 md:mb-6 leading-none tracking-wide">
-              <span className="gradient-text cursor-hover">Hi !</span><span className="text-heading" id="kshitij-text">, I'm Kshitij</span>
+            <h1 className="font-rethink text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 md:mb-6 leading-none tracking-wide text-white">
+              <SplitText
+                text="Hi !   I'm   Kshitij"
+                className="text-white cursor-hover"
+                delay={77}
+                duration={0.46}
+                ease="power3.out"
+                splitType="words"
+                from={{ opacity: 0, y: 40 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="-100px"
+                textAlign="center"
+                onLetterAnimationComplete={handleTitleAnimationComplete}
+              />
             </h1>
             
-            <p ref={subtitleRef} className="font-playfair text-lg sm:text-xl md:text-2xl lg:text-3xl text-body max-w-4xl leading-[1.4] mb-6 md:mb-8 tracking-wide">
-              a <em>designer</em> who believes in the power of warmth, wit,
+            <p ref={subtitleRef} className="font-rethink text-lg sm:text-xl md:text-2xl lg:text-3xl text-white max-w-4xl leading-[1.4] mb-[72px] md:mb-[96px] tracking-wide font-medium">
+              a <GradientText
+                colors={["#ff6b9d", "#00d4ff", "#5dade2", "#7fffd4", "#fff9c4", "#ffb3ba", "#ff6b9d"]}
+                animationSpeed={6}
+                showBorder={false}
+                className=""
+              >
+                <em>designer</em>
+              </GradientText> who believes in the power of warmth, wit,
               <br className="hidden sm:block" />
               and good visual storytelling.
             </p>
+            
+            {/* Get in touch button - mobile only */}
+            <div ref={buttonRef} className="mt-[56px] md:mt-[64px] md:hidden">
+              <GlassSurface
+                width="auto"
+                borderRadius={28}
+                backgroundOpacity={0}
+                className=""
+                onClick={() => window.location.href = 'mailto:kshitij0299@gmail.com'}
+              >
+                <div className="flex items-center justify-center px-8 py-4 font-rethink text-lg font-medium cursor-hover text-white">
+                  Get in touch
+                  <svg className="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </GlassSurface>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Scroll down arrow */}
-      <div className="scroll-arrow" style={{
-      opacity: Math.max(0, 1 - scrollY / 300)
-    }}>
-        <img src="/lovable-uploads/67843970-e07e-4e59-84de-0c9151dc63a7.png" alt="Scroll down" className="w-8 h-12 md:w-10 md:h-16" />
-      </div>
-
-    </section>;
+      {!isMobile && (
+        <GradualBlur
+          target="page"
+          position="bottom"
+          height="6rem"
+          strength={2}
+          divCount={5}
+          curve="bezier"
+          exponential={true}
+          opacity={1}
+          zIndex={10}
+        />
+      )}
+    </section>
+  );
 };
 
 // Selected Work Section as separate component

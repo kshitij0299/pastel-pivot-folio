@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
+import { gsap } from 'gsap';
 import GlassSurface from '@/components/GlassSurface';
+import StarBorder from '@/components/StarBorder';
 
 interface NavigationProps {
   activeSection?: string;
@@ -13,8 +15,69 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
   const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
   const [starSpeed, setStarSpeed] = useState(8);
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [isInHeroSection, setIsInHeroSection] = useState(true);
+  const navItemsRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Set initial state for nav items (hidden above) - use setTimeout to ensure ref is ready
+    const setInitialState = () => {
+      if (navItemsRef.current) {
+        gsap.set(navItemsRef.current, {
+          y: -100,
+          opacity: 0
+        });
+      }
+      if (logoRef.current) {
+        gsap.set(logoRef.current, {
+          y: -100,
+          opacity: 0
+        });
+      }
+      if (contactRef.current) {
+        gsap.set(contactRef.current, {
+          y: -100,
+          opacity: 0
+        });
+      }
+    };
+    
+    // Use requestAnimationFrame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      setInitialState();
+    });
+
+    // Listen for subtitle animation complete event
+    const handleSubtitleComplete = () => {
+      if (navItemsRef.current) {
+        gsap.to(navItemsRef.current, {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out'
+        });
+      }
+      if (logoRef.current) {
+        gsap.to(logoRef.current, {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out'
+        });
+      }
+      if (contactRef.current) {
+        gsap.to(contactRef.current, {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out'
+        });
+      }
+    };
+
+    window.addEventListener('subtitleAnimationComplete', handleSubtitleComplete as EventListener);
+
     const lastScrollYRef = { current: window.scrollY };
     let scrollVelocity = 0;
     let ticking = false;
@@ -36,6 +99,15 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      
+      // Check if we're in the hero section
+      const heroSection = document.getElementById('hero');
+      if (heroSection) {
+        const heroRect = heroSection.getBoundingClientRect();
+        const heroBottom = heroRect.bottom;
+        // Consider in hero section if hero bottom is still visible (with some threshold)
+        setIsInHeroSection(heroBottom > window.innerHeight * 0.3);
+      }
       
       // Always show navbar at the top of the page
       if (currentScrollY < 10) {
@@ -59,11 +131,17 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
         ticking = true;
       }
       
-      lastScrollYRef.current = currentScrollY;
+      // Don't update lastScrollYRef here; updateStarSpeed does it after computing delta
     };
 
+    // Initial check
+    handleScroll();
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('subtitleAnimationComplete', handleSubtitleComplete as EventListener);
+    };
   }, []);
 
   const navItems = [
@@ -114,18 +192,15 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
     <nav
       className={cn(
         'fixed top-4 left-1/2 transform -translate-x-1/2 z-40 transition-transform duration-300 ease-in-out',
-        'px-2 py-0.5 max-w-5xl w-[95%]',
-        isNavbarVisible ? 'translate-y-0' : '-translate-y-[200%]'
+        'px-2 py-0.5 max-w-5xl w-[95%]'
       )}
     >
       <div className="w-full">
         <div className="flex items-center justify-between">
           {/* Logo + rotating star pill */}
-          <GlassSurface width="auto" height={44} borderRadius={28} backgroundOpacity={0} className="px-3">
-            <button
-              onClick={() => scrollToSection('#hero')}
-              className="font-playfair text-lg font-bold text-heading cursor-hover tracking-[-0.06em] flex items-center gap-2"
-            >
+          <div ref={logoRef}>
+            <GlassSurface width="auto" height={44} borderRadius={28} backgroundOpacity={0} className="" onClick={() => scrollToSection('#hero')}>
+              <div className="w-full h-full px-3 flex items-center justify-center gap-2 font-playfair text-lg font-bold cursor-hover tracking-[-0.06em] text-white">
               Kshitij's Design Portfolio
               <img
                 src="/lovable-uploads/b451c05e-b40b-4835-95cb-e0a32957dfc7.png"
@@ -138,103 +213,100 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
                   animationName: 'spin-slow'
                 }}
               />
-            </button>
-          </GlassSurface>
-
-          {/* Middle nav item pills */}
-          <div className="hidden md:flex items-center gap-3">
-            {navItems.map((item) => (
-              <GlassSurface key={item.label} width="auto" height={44} borderRadius={28} backgroundOpacity={0} className="px-4">
-                <button
-                  onClick={() => scrollToSection(item.href)}
-                  className={cn(
-                    'font-playfair text-lg font-bold transition-colors cursor-hover tracking-[-0.06em]',
-                    activeSection === item.href.slice(1)
-                      ? 'text-link'
-                      : 'text-heading'
-                  )}
-                >
-                  {item.label}
-                </button>
-              </GlassSurface>
-            ))}
+              </div>
+            </GlassSurface>
           </div>
 
-          {/* Desktop Contact pill + dropdown */}
-          <div className="hidden md:block relative">
-            <GlassSurface width="auto" height={44} borderRadius={28} backgroundOpacity={0} className="px-2">
-              <button
-                onClick={() => setIsContactDropdownOpen(!isContactDropdownOpen)}
-                className="font-rethink text-gray-800 px-4 py-2 rounded-full text-sm font-medium cursor-hover hover:opacity-90 transition-all duration-300"
-              >
-                Contact
-              </button>
-            </GlassSurface>
+          {/* Center group: nav items (hide on scroll) */}
+          <div className={cn('flex-1 hidden md:flex items-center justify-center transition-transform duration-300 ease-in-out', isNavbarVisible ? 'translate-y-0' : '-translate-y-[200%]')}>
+            <div ref={navItemsRef} className="flex items-center gap-3">
+              {navItems.map((item) => (
+                <GlassSurface key={item.label} width="auto" height={44} borderRadius={28} backgroundOpacity={0} className="" onClick={() => scrollToSection(item.href)}>
+                  <div className="w-full h-full px-4 flex items-center justify-center font-playfair text-lg font-bold cursor-hover tracking-[-0.06em] text-white">
+                    {item.label}
+                  </div>
+                </GlassSurface>
+              ))}
+            </div>
+          </div>
 
-            {isContactDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur-md rounded-lg shadow-lg border border-gray-200 z-50">
-                <div className="py-2">
-                  <a
-                    href="mailto:kshitij0299@gmail.com"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-hover"
-                  >
-                    📧 Email
-                  </a>
-                  {socialLinks.map((link) => (
+          {/* Right group: Contact + mobile menu (stays visible like logo) */}
+          <div ref={contactRef} className="flex items-center gap-3">
+            <div className="hidden md:block relative">
+              <StarBorder
+                as="div"
+                className="rounded-[28px]"
+                color="cyan"
+                speed="5s"
+                transparent={true}
+                innerClassName="p-0 rounded-[28px]"
+              >
+                <GlassSurface width="auto" height={44} borderRadius={28} backgroundOpacity={0} className="" onClick={() => setIsContactDropdownOpen(!isContactDropdownOpen)}>
+                  <div className="w-full h-full px-4 flex items-center justify-center font-rethink rounded-full text-sm font-medium cursor-hover hover:opacity-90 text-white">
+                    Contact
+                  </div>
+                </GlassSurface>
+              </StarBorder>
+
+              {isContactDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur-md rounded-lg shadow-lg border border-gray-200 z-50">
+                  <div className="py-2">
                     <a
-                      key={link.name}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="mailto:kshitij0299@gmail.com"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-hover"
                     >
-                      {link.icon} {link.name}
+                      📧 Email
                     </a>
-                  ))}
+                    {socialLinks.map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-hover"
+                      >
+                        {link.icon} {link.name}
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 cursor-hover"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6 text-heading" />
-            ) : (
-              <Menu className="w-6 h-6 text-heading" />
-            )}
-          </button>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 cursor-hover"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6 text-white" />
+              ) : (
+                <Menu className="w-6 h-6 text-white" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/90 backdrop-blur-lg rounded-2xl mt-2 border border-white/30 shadow-lg">
+        <div className="md:hidden backdrop-blur-lg rounded-2xl mt-2 border border-white/30 shadow-lg bg-black/90">
           <div className="px-6 py-4">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <button
                   key={item.label}
                   onClick={() => scrollToSection(item.href)}
-                  className={cn(
-                    'font-playfair text-lg font-bold transition-colors cursor-hover text-left tracking-[-0.06em]',
-                    activeSection === item.href.slice(1)
-                      ? 'text-link'
-                      : 'text-heading hover:text-link'
-                  )}
+                  className="font-playfair text-lg font-bold cursor-hover text-left tracking-[-0.06em] text-white"
                 >
                   {item.label}
                 </button>
               ))}
               
-              <div className="pt-4 border-t border-gray-200">
-                <p className="font-rethink text-xs text-gray-500 mb-2">Contact</p>
+              <div className="pt-4 border-t border-white/30">
+                <p className="font-rethink text-xs mb-2 text-white/70">Contact</p>
                 <a
                   href="mailto:kshitij0299@gmail.com"
-                  className="block py-2 text-sm text-gray-700 cursor-hover"
+                  className="block py-2 text-sm cursor-hover text-white"
                 >
                   📧 Email
                 </a>
@@ -244,7 +316,7 @@ export const Navigation = ({ activeSection }: NavigationProps) => {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block py-2 text-sm text-gray-700 cursor-hover"
+                    className="block py-2 text-sm cursor-hover text-white"
                   >
                     {link.icon} {link.name}
                   </a>

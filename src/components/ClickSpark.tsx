@@ -57,8 +57,8 @@ function hexToHsl(hex: string): { h: number; s: number; l: number } {
 
 const ClickSpark: React.FC<ClickSparkProps> = ({
   sparkColor = '#A8FFDC',
-  sparkSize = 10,
-  sparkRadius = 15,
+  sparkSize = 20,
+  sparkRadius = 30,
   sparkCount = 8,
   duration = 400,
   easing = 'ease-out',
@@ -178,7 +178,17 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     // Only trigger on clickable elements
     const target = e.target as HTMLElement;
-    const isClickable = target.closest('button, a, [role="button"], .cursor-pointer, .cursor-hover, [onclick], input[type="button"], input[type="submit"], .work-card');
+    
+    // Check if the click is on an actual clickable element (button, link, etc.)
+    // or an element with cursor-pointer class (but not the work-card container itself)
+    const clickableElement = target.closest('button, a, [role="button"], input[type="button"], input[type="submit"]');
+    const cursorPointerElement = target.closest('.cursor-pointer');
+    const isWorkCard = target.closest('.work-card');
+    
+    // Only trigger if it's a clickable element (button, link, etc.)
+    // or has cursor-pointer class (which we now only apply to actual buttons, not the card)
+    const isClickable = clickableElement !== null || 
+                       (cursorPointerElement !== null && cursorPointerElement !== isWorkCard);
     
     if (!isClickable) {
       return;
@@ -192,8 +202,34 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    
+    // Calculate cursor tip offset
+    // Cursor is centered at mouse position with translate(-50%, -50%) and scaled by 1.7
+    // We need to offset from the center to the tip
+    // Pointer cursor (7x7): tip is at top-left, roughly (2px, 2px) from top-left
+    //   Center is at (3.5px, 3.5px), so tip offset from center is (-1.5px, -1.5px), scaled = (-2.55px, -2.55px)
+    // Hand cursor (8x8): finger tip is at top-center, roughly (4px, 2px) from top-left  
+    //   Center is at (4px, 4px), so tip offset from center is (0px, -2px), scaled = (0px, -3.4px)
+    const cursorScale = 1.7;
+    let offsetX = 0;
+    let offsetY = 0;
+    
+    // Check if it's a hand cursor (pointer) or arrow cursor
+    const isHandCursor = isClickable;
+    
+    if (isHandCursor) {
+      // Hand cursor: finger tip offset from center (0px, -2px) scaled
+      offsetX = 0;
+      offsetY = -2 * cursorScale; // -3.4px
+    } else {
+      // Arrow cursor: tip offset from center (-1.5px, -1.5px) scaled
+      offsetX = -1.5 * cursorScale; // -2.55px
+      offsetY = -1.5 * cursorScale; // -2.55px
+    }
+    
+    // Apply offset to click position to center spark at cursor tip
+    const x = e.clientX - rect.left + offsetX;
+    const y = e.clientY - rect.top + offsetY;
 
     const now = performance.now();
     

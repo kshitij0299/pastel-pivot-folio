@@ -9,7 +9,7 @@
 @layer base {
   :root {
     /* Core background colors */
-    --background: 0 0% 100%;
+    --background: 0 0% 8%;
     --foreground: 0 0% 10%;
     
     /* Typography colors */
@@ -129,14 +129,27 @@
     scroll-behavior: smooth;
   }
 
-  /* Pointer cursor for clickable elements */
-  button,
-  a,
-  [role="button"],
-  .cursor-pointer,
-  .cursor-hover,
-  [onclick] {
-    cursor: pointer;
+  /* Pointer cursor for clickable elements on non-touch devices only */
+  @media (hover: hover) and (pointer: fine) {
+    button,
+    a,
+    [role="button"],
+    .cursor-pointer,
+    .cursor-hover,
+    [onclick] {
+      cursor: pointer;
+    }
+  }
+  /* On touch devices, keep default cursor */
+  @media (hover: none) and (pointer: coarse) {
+    button,
+    a,
+    [role="button"],
+    .cursor-pointer,
+    .cursor-hover,
+    [onclick] {
+      cursor: auto;
+    }
   }
 }
 
@@ -499,7 +512,29 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.5s;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out, backdrop-filter 0.5s ease-out;
     width: 100%;
+    transform-origin: center center;
+  }
+}
+
+/* Mobile overrides: full-screen cards without rounded corners/borders */
+@media (max-width: 640px) {
+  .card-body {
+    border-radius: 0;
+    height: 100svh; /* fill safe viewport height on phones */
+  }
+  .card {
+    top: 0; /* stick from very top when card height is 100vh */
+  }
+  .cards-list {
+    padding-top: 0;
+    grid-template-rows:
+      repeat(6, calc(100svh + 4vw))
+      calc(100svh + 4vw + 100vh);
+  }
+  /* Ensure the CTA respects the phone's safe area */
+  .work-card {
+    --mobile-button-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
   }
 }
