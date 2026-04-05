@@ -4,6 +4,8 @@ import { gsap } from 'gsap';
 import Lottie from 'lottie-react';
 import { ProjectNavbar } from '@/components/ProjectNavbar';
 import { Footer } from '@/components/Footer';
+import { DefogCaseStudy } from '@/components/DefogCaseStudy';
+import { useLoading } from '@/contexts/LoadingContext';
 
 // Image assets from uploaded folder - matching Figma design
 const imgLogo = "/lovable-uploads/logo2.svg"; // Defog logo with correct aspect ratio (356x140) - SVG for crisp rendering
@@ -12,7 +14,7 @@ const imgProductImage = "/lovable-uploads/Product_image_1.png";
 const imgProductImage1 = "/lovable-uploads/Product%20image_2.png";
 const imgProductImage2 = "/lovable-uploads/Product_image_3.png";
 const imgEllipse3 = "/lovable-uploads/Ellipse%203.svg";
-const imgPhoneMockup = "/lovable-uploads/iphone%20screen.png";
+
 
 // QuillBot assets
 const quillbotLogo = "/lovable-uploads/quillbot-logo.svg"; // QuillBot logo SVG
@@ -31,8 +33,17 @@ const quillbotSlideshowImages = [
 ];
 
 // Plentum assets
-const plentumLogo = "/lovable-uploads/plentum-logo.svg";
-const plentumPdf = "/lovable-uploads/NEW PLENTUM DOC FOR PORTFOLIO.pdf";
+const plentumLogo = "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/logo_new_plentum_h8wj6n.svg";
+const plentumPages = [
+  "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/Design_Portfolio_page-0002_epfc98.jpg",
+  "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/Design_Portfolio_page-0003_wom30f.jpg",
+  "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/Design_Portfolio_page-0004_r9kk0n.jpg",
+  "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/Design_Portfolio_page-0005_gyeq9h.jpg",
+  "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/Design_Portfolio_page-0006_gcpi7n.jpg",
+  "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/Design_Portfolio_page-0007_gmlups.jpg",
+  "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/Design_Portfolio_page-0008_k4no85.jpg",
+  "https://res.cloudinary.com/dnsylvhmw/image/upload/f_auto,q_auto/Design_Portfolio_page-0009_vz9jdh.jpg",
+];
 const plentumStickers = [
   "/lovable-uploads/plentum-stickers/Slice 1@2x.png",
   "/lovable-uploads/plentum-stickers/Slice 2@2x.png",
@@ -77,7 +88,7 @@ interface ProjectData {
   brandingButtonUrl?: string; // Optional: only for Defog
   heroImage?: string; // Optional: for QuillBot hero image
   heroLogo?: string; // Optional: for QuillBot logo
-  pdfSrc?: string; // Optional: for Plentum PDF
+  plentumImages?: string[]; // Optional: for Plentum static pages
   stickerIcons?: string[]; // Optional: for Plentum sticker icons
   images: {
     product1: string;
@@ -141,7 +152,7 @@ const projectsData: ProjectData[] = [
     videoSrc: '', // Not used for Plentum
     sectionText: '', // Not used for Plentum
     heroLogo: plentumLogo,
-    pdfSrc: plentumPdf,
+    plentumImages: plentumPages,
     stickerIcons: plentumStickers,
     images: {
       product1: '', // Not used
@@ -174,7 +185,8 @@ export const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const project = projectsData.find(p => p.id === id);
-  
+  const { setIsProjectLoading } = useLoading();
+
   // Calculate next and previous project IDs
   const currentIndex = projectsData.findIndex(p => p.id === id);
   const prevIndex = currentIndex > 0 ? currentIndex - 1 : projectsData.length - 1;
@@ -182,7 +194,7 @@ export const ProjectDetail = () => {
   const prevProjectId = projectsData[prevIndex].id;
   const nextProjectId = projectsData[nextIndex].id;
   const heroRef = useRef<HTMLDivElement>(null);
-  const phoneRef = useRef<HTMLDivElement>(null);
+
   const lottie1Ref = useRef<any>(null);
   const lottie2Ref = useRef<any>(null);
   const quillbotGifRef = useRef<HTMLImageElement>(null);
@@ -201,6 +213,8 @@ export const ProjectDetail = () => {
   const [isHovered, setIsHovered] = useState(false);
   const heroVideoRef = useRef<HTMLVideoElement | null>(null);
   const [isHeroVideoReady, setIsHeroVideoReady] = useState(false);
+  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const assetsLoadedRef = useRef(false);
 
   // Load Lottie JSON files (only for Defog)
   useEffect(() => {
@@ -209,7 +223,7 @@ export const ProjectDetail = () => {
         .then(res => res.json())
         .then(data => setLottie1Data(data))
         .catch(err => console.error('Error loading Lottie 1:', err));
-      
+
       fetch('/lovable-uploads/defog-a-2.json')
         .then(res => res.json())
         .then(data => setLottie2Data(data))
@@ -217,30 +231,171 @@ export const ProjectDetail = () => {
     }
   }, [project?.id]);
 
+  // Track hero media loading with 3s max timeout
+  useEffect(() => {
+    if (!project) {
+      setIsProjectLoading(false);
+      return;
+    }
+
+    console.log('[ProjectDetail] Starting to load project:', project.id);
+    assetsLoadedRef.current = false;
+    setIsProjectLoading(true);
+    console.log('[ProjectDetail] setIsProjectLoading(true)');
+
+    // Collect hero media assets
+    const heroAssets: string[] = [];
+
+    // Hero logo
+    if (project.heroLogo) {
+      heroAssets.push(project.heroLogo);
+    } else if (project.id === 'defog') {
+      heroAssets.push(imgLogo);
+    }
+
+    // Hero image/video
+    if (project.heroImage) {
+      heroAssets.push(project.heroImage);
+    }
+    if (project.videoSrc) {
+      heroAssets.push(project.videoSrc);
+    }
+    if (project.id === 'tbs' && tbsHeroVideo) {
+      heroAssets.push(tbsHeroVideo);
+    }
+
+    // Set 3 second maximum timeout
+    const maxTimeout = setTimeout(() => {
+      if (!assetsLoadedRef.current) {
+        console.log('[ProjectDetail] Timeout reached (3s), hiding loader');
+        assetsLoadedRef.current = true;
+        setIsProjectLoading(false);
+        console.log('[ProjectDetail] setIsProjectLoading(false) - timeout');
+      }
+    }, 3000);
+    loadingTimeoutRef.current = maxTimeout;
+
+    let completedCount = 0;
+    const totalAssets = heroAssets.length;
+
+    const checkCompletion = () => {
+      completedCount++;
+      if (completedCount >= totalAssets && !assetsLoadedRef.current) {
+        assetsLoadedRef.current = true;
+        clearTimeout(maxTimeout);
+        if (loadingTimeoutRef.current) {
+          clearTimeout(loadingTimeoutRef.current);
+          loadingTimeoutRef.current = null;
+        }
+        setIsProjectLoading(false);
+        console.log('[ProjectDetail] setIsProjectLoading(false) - all assets loaded');
+      }
+    };
+
+    // Preload hero assets
+    heroAssets.forEach((assetUrl) => {
+      if (assetUrl.endsWith('.mp4') || assetUrl.endsWith('.webm') || assetUrl.endsWith('.mov')) {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        let hasLoaded = false;
+
+        const handleLoad = () => {
+          if (!hasLoaded) {
+            hasLoaded = true;
+            checkCompletion();
+          }
+        };
+
+        const handleError = () => {
+          if (!hasLoaded) {
+            hasLoaded = true;
+            checkCompletion(); // Count errors as "loaded" to prevent getting stuck
+          }
+        };
+
+        video.onloadedmetadata = handleLoad;
+        video.oncanplay = handleLoad;
+        video.onerror = handleError;
+        video.src = assetUrl;
+      } else {
+        const img = new Image();
+        let hasLoaded = false;
+
+        const handleLoad = () => {
+          if (!hasLoaded) {
+            hasLoaded = true;
+            checkCompletion();
+          }
+        };
+
+        const handleError = () => {
+          if (!hasLoaded) {
+            hasLoaded = true;
+            checkCompletion(); // Count errors as "loaded" to prevent getting stuck
+          }
+        };
+
+        img.onload = handleLoad;
+        img.onerror = handleError;
+        img.src = assetUrl;
+      }
+    });
+
+    // If no assets, hide immediately
+    if (totalAssets === 0) {
+      clearTimeout(maxTimeout);
+      assetsLoadedRef.current = true;
+      setIsProjectLoading(false);
+      console.log('[ProjectDetail] setIsProjectLoading(false) - no assets to load');
+    }
+
+    return () => {
+      clearTimeout(maxTimeout);
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+        loadingTimeoutRef.current = null;
+      }
+    };
+  }, [project?.id, setIsProjectLoading]);
+
   // Scroll to top when navigating to a project page or switching between projects
   // Use useLayoutEffect to run synchronously before browser paint
   useLayoutEffect(() => {
+    // 1. Clean up any lingering snap classes immediately
+    document.documentElement.classList.remove('snap-scroll-enabled');
+
+    // 2. Prevent browser from restoring scroll position (which might be footer)
+    // Removed to allow back button to restore position
+    // if (history.scrollRestoration) {
+    //   history.scrollRestoration = 'manual';
+    // }
+
     // Scroll both window and documentElement to ensure it works across browsers
     const scrollToTop = () => {
       window.scrollTo({ top: 0, behavior: 'instant' });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     };
-    
+
     // Immediate scroll
     scrollToTop();
-    
+
     // Also use requestAnimationFrame as a fallback in case browser restoration happens after
     requestAnimationFrame(() => {
       scrollToTop();
     });
-    
+
     // Additional fallback with a small delay to catch any late restoration
     const timeoutId = setTimeout(() => {
       scrollToTop();
-    }, 0);
-    
-    return () => clearTimeout(timeoutId);
+    }, 10); // Slight increase to outrace browser
+
+    return () => {
+      clearTimeout(timeoutId);
+      // Restore auto scroll restoration when leaving if desireable, 
+      // though typically manual is fine for SPA. 
+      // We won't reset it here to avoid race conditions on back button.
+    };
   }, [location.pathname]);
 
   useEffect(() => {
@@ -254,84 +409,47 @@ export const ProjectDetail = () => {
 
   // Animate hero text on mount (similar to HeroSection but without delay)
   useEffect(() => {
+    if (!project?.id) return;
+
+    // Check if user has seen this project intro
+    const storageKey = `intro_seen_project_${project.id}`;
+    const hasSeenIntro = sessionStorage.getItem(storageKey);
+    const duration = hasSeenIntro ? 0 : 0.6; // Faster (was 1.8) or instant
+
+    // Mark as seen if not already
+    if (!hasSeenIntro) {
+      sessionStorage.setItem(storageKey, 'true');
+    }
+
+    const animateElement = (element: HTMLElement | null) => {
+      if (element) {
+        if (hasSeenIntro) {
+          gsap.set(element, { opacity: 1, y: 0 });
+        } else {
+          gsap.set(element, { opacity: 0, y: 30 });
+          gsap.to(element, {
+            opacity: 1,
+            y: 0,
+            duration: duration,
+            ease: 'power3.out'
+          });
+        }
+      }
+    };
+
     // QuillBot desktop
-    if (heroTextRef.current) {
-      gsap.set(heroTextRef.current, {
-        opacity: 0,
-        y: 30
-      });
-      gsap.to(heroTextRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1.8,
-        ease: 'power3.out'
-      });
-    }
+    animateElement(heroTextRef.current);
     // QuillBot mobile
-    if (heroTextMobileRef.current) {
-      gsap.set(heroTextMobileRef.current, {
-        opacity: 0,
-        y: 30
-      });
-      gsap.to(heroTextMobileRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1.8,
-        ease: 'power3.out'
-      });
-    }
+    animateElement(heroTextMobileRef.current);
     // Defog desktop
-    if (defogHeroTextRef.current) {
-      gsap.set(defogHeroTextRef.current, {
-        opacity: 0,
-        y: 30
-      });
-      gsap.to(defogHeroTextRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1.8,
-        ease: 'power3.out'
-      });
-    }
+    animateElement(defogHeroTextRef.current);
     // Defog mobile
-    if (defogHeroTextMobileRef.current) {
-      gsap.set(defogHeroTextMobileRef.current, {
-        opacity: 0,
-        y: 30
-      });
-      gsap.to(defogHeroTextMobileRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1.8,
-        ease: 'power3.out'
-      });
-    }
+    animateElement(defogHeroTextMobileRef.current);
     // Plentum desktop
-    if (plentumHeroTextRef.current) {
-      gsap.set(plentumHeroTextRef.current, {
-        opacity: 0,
-        y: 30
-      });
-      gsap.to(plentumHeroTextRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1.8,
-        ease: 'power3.out'
-      });
-    }
+    animateElement(plentumHeroTextRef.current);
     // Plentum mobile
-    if (plentumHeroTextMobileRef.current) {
-      gsap.set(plentumHeroTextMobileRef.current, {
-        opacity: 0,
-        y: 30
-      });
-      gsap.to(plentumHeroTextMobileRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 1.8,
-        ease: 'power3.out'
-      });
-    }
+    animateElement(plentumHeroTextMobileRef.current);
+
   }, [project?.id]);
 
   // Calculate parallax offset - phone moves 1.5x faster than scroll
@@ -341,13 +459,13 @@ export const ProjectDetail = () => {
   const parallaxOffset = scrollY * 1.5;
   // Lotties move at half the speed of phone (0.75x)
   const lottieParallaxOffset = scrollY * 0.75;
-  
+
   // Plentum sticker icons parallax - each with slightly different speeds
   const stickerParallaxSpeeds = [0.6, 0.7, 0.8, 0.65, 0.75, 0.85]; // Different speeds for each icon
   const stickerParallaxOffsets = stickerParallaxSpeeds.map(speed => scrollY * speed);
   const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
   const stickerInitialTop = viewportHeight + 200; // Start below viewport, not visible initially
-  
+
   // Check if Lotties are visible (should start playing when visible)
   const lottieInitialTop = viewportHeight + 150; // Start below viewport, not visible initially (moved up by 50px)
   const lottieCurrentTop = lottieInitialTop - lottieParallaxOffset;
@@ -379,16 +497,16 @@ export const ProjectDetail = () => {
     if (project?.id === 'quillbot') {
       // Start with first image visible
       setIsAnimating(true);
-      
+
       // Calculate interval based on hover state: 500ms animation + display time
       const displayTime = isHovered ? 2000 : 1500; // 2s on hover, 1.5s normal
       const totalCycle = 500 + displayTime; // 500ms animation + display time
-      
+
       const interval = setInterval(() => {
         // Change to next image and position it off-screen to the right
         setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % quillbotSlideshowImages.length);
         setIsAnimating(false);
-        
+
         // Use requestAnimationFrame to ensure the image is positioned off-screen before animating
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
@@ -418,52 +536,37 @@ export const ProjectDetail = () => {
   return (
     <div className="min-h-screen bg-white">
       <ProjectNavbar />
-      
+
       {/* Desktop Layout - Exact Figma Auto Layout Structure */}
       <div className="hidden md:block bg-white content-stretch flex flex-col gap-[10px] items-center justify-center w-full">
         {/* Hero Section - Black background with full viewport height */}
         {project.id === 'defog' ? (
-          <div 
+          <div
             ref={heroRef}
             className="bg-black box-border content-stretch flex flex-col gap-[60px] h-screen items-center overflow-clip px-[176px] py-[60px] relative shrink-0 w-full"
           >
             {/* Logo - exact dimensions (356x140), centered */}
             <div className="h-[140px] relative shrink-0 w-[356px]">
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <img 
-                  src={imgLogo} 
-                  alt="Defog logo" 
+                <img
+                  src={imgLogo}
+                  alt="Defog logo"
                   className="absolute left-0 max-w-none w-full h-full top-0 object-contain"
                   style={{ imageRendering: 'auto' }}
                 />
               </div>
             </div>
-            
+
             {/* Large text - full viewport width with 30px padding, positioned absolutely */}
-            <p ref={defogHeroTextRef} className="font-playfair leading-[78px] not-italic absolute text-[#fbe4e2] text-[64px] text-center whitespace-pre-wrap left-[30px] right-[30px] top-[250px] z-10">
+            <p ref={defogHeroTextRef} className="font-playfair font-light leading-[78px] not-italic absolute text-[#fbe4e2] text-[62px] text-center whitespace-pre-wrap left-[30px] right-[30px] top-[250px] z-10">
               {project.heroText}
             </p>
-            
-            {/* Phone mockup - parallax effect: moves 1.5x faster than scroll */}
-            <div 
-              ref={phoneRef}
-              className="absolute h-[916px] left-1/2 w-[439px] z-20"
-              style={{
-                top: `${543 - parallaxOffset}px`,
-                transform: 'translateX(-50%)',
-                willChange: 'top',
-              }}
-            >
-              <img 
-                src={imgPhoneMockup} 
-                alt="Defog app on iPhone" 
-                className="block max-w-none w-full h-full object-contain"
-              />
-            </div>
+
+            {/* Phone mockup removed as requested */}
 
             {/* Lottie Animation 1 - Left side, 60px left of phone */}
             {lottie1Data && (
-              <div 
+              <div
                 className="absolute w-[100px] h-[100px] z-0"
                 style={{
                   top: `${lottieInitialTop - lottieParallaxOffset}px`,
@@ -484,7 +587,7 @@ export const ProjectDetail = () => {
 
             {/* Lottie Animation 2 - Right side, 60px right of phone */}
             {lottie2Data && (
-              <div 
+              <div
                 className="absolute w-[100px] h-[100px] z-0"
                 style={{
                   top: `${lottieInitialTop - lottieParallaxOffset + 70}px`,
@@ -505,28 +608,28 @@ export const ProjectDetail = () => {
           </div>
         ) : project.id === 'quillbot' ? (
           // QuillBot Hero Section - Full viewport height like Defog
-          <div 
+          <div
             ref={heroRef}
             className="bg-black box-border content-stretch flex flex-col gap-[60px] h-screen items-center overflow-clip px-[176px] py-[60px] relative shrink-0 w-full"
           >
             {/* Logo - QuillBot logo */}
             <div className="h-[136.5px] relative shrink-0 w-[589.457px]">
-              <img 
-                src={project.heroLogo || quillbotLogo} 
-                alt="QuillBot logo" 
+              <img
+                src={project.heroLogo || quillbotLogo}
+                alt="QuillBot logo"
                 className="block max-w-none w-full h-full object-contain"
                 style={{ imageRendering: 'auto' }}
               />
             </div>
-            
+
             {/* Large text - centered */}
-            <p ref={heroTextRef} className="font-playfair leading-[78px] not-italic relative shrink-0 text-[#e7f1e7] text-[64px] text-center whitespace-pre-wrap w-[min-content] min-w-full">
+            <p ref={heroTextRef} className="font-playfair font-light leading-[78px] not-italic relative shrink-0 text-[#e7f1e7] text-[62px] text-center whitespace-pre-wrap w-[min-content] min-w-full">
               {project.heroText}
             </p>
-            
+
             {/* GIF with parallax - positioned absolutely within hero section, like Defog phone */}
             {/* Position so 60% of GIF (242px) is visible at bottom of viewport initially */}
-            <div 
+            <div
               ref={quillbotGifContainerRef}
               className="absolute h-[404px] left-1/2 w-[497px] z-0"
               style={{
@@ -540,40 +643,40 @@ export const ProjectDetail = () => {
               }}
             >
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <img 
+                <img
                   ref={quillbotGifRef}
                   src={project.heroImage || quillbotHeroGif}
-                  alt="QuillBot hero" 
+                  alt="QuillBot hero"
                   className="absolute h-[126.6%] left-[-41.45%] max-w-none top-[-11.11%] w-[182.8%] object-contain"
                 />
               </div>
             </div>
-            
+
             {/* Spacer container to extend hero section for parallax effect */}
             <div className="box-border content-stretch flex flex-col gap-[10px] h-[1051px] items-center px-[10px] py-[50px] relative shrink-0 w-full pointer-events-none" aria-hidden="true">
             </div>
           </div>
         ) : project.id === 'plentum' ? (
           // Plentum Hero Section - Full viewport height
-          <div 
+          <div
             ref={heroRef}
             className="bg-black box-border content-stretch flex flex-col gap-[60px] h-screen items-center overflow-clip px-[176px] py-[60px] relative shrink-0 w-full"
           >
             {/* Logo - Plentum logo */}
             <div className="h-[140px] relative shrink-0" style={{ aspectRatio: '171/40', width: 'auto' }}>
-              <img 
-                src={project.heroLogo || plentumLogo} 
-                alt="Plentum logo" 
+              <img
+                src={project.heroLogo || plentumLogo}
+                alt="Plentum logo"
                 className="block max-w-none w-full h-full object-contain"
                 style={{ imageRendering: 'auto' }}
               />
             </div>
-            
+
             {/* Large text - centered */}
-            <p ref={plentumHeroTextRef} className="font-playfair leading-[78px] not-italic relative shrink-0 text-white text-[64px] text-center whitespace-pre-wrap w-[min-content] min-w-full max-w-6xl">
+            <p ref={plentumHeroTextRef} className="font-playfair font-light leading-[78px] not-italic relative shrink-0 text-white text-[62px] text-center whitespace-pre-wrap w-[min-content] min-w-full max-w-6xl">
               {project.heroText}
             </p>
-            
+
             {/* Sticker icons with parallax - positioned horizontally across, hidden initially */}
             {project.stickerIcons && project.stickerIcons.map((sticker, index) => {
               const iconWidth = 100;
@@ -583,7 +686,7 @@ export const ProjectDetail = () => {
               const leftPosition = spacing * (index + 1) - iconWidth / 2;
               const currentTop = stickerInitialTop - stickerParallaxOffsets[index];
               const isVisible = currentTop < viewportHeight + 100; // Visible when within 100px of viewport
-              
+
               return (
                 <div
                   key={index}
@@ -599,7 +702,7 @@ export const ProjectDetail = () => {
                     opacity: isVisible ? 1 : 0,
                   }}
                 >
-                  <img 
+                  <img
                     src={sticker}
                     alt={`Plentum sticker ${index + 1}`}
                     className="block max-w-none w-full h-full object-contain"
@@ -607,7 +710,7 @@ export const ProjectDetail = () => {
                 </div>
               );
             })}
-            
+
             {/* Spacer container to extend hero section for parallax effect */}
             <div className="box-border content-stretch flex flex-col gap-[10px] h-[1051px] items-center px-[10px] py-[50px] relative shrink-0 w-full pointer-events-none" aria-hidden="true">
             </div>
@@ -631,7 +734,7 @@ export const ProjectDetail = () => {
               onCanPlayThrough={() => {
                 if (!isHeroVideoReady) {
                   setIsHeroVideoReady(true);
-                  heroVideoRef.current?.play().catch(() => {});
+                  heroVideoRef.current?.play().catch(() => { });
                 }
               }}
             >
@@ -652,7 +755,7 @@ export const ProjectDetail = () => {
               </div>
 
               {/* Hero text with mixed fonts - responsive, wraps nicely */}
-              <p className="[text-shadow:rgba(0,0,0,0.25)_0px_4px_4px] font-playfair text-white leading-tight text-3xl md:text-5xl lg:text-6xl">
+              <p className="[text-shadow:rgba(0,0,0,0.25)_0px_4px_4px] font-playfair font-light text-white leading-tight text-[28px] md:text-[46px] lg:text-[58px]">
                 <span className="block">
                   WALKTHROUGH OF MY WORK & ART DIRECTION FOR SOCIAL MEDIA
                 </span>
@@ -669,52 +772,54 @@ export const ProjectDetail = () => {
 
         {/* Information and Intro Section - Auto Layout with gap-[100px], centered (skip for Plentum) */}
         {project.id !== 'plentum' && (
-          <div className="box-border content-stretch flex flex-col gap-[100px] items-center justify-center pb-0 pt-[30px] px-[80px] relative shrink-0 w-full">
-          <div className="content-stretch flex gap-[32px] items-start relative shrink-0 w-full max-w-[1440px]">
-            {/* Information Section */}
-            <div className="content-stretch flex flex-col gap-[8px] items-center overflow-clip relative shrink-0">
-              <div className="content-stretch flex font-inter font-normal gap-[8px] items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[14px] text-black uppercase">
-                <p className="opacity-40 relative shrink-0 w-[88px]">year</p>
-                <p className="relative shrink-0 w-[256px]">{project.year}</p>
+          <div className="box-border content-stretch flex flex-col gap-[100px] items-center justify-center pb-0 pt-[30px] px-4 md:px-8 lg:px-12 xl:px-16 2xl:px-[80px] relative shrink-0 w-full">
+            <div className="content-stretch flex flex-col md:flex-row gap-[32px] items-start relative shrink-0 w-full max-w-[1440px]">
+              {/* Information Section */}
+              <div className="content-stretch flex flex-col gap-[8px] items-center overflow-clip relative shrink-0">
+                <div className="content-stretch flex font-inter font-normal gap-[8px] items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[14px] text-black uppercase">
+                  <p className="opacity-40 relative shrink-0 w-[88px]">year</p>
+                  <p className="relative shrink-0 w-[256px]">{project.year}</p>
+                </div>
+                <div className="content-stretch flex font-inter font-normal gap-[8px] items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[14px] text-black uppercase">
+                  <p className="opacity-40 relative shrink-0 w-[88px]">Type</p>
+                  <p className="relative shrink-0 w-[256px]">{project.type}</p>
+                </div>
+                <div className="content-stretch flex font-inter font-normal gap-[8px] items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[14px] text-black uppercase">
+                  <p className="opacity-40 relative shrink-0 w-[88px]">ROLE</p>
+                  <p className="relative shrink-0 w-[256px]">{project.role}</p>
+                </div>
+                <div className="content-stretch flex font-inter font-normal gap-[8px] items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[14px] text-black uppercase">
+                  <p className="opacity-40 relative shrink-0 w-[88px]">DESIGN</p>
+                  <p className="relative shrink-0 w-[256px]">{project.design}</p>
+                </div>
               </div>
-              <div className="content-stretch flex font-inter font-normal gap-[8px] items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[14px] text-black uppercase">
-                <p className="opacity-40 relative shrink-0 w-[88px]">Type</p>
-                <p className="relative shrink-0 w-[256px]">{project.type}</p>
-              </div>
-              <div className="content-stretch flex font-inter font-normal gap-[8px] items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[14px] text-black uppercase">
-                <p className="opacity-40 relative shrink-0 w-[88px]">ROLE</p>
-                <p className="relative shrink-0 w-[256px]">{project.role}</p>
-              </div>
-              <div className="content-stretch flex font-inter font-normal gap-[8px] items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[14px] text-black uppercase">
-                <p className="opacity-40 relative shrink-0 w-[88px]">DESIGN</p>
-                <p className="relative shrink-0 w-[256px]">{project.design}</p>
+
+              {/* Intro Section */}
+              <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0">
+                <div className={`[grid-area:1_/_1] font-inter font-normal leading-[20px] ml-0 mt-0 not-italic relative text-[14px] text-black w-full ${project.id === 'quillbot' ? 'max-w-[615px]' : project.id === 'tbs' ? 'max-w-[400px]' : 'max-w-[448px]'}`}>
+                  <p className="whitespace-pre-wrap">{project.intro}</p>
+                </div>
               </div>
             </div>
 
-            {/* Intro Section */}
-            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0">
-              <div className={`[grid-area:1_/_1] font-inter font-normal leading-[20px] ml-0 mt-0 not-italic relative text-[14px] text-black ${project.id === 'quillbot' ? 'w-[615px]' : project.id === 'tbs' ? 'w-[400px]' : 'w-[448px]'}`}>
-                <p className="whitespace-pre-wrap">{project.intro}</p>
+            {/* Video Section - matching width with images below (skip for TBS, has different structure) */}
+            {project.id !== 'tbs' && (
+              <div className="box-border content-stretch flex items-center justify-center px-4 md:px-8 lg:px-12 xl:px-16 2xl:px-[80px] py-[30px] relative shrink-0 w-full">
+                <div className="h-[625px] relative rounded-[20px] shrink-0 w-full max-w-[1114px]">
+                  <video
+                    autoPlay
+                    className="absolute max-w-none object-cover rounded-[20px] w-full h-full"
+                    controlsList="nodownload"
+                    loop
+                    playsInline
+                    muted
+                  >
+                    <source src={project.videoSrc} type="video/mp4" />
+                  </video>
+                </div>
               </div>
-            </div>
-            </div>
-
-          {/* Video Section - exact width w-[1111px] (skip for TBS, has different structure) */}
-          {project.id !== 'tbs' && (
-            <div className="h-[625px] relative rounded-[20px] shrink-0 w-[1111px]">
-              <video 
-                autoPlay 
-                className="absolute max-w-none object-cover rounded-[20px] w-full h-full" 
-                controlsList="nodownload" 
-                loop 
-                playsInline
-                muted
-              >
-                <source src={project.videoSrc} type="video/mp4" />
-              </video>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
         )}
 
         {/* TBS Specific Sections */}
@@ -731,7 +836,7 @@ export const ProjectDetail = () => {
             <div className="box-border content-stretch flex flex-col md:flex-row gap-[32px] items-start px-6 md:px-[80px] pt-[30px] pb-[15px] relative shrink-0 w-full">
               {/* Left: text */}
               <div className="md:flex-1 flex">
-                <div className="md:h-[520px] flex items-start md:items-center">
+                <div className="flex items-start">
                   <p className="font-rethink font-semibold text-[32px] md:text-[48px] text-black tracking-[-0.06em] uppercase leading-[1.1] max-w-[704px]">
                     I was tasked with ensuring the brand's Instagram presence was cohesive and aligned with Timeless Beauty Secrets' identity.
                   </p>
@@ -740,14 +845,14 @@ export const ProjectDetail = () => {
 
               {/* Right: phone + label */}
               <div className="md:flex-1 flex flex-col items-center md:items-end mt-10 md:mt-0">
-                <div className="relative w-full max-w-[360px] md:max-w-[420px] md:h-[520px]">
+                <div className="relative w-full max-w-[500px] md:max-w-[600px]">
                   <img
                     alt="Instagram old look"
-                    className="w-full h-full object-contain pointer-events-none"
+                    className="w-full h-auto object-contain pointer-events-none"
                     src={tbsPhoneMockup}
                   />
                 </div>
-                <p className="font-rethink font-semibold text-[16px] text-black mt-[16px]">
+                <p className="font-rethink font-semibold text-[16px] text-black mt-[20px]">
                   OLD LOOK
                 </p>
               </div>
@@ -855,85 +960,88 @@ export const ProjectDetail = () => {
           </>
         )}
 
-        {/* PDF Display Section - Only for Plentum */}
-        {project.id === 'plentum' && project.pdfSrc && (
-          <div className="w-full bg-white">
-            <iframe
-              src={project.pdfSrc}
-              className="w-full"
-              style={{ height: '100vh', border: 'none' }}
-              title="Plentum PDF"
-            />
+        {/* Static Images Section - Only for Plentum */}
+        {project.id === 'plentum' && project.plentumImages && (
+          <div className="w-full bg-white flex flex-col">
+            {project.plentumImages.map((imgSrc, index) => (
+              <img
+                key={index}
+                src={imgSrc}
+                alt={`Plentum page ${index + 1}`}
+                className="w-full h-auto block"
+                style={{ verticalAlign: 'middle' }} // Ensures no gap between images
+              />
+            ))}
           </div>
         )}
 
         {/* Product Images - Using gap-[26px] and justify-center as per Figma (skip for Plentum and TBS) */}
         {project.id !== 'plentum' && project.id !== 'tbs' && (
-          <div className="box-border content-stretch flex gap-[26px] items-start justify-center px-[80px] py-[30px] relative shrink-0 w-full">
-          <div className="h-[625px] relative rounded-[20px] shrink-0 w-[640px]">
-            <img 
-              src={project.images.product1} 
-              alt="Product image 1" 
-              className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[20px] w-full h-full"
-            />
+          <div className="box-border content-stretch flex flex-wrap gap-[26px] items-start justify-center px-4 md:px-8 lg:px-12 xl:px-16 2xl:px-[80px] py-[30px] relative shrink-0 w-full">
+            <div className="h-[625px] relative rounded-[20px] shrink-0 w-full max-w-[640px] md:flex-1">
+              <img
+                src={project.images.product1}
+                alt="Product image 1"
+                className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[20px] w-full h-full"
+              />
+            </div>
+            <div className="h-[625px] relative rounded-[20px] shrink-0 w-full max-w-[448px] md:flex-1">
+              <img
+                src={project.images.product2}
+                alt="Product image 2"
+                className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[20px] w-full h-full"
+              />
+            </div>
           </div>
-          <div className="h-[625px] relative rounded-[20px] shrink-0 w-[448px]">
-            <img 
-              src={project.images.product2} 
-              alt="Product image 2" 
-              className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[20px] w-full h-full"
-            />
-          </div>
-        </div>
         )}
 
         {/* Colored Section - Updated structure with flex and grow (skip for Plentum and TBS) */}
         {project.id !== 'plentum' && project.id !== 'tbs' && (
           <div className="content-stretch flex h-[845px] items-center justify-center min-h-[845px] relative shrink-0 w-full">
-          {/* Left side - Product image with grow */}
-          <div className="basis-0 grow h-full min-h-px min-w-px relative shrink-0 overflow-hidden">
-            {project.id === 'quillbot' ? (
-              // Slideshow for QuillBot with slide animation
-              <div 
-                className="absolute inset-0 w-full h-full overflow-hidden" 
-                style={{ backgroundColor: '#000000' }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <img 
-                  src={quillbotSlideshowImages[currentSlideIndex]} 
-                  alt={`QuillBot slideshow ${currentSlideIndex + 1}`} 
-                  className="absolute inset-0 max-w-none object-contain pointer-events-none w-full h-full transition-transform duration-500 ease-out"
-                  style={{
-                    transform: isAnimating ? 'translateX(0)' : 'translateX(100%)',
-                  }}
-                  key={currentSlideIndex}
-                />
-              </div>
-            ) : (
-              // Static image for Defog
-              <>
-                <img 
-                  src={project.images.product3} 
-                  alt="Product image 3" 
-                  className="absolute inset-0 max-w-none object-cover pointer-events-none w-full h-full"
-                />
-                {/* Caption positioned at bottom - centered horizontally (only for Defog) */}
-                <div className="absolute box-border content-stretch flex gap-[10px] items-center justify-center left-1/2 p-[10px] top-[733px] -translate-x-1/2">
-                  <p className="font-playfair leading-[32px] lowercase not-italic relative shrink-0 text-[#6e6e6e] text-[24px] text-nowrap whitespace-pre">
-                    INITIAL IDEA ON PAPER
-                  </p>
+            {/* Left side - Product image with grow */}
+            <div className="basis-0 grow h-full min-h-px min-w-px relative shrink-0 overflow-hidden">
+              {project.id === 'quillbot' ? (
+                // Slideshow for QuillBot with slide animation
+                <div
+                  className="absolute inset-0 w-full h-full overflow-hidden"
+                  style={{ backgroundColor: '#000000' }}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  <img
+                    src={quillbotSlideshowImages[currentSlideIndex]}
+                    alt={`QuillBot slideshow ${currentSlideIndex + 1}`}
+                    className="absolute inset-0 max-w-none object-contain pointer-events-none w-full h-full transition-transform duration-500 ease-out"
+                    style={{
+                      transform: isAnimating ? 'translateX(0)' : 'translateX(100%)',
+                    }}
+                    key={currentSlideIndex}
+                  />
                 </div>
-              </>
-            )}
-          </div>
-          {/* Right side - Colored background with grow */}
-          <div className={`basis-0 box-border content-stretch flex flex-col gap-[10px] grow h-full items-center justify-center min-h-px min-w-px px-[80px] py-[160px] relative shrink-0`} style={{ backgroundColor: project.sectionColor || '#f29f97' }}>
-            <div className={`font-rethink font-medium leading-[32px] relative shrink-0 text-[24px] uppercase w-full whitespace-pre-wrap ${project.sectionColor === '#e7f1e7' ? 'text-black' : 'text-white'}`}>
-              {project.sectionText}
+              ) : (
+                // Static image for Defog
+                <>
+                  <img
+                    src={project.images.product3}
+                    alt="Product image 3"
+                    className="absolute inset-0 max-w-none object-cover pointer-events-none w-full h-full"
+                  />
+                  {/* Caption positioned at bottom - centered horizontally (only for Defog) */}
+                  <div className="absolute box-border content-stretch flex gap-[10px] items-center justify-center left-1/2 p-[10px] top-[733px] -translate-x-1/2">
+                    <p className="font-playfair leading-[32px] lowercase not-italic relative shrink-0 text-[#6e6e6e] text-[24px] text-nowrap whitespace-pre">
+                      INITIAL IDEA ON PAPER
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+            {/* Right side - Colored background with grow */}
+            <div className={`basis-0 box-border content-stretch flex flex-col gap-[10px] grow h-full items-center justify-center min-h-px min-w-px px-[80px] py-[160px] relative shrink-0`} style={{ backgroundColor: project.sectionColor || '#f29f97' }}>
+              <div className={`font-rethink font-medium leading-[32px] relative shrink-0 text-[24px] uppercase w-full whitespace-pre-wrap ${project.sectionColor === '#e7f1e7' ? 'text-black' : 'text-white'}`}>
+                {project.sectionText}
+              </div>
             </div>
           </div>
-        </div>
         )}
 
         {/* Large Text Section - centered (only for Defog) */}
@@ -948,10 +1056,15 @@ export const ProjectDetail = () => {
           </div>
         )}
 
+        {/* Defog Case Study Section - Desktop */}
+        {project.id === 'defog' && (
+          <DefogCaseStudy />
+        )}
+
         {/* Branding Document Button (only for Defog) */}
         {project.hasBrandingButton && project.brandingButtonUrl && (
           <div className="flex items-center justify-center w-full py-[53px]">
-            <button 
+            <button
               onClick={() => window.open(project.brandingButtonUrl, '_blank', 'noopener,noreferrer')}
               className="group group-hover:before:duration-500 group-hover:after:duration-500 after:duration-500 hover:border-rose-300 hover:before:[box-shadow:_20px_20px_20px_30px_#a21caf] duration-500 before:duration-500 hover:duration-500 hover:after:-right-8 hover:before:right-12 hover:before:-bottom-8 hover:before:blur origin-left hover:text-rose-300 relative bg-neutral-800 h-20 w-80 border text-left px-6 py-4 text-gray-50 text-lg font-bold rounded-lg overflow-hidden before:absolute before:w-12 before:h-12 before:content[''] before:right-1 before:top-1 before:z-0 before:bg-violet-500 before:rounded-full before:blur-lg after:absolute after:z-0 after:w-20 after:h-20 after:content[''] after:bg-rose-300 after:right-8 after:top-3 after:rounded-full after:blur-lg font-rethink cursor-pointer"
             >
@@ -963,7 +1076,7 @@ export const ProjectDetail = () => {
         {/* Contact Button (only for QuillBot) */}
         {project.id === 'quillbot' && (
           <div className="flex items-center justify-center w-full py-[53px]">
-            <button 
+            <button
               onClick={() => window.location.href = 'mailto:kshitij0299@gmail.com'}
               className="group group-hover:before:duration-500 group-hover:after:duration-500 after:duration-500 hover:border-rose-300 hover:before:[box-shadow:_20px_20px_20px_30px_#a21caf] duration-500 before:duration-500 hover:duration-500 hover:after:-right-8 hover:before:right-12 hover:before:-bottom-8 hover:before:blur origin-left hover:text-rose-300 relative bg-neutral-800 h-20 w-80 border text-left px-6 py-4 text-gray-50 text-lg font-bold rounded-lg overflow-hidden before:absolute before:w-12 before:h-12 before:content[''] before:right-1 before:top-1 before:z-0 before:bg-violet-500 before:rounded-full before:blur-lg after:absolute after:z-0 after:w-20 after:h-20 after:content[''] after:bg-rose-300 after:right-8 after:top-3 after:rounded-full after:blur-lg font-rethink cursor-pointer"
             >
@@ -975,9 +1088,9 @@ export const ProjectDetail = () => {
         {/* Previous/Next Navigation - centered */}
         <div className={`box-border content-stretch flex gap-[224px] items-center justify-center overflow-clip px-0 relative shrink-0 w-full ${project.id === 'quillbot' ? 'py-[256px]' : 'py-[213px]'}`}>
           <Link to={`/project/${prevProjectId}`} className="relative size-[256px] flex items-center justify-center">
-            <img 
-              src={imgEllipse3} 
-              alt="" 
+            <img
+              src={imgEllipse3}
+              alt=""
               className="absolute inset-0 w-full h-full"
             />
             <div className="absolute flex flex-col font-rethink font-medium h-[72px] justify-center leading-[32px] left-[128px] text-[24px] text-center text-white top-[140px] -translate-x-1/2 -translate-y-1/2 uppercase w-[206px]">
@@ -986,16 +1099,16 @@ export const ProjectDetail = () => {
             <div className="absolute h-[22px] left-[104px] top-[64px] w-[48px]">
               <div className="rotate-180">
                 <svg className="w-full h-full" viewBox="0 0 48 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1.5 11L46.5 11M46.5 11L36.5 1M46.5 11L36.5 21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M1.5 11L46.5 11M46.5 11L36.5 1M46.5 11L36.5 21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
             </div>
           </Link>
-          
+
           <Link to={`/project/${nextProjectId}`} className="relative size-[256px] flex items-center justify-center">
-            <img 
-              src={imgEllipse3} 
-              alt="" 
+            <img
+              src={imgEllipse3}
+              alt=""
               className="absolute inset-0 w-full h-full"
             />
             <div className="absolute flex flex-col font-rethink font-medium h-[72px] justify-center leading-[32px] left-[128px] text-[24px] text-center text-white top-[140px] -translate-x-1/2 -translate-y-1/2 uppercase w-[192px]">
@@ -1004,7 +1117,7 @@ export const ProjectDetail = () => {
             </div>
             <div className="absolute h-[22px] left-[104px] top-[64px] w-[48px]">
               <svg className="w-full h-full" viewBox="0 0 48 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.5 11L46.5 11M46.5 11L36.5 1M46.5 11L36.5 21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M1.5 11L46.5 11M46.5 11L36.5 1M46.5 11L36.5 21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </Link>
@@ -1019,20 +1132,20 @@ export const ProjectDetail = () => {
             <div className="absolute inset-0 p-[30px] flex flex-col gap-[40px] items-center">
               {/* Logo - maintaining 356x140 aspect ratio */}
               <div className="w-full max-w-[356px] flex-shrink-0" style={{ aspectRatio: '356/140' }}>
-                <img 
-                  src={imgLogo} 
-                  alt="Defog logo" 
+                <img
+                  src={imgLogo}
+                  alt="Defog logo"
                   className="w-full h-full object-contain"
                   style={{ imageRendering: 'auto' }}
                 />
               </div>
-              <p ref={defogHeroTextMobileRef} className="font-playfair leading-[38px] text-[#fbe4e2] text-[36px] text-center whitespace-pre-wrap min-w-full w-[min-content] flex-shrink-0">
+              <p ref={defogHeroTextMobileRef} className="font-playfair font-light leading-[38px] text-[#fbe4e2] text-[34px] text-center whitespace-pre-wrap min-w-full w-[min-content] flex-shrink-0">
                 {project.heroText}
               </p>
               <div className="h-[604px] w-[290px] flex-shrink-0">
-                <img 
-                  src={imgImage2} 
-                  alt="Defog app" 
+                <img
+                  src={imgImage2}
+                  alt="Defog app"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -1044,22 +1157,22 @@ export const ProjectDetail = () => {
             <div className="p-[30px] flex flex-col gap-[40px] items-center">
               {/* Logo */}
               <div className="w-full max-w-[589.457px] flex-shrink-0" style={{ aspectRatio: '589.457/136.5' }}>
-                <img 
-                  src={project.heroLogo || quillbotLogo} 
-                  alt="QuillBot logo" 
+                <img
+                  src={project.heroLogo || quillbotLogo}
+                  alt="QuillBot logo"
                   className="w-full h-full object-contain"
                   style={{ imageRendering: 'auto' }}
                 />
               </div>
-              <p ref={heroTextMobileRef} className="font-playfair leading-[38px] text-[#e7f1e7] text-[36px] text-center whitespace-pre-wrap min-w-full w-[min-content] flex-shrink-0">
+              <p ref={heroTextMobileRef} className="font-playfair font-light leading-[38px] text-[#e7f1e7] text-[34px] text-center whitespace-pre-wrap min-w-full w-[min-content] flex-shrink-0">
                 {project.heroText}
               </p>
               {/* Hero GIF */}
               <div className="w-full max-w-[497px] h-[404px] flex-shrink-0">
-                <img 
+                <img
                   ref={quillbotGifRef}
                   src={project.heroImage || quillbotHeroGif}
-                  alt="QuillBot hero" 
+                  alt="QuillBot hero"
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -1071,20 +1184,20 @@ export const ProjectDetail = () => {
             <div className="p-[30px] flex flex-col gap-[40px] items-center">
               {/* Logo */}
               <div className="w-full max-w-[171px] flex-shrink-0" style={{ aspectRatio: '171/40' }}>
-                <img 
-                  src={project.heroLogo || plentumLogo} 
-                  alt="Plentum logo" 
+                <img
+                  src={project.heroLogo || plentumLogo}
+                  alt="Plentum logo"
                   className="w-full h-full object-contain"
                   style={{ imageRendering: 'auto' }}
                 />
               </div>
-              <p ref={plentumHeroTextMobileRef} className="font-playfair leading-[38px] text-white text-[36px] text-center whitespace-pre-wrap min-w-full w-[min-content] flex-shrink-0">
+              <p ref={plentumHeroTextMobileRef} className="font-playfair font-light leading-[38px] text-white text-[34px] text-center whitespace-pre-wrap min-w-full w-[min-content] flex-shrink-0">
                 {project.heroText}
               </p>
               {/* Sticker icons - simplified for mobile */}
               {project.stickerIcons && project.stickerIcons.slice(0, 3).map((sticker, index) => (
                 <div key={index} className="w-[80px] h-[80px] flex-shrink-0">
-                  <img 
+                  <img
                     src={sticker}
                     alt={`Plentum sticker ${index + 1}`}
                     className="w-full h-full object-contain"
@@ -1097,39 +1210,39 @@ export const ProjectDetail = () => {
           // Timeless Beauty Secrets Mobile Hero - matching Figma
           <div className="box-border content-stretch flex flex-col gap-[60px] h-[869px] items-center overflow-clip p-[30px] relative shrink-0 w-full">
             {/* Video background - lazy loaded */}
-            <video 
+            <video
               ref={heroVideoRef}
-              autoPlay 
+              autoPlay
               className={`absolute max-w-none object-cover size-full transition-opacity duration-500 ${isHeroVideoReady ? 'opacity-100' : 'opacity-0'}`}
-              controlsList="nodownload" 
-              loop 
+              controlsList="nodownload"
+              loop
               playsInline
               muted
               preload="metadata"
               onCanPlayThrough={() => {
                 if (!isHeroVideoReady) {
                   setIsHeroVideoReady(true);
-                  heroVideoRef.current?.play().catch(() => {});
+                  heroVideoRef.current?.play().catch(() => { });
                 }
               }}
             >
               <source src={tbsHeroVideo} type="video/mp4" />
             </video>
-            
+
             {/* Logo - Logo Black 1 */}
             <div className="h-[192px] relative shrink-0 w-[190px] z-10">
-              <img 
-                alt="Timeless Beauty Secrets Logo" 
-                className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" 
-                src={tbsLogo} 
+              <img
+                alt="Timeless Beauty Secrets Logo"
+                className="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+                src={tbsLogo}
               />
             </div>
-            
+
             {/* Hero text with mixed fonts */}
-            <p className="[text-shadow:rgba(0,0,0,0.25)_0px_2.222px_2.222px] font-playfair leading-[43.333px] min-w-full not-italic relative shrink-0 text-[0px] text-center text-white w-[min-content] whitespace-pre-wrap z-10">
-              <span className="text-[35.556px]">WALKTHROUGH OF MY WORK & ART DIRECTION FOR SOCIAL MEDIA  </span>
-              <span className="font-playfair italic text-[45px]">at </span>
-              <span className="text-[35.556px]">TIMELESS BEAUTY SECRETS</span>
+            <p className="[text-shadow:rgba(0,0,0,0.25)_0px_2.222px_2.222px] font-playfair font-light leading-[43.333px] min-w-full not-italic relative shrink-0 text-[0px] text-center text-white w-[min-content] whitespace-pre-wrap z-10">
+              <span className="text-[33.556px]">WALKTHROUGH OF MY WORK & ART DIRECTION FOR SOCIAL MEDIA  </span>
+              <span className="font-playfair font-light italic text-[43px]">at </span>
+              <span className="text-[33.556px]">TIMELESS BEAUTY SECRETS</span>
             </p>
           </div>
         ) : null}
@@ -1137,59 +1250,62 @@ export const ProjectDetail = () => {
         {/* Information and Intro Section (skip for Plentum) */}
         {project.id !== 'plentum' && (
           <div className="flex flex-col gap-[32px] items-start p-[30px] w-full">
-          {/* Information Section */}
-          <div className="flex flex-col gap-[8px] items-start w-full flex-shrink-0">
-            <div className="flex font-inter font-normal gap-[8px] items-center leading-[18px] text-[14px] text-black uppercase w-full">
-              <p className="flex-1 opacity-40">year</p>
-              <p className="flex-1">{project.year}</p>
+            {/* Information Section */}
+            <div className="flex flex-col gap-[8px] items-start w-full flex-shrink-0">
+              <div className="flex font-inter font-normal gap-[8px] items-center leading-[18px] text-[14px] text-black uppercase w-full">
+                <p className="flex-1 opacity-40">year</p>
+                <p className="flex-1">{project.year}</p>
+              </div>
+              <div className="flex font-inter font-normal gap-[8px] items-center leading-[18px] text-[14px] text-black uppercase w-full">
+                <p className="flex-1 opacity-40">Type</p>
+                <p className="flex-1">{project.type}</p>
+              </div>
+              <div className="flex font-inter font-normal gap-[8px] items-center leading-[18px] text-[14px] text-black uppercase w-full">
+                <p className="flex-1 opacity-40">ROLE</p>
+                <p className="flex-1">{project.role}</p>
+              </div>
+              <div className="flex font-inter font-normal gap-[8px] items-center leading-[18px] text-[14px] text-black uppercase w-full">
+                <p className="flex-1 opacity-40">DESIGN</p>
+                <p className="flex-1">{project.design}</p>
+              </div>
             </div>
-            <div className="flex font-inter font-normal gap-[8px] items-center leading-[18px] text-[14px] text-black uppercase w-full">
-              <p className="flex-1 opacity-40">Type</p>
-              <p className="flex-1">{project.type}</p>
-            </div>
-            <div className="flex font-inter font-normal gap-[8px] items-center leading-[18px] text-[14px] text-black uppercase w-full">
-              <p className="flex-1 opacity-40">ROLE</p>
-              <p className="flex-1">{project.role}</p>
-            </div>
-            <div className="flex font-inter font-normal gap-[8px] items-center leading-[18px] text-[14px] text-black uppercase w-full">
-              <p className="flex-1 opacity-40">DESIGN</p>
-              <p className="flex-1">{project.design}</p>
+
+            {/* Intro Section */}
+            <div className={`w-full flex-shrink-0 ${project.id === 'quillbot' ? 'max-w-full' : 'max-w-[342px]'}`}>
+              <p className="font-inter font-normal leading-[20px] text-[14px] text-black whitespace-pre-wrap">
+                {project.intro}
+              </p>
             </div>
           </div>
-          
-          {/* Intro Section */}
-          <div className={`w-full flex-shrink-0 ${project.id === 'quillbot' ? 'max-w-full' : 'max-w-[342px]'}`}>
-            <p className="font-inter font-normal leading-[20px] text-[14px] text-black whitespace-pre-wrap">
-              {project.intro}
-            </p>
-          </div>
-        </div>
         )}
 
-        {/* PDF Display Section - Mobile (Only for Plentum) */}
-        {project.id === 'plentum' && project.pdfSrc && (
-          <div className="w-full bg-white">
-            <iframe
-              src={project.pdfSrc}
-              className="w-full"
-              style={{ height: '100vh', border: 'none' }}
-              title="Plentum PDF"
-            />
+        {/* Static Images Section - Mobile - Only for Plentum */}
+        {project.id === 'plentum' && project.plentumImages && (
+          <div className="w-full bg-white flex flex-col">
+            {project.plentumImages.map((imgSrc, index) => (
+              <img
+                key={index}
+                src={imgSrc}
+                alt={`Plentum page ${index + 1}`}
+                className="w-full h-auto block"
+                style={{ verticalAlign: 'middle' }}
+              />
+            ))}
           </div>
         )}
 
         {/* Video Section (skip for Plentum and TBS - TBS has different structure) */}
         {project.id !== 'plentum' && project.id !== 'tbs' && (
-          <div className="h-[625px] w-full">
-          <video 
-            autoPlay 
-            loop 
-            playsInline
-            muted
-            className="w-full h-full object-cover"
-          >
-            <source src={project.videoSrc} type="video/mp4" />
-          </video>
+          <div className="w-full px-[30px] mb-[30px]">
+            <video
+              autoPlay
+              loop
+              playsInline
+              muted
+              className="w-full h-auto"
+            >
+              <source src={project.videoSrc} type="video/mp4" />
+            </video>
           </div>
         )}
 
@@ -1210,26 +1326,11 @@ export const ProjectDetail = () => {
                   <p className="leading-[normal]">I was tasked with ensuring the brand's Instagram presence was cohesive and aligned with Timeless Beauty Secrets' identity.</p>
                 </div>
               </div>
-              <div className="content-stretch flex flex-col gap-[10px] items-center justify-center relative shrink-0 w-full">
-                <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0">
-                  <div className="[grid-area:1_/_1] h-[703px] ml-0 mt-0 relative w-[938px]">
-                    <img alt="Instagram old look" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={tbsPhoneMockup} />
-                  </div>
-                  <div className="[grid-area:1_/_1] grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-[332.81px] mt-[581px] place-items-start relative">
-                    <div className="[grid-area:1_/_1] flex h-[123.744px] items-center justify-center ml-[111px] mt-0 relative w-[161.371px]">
-                      <div className="flex-none rotate-[326.334deg]">
-                        <div className="h-[35.117px] relative w-[170.5px]">
-                          <svg className="absolute inset-[-7.12%_-1.47%_-7.12%_-0.91%] w-full h-full" viewBox="0 0 170.5 35.117" fill="none">
-                            <path d="M0 17.5585L170.5 17.5585M170.5 17.5585L160.5 1M170.5 17.5585L160.5 34.117" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="[grid-area:1_/_1] flex flex-col font-rethink font-semibold h-[34px] justify-center ml-0 mt-[93px] relative text-[16px] text-black translate-y-[-50%] w-[96px]">
-                      <p className="leading-[normal]">OLD LOOK</p>
-                    </div>
-                  </div>
+              <div className="content-stretch flex flex-col gap-[20px] items-center justify-center relative shrink-0 w-full mt-8">
+                <div className="relative w-full max-w-[360px]">
+                  <img alt="Instagram old look" className="w-full h-auto object-contain pointer-events-none" src={tbsPhoneMockup} />
                 </div>
+                <p className="font-rethink font-semibold text-[16px] text-black">OLD LOOK</p>
               </div>
             </div>
 
@@ -1318,65 +1419,65 @@ export const ProjectDetail = () => {
         {/* Product Images - Stacked (skip for Plentum and TBS) */}
         {project.id !== 'plentum' && project.id !== 'tbs' && (
           <div className="flex flex-col items-center justify-center w-full">
-          <div className="aspect-[640/625] w-full flex-shrink-0">
-            <img 
-              src={project.images.product1} 
-              alt="Product image 1" 
-              className="w-full h-full object-cover"
-                />
-              </div>
-          <div className="h-[625px] w-full flex-shrink-0">
-            <img 
-              src={project.images.product2} 
-              alt="Product image 2" 
-              className="w-full h-full object-cover"
-            />
+            <div className="aspect-[640/625] w-full flex-shrink-0">
+              <img
+                src={project.images.product1}
+                alt="Product image 1"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="h-[625px] w-full flex-shrink-0">
+              <img
+                src={project.images.product2}
+                alt="Product image 2"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
-                </div>
         )}
 
         {/* Colored Section (skip for Plentum and TBS) */}
         {project.id !== 'plentum' && project.id !== 'tbs' && (
           <div className="flex flex-col items-start justify-center w-full">
-          <div className="flex flex-col gap-[10px] items-center justify-center p-[30px] w-full flex-shrink-0" style={{ backgroundColor: project.sectionColor || '#f29f97' }}>
-            <p className={`font-rethink font-medium leading-[32px] text-[16px] uppercase whitespace-pre-wrap w-full ${project.sectionColor === '#e7f1e7' ? 'text-black' : 'text-white'}`}>
-              {project.sectionText}
-            </p>
+            <div className="flex flex-col gap-[10px] items-center justify-center p-[30px] w-full flex-shrink-0" style={{ backgroundColor: project.sectionColor || '#f29f97' }}>
+              <p className={`font-rethink font-medium leading-[32px] text-[16px] uppercase whitespace-pre-wrap w-full ${project.sectionColor === '#e7f1e7' ? 'text-black' : 'text-white'}`}>
+                {project.sectionText}
+              </p>
+            </div>
+            <div className="aspect-[640/800] w-full relative flex-shrink-0 overflow-hidden">
+              {project.id === 'quillbot' ? (
+                // Slideshow for QuillBot with slide animation
+                <div
+                  className="absolute inset-0 w-full h-full overflow-hidden"
+                  style={{ backgroundColor: '#000000' }}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  <img
+                    src={quillbotSlideshowImages[currentSlideIndex]}
+                    alt={`QuillBot slideshow ${currentSlideIndex + 1}`}
+                    className="absolute inset-0 max-w-none object-contain w-full h-full transition-transform duration-500 ease-out"
+                    style={{
+                      transform: isAnimating ? 'translateX(0)' : 'translateX(100%)',
+                    }}
+                    key={currentSlideIndex}
+                  />
+                </div>
+              ) : (
+                // Static image for Defog
+                <>
+                  <img
+                    src={project.images.product3}
+                    alt="Product image 3"
+                    className="w-full h-full object-cover"
+                  />
+                  <p className="absolute right-[-283px] top-[459.25px] translate-x-full font-playfair leading-[32px] lowercase text-[#6e6e6e] text-[24px] whitespace-pre">
+                    INITIAL IDEA ON PAPER
+                  </p>
+                </>
+              )}
+            </div>
           </div>
-          <div className="aspect-[640/800] w-full relative flex-shrink-0 overflow-hidden">
-            {project.id === 'quillbot' ? (
-              // Slideshow for QuillBot with slide animation
-              <div 
-                className="absolute inset-0 w-full h-full overflow-hidden" 
-                style={{ backgroundColor: '#000000' }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <img 
-                  src={quillbotSlideshowImages[currentSlideIndex]} 
-                  alt={`QuillBot slideshow ${currentSlideIndex + 1}`} 
-                  className="absolute inset-0 max-w-none object-contain w-full h-full transition-transform duration-500 ease-out"
-                  style={{
-                    transform: isAnimating ? 'translateX(0)' : 'translateX(100%)',
-                  }}
-                  key={currentSlideIndex}
-                />
-              </div>
-            ) : (
-              // Static image for Defog
-              <>
-                <img 
-                  src={project.images.product3} 
-                  alt="Product image 3" 
-                  className="w-full h-full object-cover"
-                />
-                <p className="absolute right-[-283px] top-[459.25px] translate-x-full font-playfair leading-[32px] lowercase text-[#6e6e6e] text-[24px] whitespace-pre">
-                  INITIAL IDEA ON PAPER
-                </p>
-              </>
-            )}
-          </div>
-        </div>
         )}
 
         {/* Large Text Section (only for Defog) */}
@@ -1391,10 +1492,15 @@ export const ProjectDetail = () => {
           </div>
         )}
 
+        {/* Defog Case Study Section - Mobile */}
+        {project.id === 'defog' && (
+          <DefogCaseStudy />
+        )}
+
         {/* Contact Button (only for QuillBot) - Mobile */}
         {project.id === 'quillbot' && (
           <div className="flex items-center justify-center w-full py-[40px] px-[30px]">
-            <button 
+            <button
               onClick={() => window.location.href = 'mailto:kshitij0299@gmail.com'}
               className="group group-hover:before:duration-500 group-hover:after:duration-500 after:duration-500 hover:border-rose-300 hover:before:[box-shadow:_20px_20px_20px_30px_#a21caf] duration-500 before:duration-500 hover:duration-500 hover:after:-right-8 hover:before:right-12 hover:before:-bottom-8 hover:before:blur origin-left hover:text-rose-300 relative bg-neutral-800 h-16 w-full max-w-[320px] border text-left px-6 py-4 text-gray-50 text-base font-bold rounded-lg overflow-hidden before:absolute before:w-12 before:h-12 before:content[''] before:right-1 before:top-1 before:z-0 before:bg-violet-500 before:rounded-full before:blur-lg after:absolute after:z-0 after:w-20 after:h-20 after:content[''] after:bg-rose-300 after:right-8 after:top-3 after:rounded-full after:blur-lg font-rethink cursor-pointer"
             >
@@ -1406,9 +1512,9 @@ export const ProjectDetail = () => {
         {/* Previous/Next Navigation */}
         <div className="flex items-center justify-between p-[30px] w-full">
           <Link to={`/project/${prevProjectId}`} className="relative size-[139.826px] flex items-center justify-center">
-            <img 
-              src={imgEllipse3} 
-              alt="" 
+            <img
+              src={imgEllipse3}
+              alt=""
               className="absolute inset-0 w-full h-full"
             />
             <div className="absolute flex flex-col font-rethink font-medium h-[39.326px] justify-center leading-[17.478px] left-1/2 top-[76.47px] -translate-x-1/2 -translate-y-1/2 text-[13.109px] text-center text-white uppercase w-[112.516px]">
@@ -1417,16 +1523,16 @@ export const ProjectDetail = () => {
             <div className="absolute h-[12.016px] left-[56.8px] top-[34.96px] w-[26.217px]">
               <div className="rotate-180">
                 <svg className="w-full h-full" viewBox="0 0 26 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 6L25 6M25 6L20 1M25 6L20 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M1 6L25 6M25 6L20 1M25 6L20 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
             </div>
           </Link>
-          
+
           <Link to={`/project/${nextProjectId}`} className="relative size-[139.826px] flex items-center justify-center">
-            <img 
-              src={imgEllipse3} 
-              alt="" 
+            <img
+              src={imgEllipse3}
+              alt=""
               className="absolute inset-0 w-full h-full"
             />
             <div className="absolute flex flex-col font-rethink font-medium h-[39.326px] justify-center leading-[17.478px] left-1/2 top-[76.47px] -translate-x-1/2 -translate-y-1/2 text-[13.109px] text-center text-white uppercase w-[104.87px]">
@@ -1435,9 +1541,9 @@ export const ProjectDetail = () => {
             </div>
             <div className="absolute h-[12.016px] left-[56.8px] top-[34.96px] w-[26.217px]">
               <svg className="w-full h-full" viewBox="0 0 26 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 6L25 6M25 6L20 1M25 6L20 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M1 6L25 6M25 6L20 1M25 6L20 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-          </div>
+            </div>
           </Link>
         </div>
       </div>

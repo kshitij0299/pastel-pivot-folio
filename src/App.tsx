@@ -10,33 +10,22 @@ import { LogosCaseStudies } from "./pages/LogosCaseStudies";
 import NotFound from "./pages/NotFound";
 import { useFacebookPixel } from "./hooks/useFacebookPixel";
 import { LiquidLoader } from "./components/LiquidLoader";
+import { LoadingProvider, useLoading } from "./contexts/LoadingContext";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   useFacebookPixel();
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [prevPathname, setPrevPathname] = useState(location.pathname);
+  const { isProjectLoading } = useLoading();
+  const [isNavigatingToProject, setIsNavigatingToProject] = useState(false);
 
   useEffect(() => {
-    // Show loader only when navigating to project pages (work pages)
-    const isNavigatingToProject = location.pathname.startsWith('/project/');
-    const wasOnProject = prevPathname.startsWith('/project/');
-    
-    if (isNavigatingToProject && !wasOnProject) {
-      // Navigating TO a project page from a non-project page
-      setIsLoading(true);
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 1500); // Show loader for 1.5 seconds when navigating to project pages
-      setPrevPathname(location.pathname);
-      return () => clearTimeout(timer);
-    } else {
-      // Not navigating to a project page, no loader needed
-      setPrevPathname(location.pathname);
-    }
-  }, [location.pathname, prevPathname]);
+    const isProjectPage = location.pathname.startsWith('/project/');
+    setIsNavigatingToProject(isProjectPage);
+  }, [location.pathname]);
+  
+  const isLoading = isNavigatingToProject && isProjectLoading;
   
   return (
     <>
@@ -58,7 +47,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppContent />
+        <LoadingProvider>
+          <AppContent />
+        </LoadingProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

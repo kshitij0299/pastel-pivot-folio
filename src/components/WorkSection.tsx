@@ -54,7 +54,7 @@ export const WorkSection = () => {
         const cardElement = card as HTMLElement;
         const cardRect = cardElement.getBoundingClientRect();
         const isAtSticky = Math.abs(cardRect.top - stickyTop) < 10;
-        
+
         if (isAtSticky) {
           currentActiveIndex = index;
         }
@@ -68,7 +68,7 @@ export const WorkSection = () => {
         const cardElement = card as HTMLElement;
         const cardRect = cardElement.getBoundingClientRect();
         const isAtSticky = Math.abs(cardRect.top - stickyTop) < 10;
-        
+
         // Check if next card is approaching
         const nextCard = cards[index + 1] as HTMLElement;
         let nextCardDistance = Infinity;
@@ -89,15 +89,15 @@ export const WorkSection = () => {
             // Next card is approaching - calculate progress for gradual effects
             // Progress goes from 0 (next card far) to 1 (next card reaches sticky)
             const progress = 1 - (nextCardDistance / viewportHeight);
-            
+
             // Scale down based on proximity
             const scaleProgress = Math.max(0.85, 1 - progress * 0.15);
             cardBody.style.transform = `scale(${scaleProgress})`;
-            
+
             // Gradually blur: blur from 0px to 10px
             const blurAmount = progress * 10; // 0 to 10
             cardBody.style.backdropFilter = `blur(${blurAmount}px)`;
-            
+
             // Gradually fade: opacity from 1 to 0
             const opacity = 1 - progress;
             cardBody.style.opacity = `${opacity}`;
@@ -153,19 +153,12 @@ export const WorkSection = () => {
     description: 'Editorial layout design assessment for magazine featuring nature content and storytelling'
   }];
   return (
-    <section 
-      id="work" 
-      ref={sectionRef} 
+    <section
+      id="work"
+      ref={sectionRef}
       className="bg-background"
       style={{ position: 'relative' }}
     >
-      {/* Gradient fade from black to transparent at top */}
-      <div 
-        className="absolute top-0 left-0 right-0 h-[20px] z-[5] pointer-events-none"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%)'
-        }}
-      />
       <div className="w-full md:mx-auto md:max-w-5xl md:w-[95%]">
         <ul ref={cardsContainerRef} id="cards" className="cards-list">
           <li className="card" id="card1" style={{ '--index': 1 } as React.CSSProperties}>
@@ -185,20 +178,6 @@ export const WorkSection = () => {
           <li className="card" id="card2" style={{ '--index': 2 } as React.CSSProperties}>
             <div className="card-body" ref={el => cardBodyRefs.current[1] = el}>
               <WorkCard
-                title={projects[0].title}
-                description={projects[0].description}
-                categories={projects[0].category.split(/\s*[•|]\s*/).filter(Boolean)}
-                media={{ type: 'video', src: '/lovable-uploads/plentum1.mp4' }}
-                backgroundColor="#e4dbea"
-                buttonColor="#dca8ff"
-                onClick={() => navigate('/project/plentum')}
-              />
-            </div>
-          </li>
-
-          <li className="card" id="card3" style={{ '--index': 3 } as React.CSSProperties}>
-            <div className="card-body" ref={el => cardBodyRefs.current[2] = el}>
-              <WorkCard
                 title={'Defog'}
                 description={'A unique daily task management app'}
                 categories={'UI/UX • Web App • Branding • 0→1'.split(/\s*[•|]\s*/)}
@@ -206,6 +185,20 @@ export const WorkSection = () => {
                 backgroundColor="#dbe5f0"
                 buttonColor="#a8d0ff"
                 onClick={() => navigate('/project/defog')}
+              />
+            </div>
+          </li>
+
+          <li className="card" id="card3" style={{ '--index': 3 } as React.CSSProperties}>
+            <div className="card-body" ref={el => cardBodyRefs.current[2] = el}>
+              <WorkCard
+                title={projects[0].title}
+                description={projects[0].description}
+                categories={projects[0].category.split(/\s*[•|]\s*/).filter(Boolean)}
+                media={{ type: 'video', src: 'https://res.cloudinary.com/dnsylvhmw/video/upload/f_auto,q_auto/plentum1_n48ina.mp4' }}
+                backgroundColor="#e4dbea"
+                buttonColor="#dca8ff"
+                onClick={() => navigate('/project/plentum')}
               />
             </div>
           </li>
@@ -228,19 +221,6 @@ export const WorkSection = () => {
           <li className="card" id="card5" style={{ '--index': 5 } as React.CSSProperties}>
             <div className="card-body" ref={el => cardBodyRefs.current[4] = el}>
               <WorkCard
-                title={projects[2].title}
-                description={projects[2].description}
-                categories={projects[2].category.split(/\s*[•|]\s*/)}
-                media={{ type: 'image', src: '/lovable-uploads/f4f28388-07b6-4ef1-9f2b-d0bdc6b0a79e.png' }}
-                backgroundColor="#f0e5db"
-                buttonColor="#ffd0a8"
-              />
-            </div>
-          </li>
-
-          <li className="card" id="card6" style={{ '--index': 6 } as React.CSSProperties}>
-            <div className="card-body" ref={el => cardBodyRefs.current[5] = el}>
-              <WorkCard
                 title={projects[3].title}
                 description={projects[3].description}
                 categories={projects[3].category.split(/\s*[•|]\s*/)}
@@ -252,8 +232,8 @@ export const WorkSection = () => {
             </div>
           </li>
 
-          <li className="card" id="card7" style={{ '--index': 7 } as React.CSSProperties}>
-            <div className="card-body" ref={el => cardBodyRefs.current[6] = el}>
+          <li className="card" id="card6" style={{ '--index': 6 } as React.CSSProperties}>
+            <div className="card-body" ref={el => cardBodyRefs.current[5] = el}>
               <WorkCard
                 title={projects[4].title}
                 description={projects[4].description}
@@ -261,6 +241,25 @@ export const WorkSection = () => {
                 media={{ type: 'image', src: '/lovable-uploads/16a24bcb-dd11-479f-aa7e-8b7bf9db1672.png' }}
                 backgroundColor="#dbeae5"
                 buttonColor="#a8ffdc"
+                showDialog={true}
+                dialogText="Case Study coming Soon"
+                secondaryButtonText="Back"
+              />
+            </div>
+          </li>
+
+          <li className="card" id="card7" style={{ '--index': 7 } as React.CSSProperties}>
+            <div className="card-body" ref={el => cardBodyRefs.current[6] = el}>
+              <WorkCard
+                title={projects[2].title}
+                description={projects[2].description}
+                categories={projects[2].category.split(/\s*[•|]\s*/)}
+                media={{ type: 'image', src: '/lovable-uploads/f4f28388-07b6-4ef1-9f2b-d0bdc6b0a79e.png' }}
+                backgroundColor="#f0e5db"
+                buttonColor="#ffd0a8"
+                showDialog={true}
+                behanceUrl="https://www.behance.net/gallery/205001805/Mini-Design-Portfolio-24"
+                dialogText="This will direct you to my 2024 Graphic Design Portfolio on Behance "
               />
             </div>
           </li>
@@ -274,6 +273,9 @@ export const WorkSection = () => {
                 media={{ type: 'image', src: '/lovable-uploads/7fe75674-f948-425c-8974-41752de61f6c.png' }}
                 backgroundColor="#f0eadb"
                 buttonColor="#ffdca8"
+                showDialog={true}
+                dialogText="View this Project PDF in a new tab?"
+                behanceUrl="https://drive.google.com/file/d/1Gm2wgeyTUzbo5oEwnWq4ka0imtqv1XmC/view?usp=sharing"
               />
             </div>
           </li>

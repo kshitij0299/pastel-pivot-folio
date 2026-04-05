@@ -8,8 +8,34 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ children }) => {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [isPointer, setIsPointer] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [hasHover, setHasHover] = useState(false);
+
+  // Detect if device supports hover/mouse input
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    
+    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      setHasHover(e.matches);
+    };
+
+    // Set initial value
+    handleChange(mediaQuery);
+
+    // Listen for changes (e.g., device orientation change, external mouse connected)
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else {
+      // Fallback for older browsers
+      mediaQuery.addListener(handleChange);
+      return () => mediaQuery.removeListener(handleChange);
+    }
+  }, []);
 
   useEffect(() => {
+    // Only set up mouse event listeners if device supports hover
+    if (!hasHover) return;
+
     const cursor = cursorRef.current;
     if (!cursor) return;
 
@@ -45,43 +71,47 @@ const CustomCursor: React.FC<CustomCursorProps> = ({ children }) => {
       document.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, []);
+  }, [hasHover]);
 
   return (
     <>
-      <style>{`
-        * {
-          cursor: none !important;
-        }
-      `}</style>
-      <div
-        ref={cursorRef}
-        className="fixed pointer-events-none z-[10000] transition-opacity duration-200"
-        style={{
-          left: `${mousePos.x}px`,
-          top: `${mousePos.y}px`,
-          transform: `translate(-50%, -50%) scale(1.7)`,
-          transformOrigin: 'center center',
-        }}
-      >
-        {/* macOS-style pointer cursor */}
-        {!isPointer ? (
-          <img
-            src="/cursor-pointer.svg"
-            alt="Cursor"
-            className="w-7 h-7"
-            style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))' }}
-          />
-        ) : (
-          /* macOS-style hand cursor (pointing hand) */
-          <img
-            src="/cursor-hand.svg"
-            alt="Hand cursor"
-            className="w-8 h-8"
-            style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))' }}
-          />
-        )}
-      </div>
+      {hasHover && (
+        <style>{`
+          * {
+            cursor: none !important;
+          }
+        `}</style>
+      )}
+      {hasHover && (
+        <div
+          ref={cursorRef}
+          className="fixed pointer-events-none z-[10000] transition-opacity duration-200"
+          style={{
+            left: `${mousePos.x}px`,
+            top: `${mousePos.y}px`,
+            transform: `translate(-50%, -50%) scale(1.7)`,
+            transformOrigin: 'center center',
+          }}
+        >
+          {/* macOS-style pointer cursor */}
+          {!isPointer ? (
+            <img
+              src="/cursor-pointer.svg"
+              alt="Cursor"
+              className="w-7 h-7"
+              style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))' }}
+            />
+          ) : (
+            /* macOS-style hand cursor (pointing hand) */
+            <img
+              src="/cursor-hand.svg"
+              alt="Hand cursor"
+              className="w-8 h-8"
+              style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))' }}
+            />
+          )}
+        </div>
+      )}
       {children}
     </>
   );

@@ -21,9 +21,23 @@ export interface WorkCardProps {
   buttonColor?: string;
   showDialog?: boolean;
   behanceUrl?: string;
+  dialogText?: string;
+  secondaryButtonText?: string;
 }
 
-const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, media, onClick, backgroundColor = '#e4dbea', buttonColor = '#dca8ff', showDialog = false, behanceUrl }) => {
+const WorkCard: React.FC<WorkCardProps> = ({
+  title,
+  description,
+  categories,
+  media,
+  onClick,
+  backgroundColor = '#e4dbea',
+  buttonColor = '#dca8ff',
+  showDialog = false,
+  behanceUrl,
+  dialogText = "This will direct you to my Behance where this document sits. Click here to see the branding doc",
+  secondaryButtonText = "Later"
+}) => {
   const circleRef = useRef<HTMLSpanElement | null>(null);
   const clickCircleRef = useRef<HTMLSpanElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -41,7 +55,7 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
     const layout = () => {
       const circle = circleRef.current;
       const button = buttonRef.current;
-      
+
       if (!circle || !button) return;
 
       const rect = button.getBoundingClientRect();
@@ -66,13 +80,13 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
       // Create timeline for hover animation
       tlRef.current?.kill();
       const tl = gsap.timeline({ paused: true });
-      
-      tl.to(circle, { 
-        scale: 1.2, 
-        xPercent: -50, 
-        duration: 2, 
-        ease, 
-        overwrite: 'auto' 
+
+      tl.to(circle, {
+        scale: 1.2,
+        xPercent: -50,
+        duration: 2,
+        ease,
+        overwrite: 'auto'
       }, 0);
 
       tlRef.current = tl;
@@ -84,7 +98,7 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
     window.addEventListener('resize', onResize);
 
     if (document.fonts) {
-      document.fonts.ready.then(layout).catch(() => {});
+      document.fonts.ready.then(layout).catch(() => { });
     }
 
     return () => {
@@ -95,11 +109,11 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
   const handleMouseEnter = () => {
     const tl = tlRef.current;
     const button = buttonRef.current;
-    
+
     if (!tl || !button) return;
 
     activeTweenRef.current?.kill();
-    
+
     // Animate circle expansion
     activeTweenRef.current = tl.tweenTo(tl.duration(), {
       duration: 0.3,
@@ -119,11 +133,11 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
   const handleMouseLeave = () => {
     const tl = tlRef.current;
     const button = buttonRef.current;
-    
+
     if (!tl || !button) return;
 
     activeTweenRef.current?.kill();
-    
+
     // Animate circle contraction
     activeTweenRef.current = tl.tweenTo(0, {
       duration: 0.2,
@@ -144,7 +158,7 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
     // Don't stop propagation - let ClickSpark handle the spark effect
     const button = buttonRef.current;
     const clickCircle = clickCircleRef.current;
-    
+
     if (!button || !clickCircle) return;
 
     // Get click position relative to button
@@ -192,7 +206,7 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
         }
       }
     });
-    
+
     // Expand circle and change background back to original color
     clickTl.to(clickCircle, {
       scale: 1.2,
@@ -264,7 +278,7 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
   const handleDialogButtonMouseEnter = () => {
     const button = dialogButtonRef.current;
     const circle = dialogCircleRef.current;
-    
+
     if (!button || !circle) return;
 
     gsap.to(circle, {
@@ -286,7 +300,7 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
   const handleDialogButtonMouseLeave = () => {
     const button = dialogButtonRef.current;
     const circle = dialogCircleRef.current;
-    
+
     if (!button || !circle) return;
 
     gsap.to(circle, {
@@ -313,7 +327,7 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
   const handleLaterButtonMouseEnter = () => {
     const button = laterButtonRef.current;
     const circle = laterCircleRef.current;
-    
+
     if (!button || !circle) return;
 
     gsap.to(circle, {
@@ -335,7 +349,7 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
   const handleLaterButtonMouseLeave = () => {
     const button = laterButtonRef.current;
     const circle = laterCircleRef.current;
-    
+
     if (!button || !circle) return;
 
     gsap.to(circle, {
@@ -356,11 +370,11 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
 
   return (
     <div
-      className="work-card relative grid grid-cols-1 md:grid-cols-2 md:grid-rows-none grid-rows-[1fr,auto] w-full h-[100svh] md:h-[500px] rounded-none md:rounded-[20px] overflow-hidden gap-0"
+      className="work-card relative grid grid-cols-1 md:grid-cols-2 md:grid-rows-none grid-rows-[1fr,auto] w-full h-[100svh] md:h-[500px] rounded-none md:rounded-[20px] overflow-hidden gap-0 border-0 md:border-[2px]"
       data-card="work-card"
       style={{
         boxSizing: 'border-box',
-        border: `2px solid ${buttonColor}`
+        borderColor: buttonColor
       }}
     >
       {/* Left: text panel (Figma-specified) */}
@@ -443,14 +457,14 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
         >
           <div className="flex flex-col gap-6">
             <p className="font-rethink text-[14px] md:text-[16px] text-black leading-relaxed">
-              This will direct you to my Behance where this document sits. Click here to see the branding doc
+              {dialogText}
             </p>
             <div className="flex gap-3 w-full">
               <button
                 ref={laterButtonRef}
                 type="button"
                 className="relative h-[50px] flex-1 flex items-center justify-center rounded-[50px] text-black font-rethink text-[14px] leading-[14px] p-0 overflow-hidden"
-                style={{ 
+                style={{
                   background: 'transparent',
                   border: `2px solid ${buttonColor}`,
                   boxSizing: 'border-box'
@@ -469,31 +483,33 @@ const WorkCard: React.FC<WorkCardProps> = ({ title, description, categories, med
                   ref={laterCircleRef}
                 />
                 <span className="relative z-[2]">
-                  Later
+                  {secondaryButtonText}
                 </span>
               </button>
-              <button
-                ref={dialogButtonRef}
-                type="button"
-                className="relative h-[50px] flex-1 flex items-center justify-center rounded-[50px] text-black font-rethink text-[14px] leading-[14px] p-0 border-0 overflow-hidden"
-                style={{ background: buttonColor }}
-                onMouseEnter={handleDialogButtonMouseEnter}
-                onMouseLeave={handleDialogButtonMouseLeave}
-                onClick={handleDialogButtonClick}
-              >
-                <span
-                  className="hover-circle absolute left-1/2 bottom-0 rounded-full z-[1] block pointer-events-none"
-                  style={{
-                    background: '#ffffff',
-                    willChange: 'transform'
-                  }}
-                  aria-hidden="true"
-                  ref={dialogCircleRef}
-                />
-                <span className="relative z-[2]">
-                  View Project
-                </span>
-              </button>
+              {behanceUrl && (
+                <button
+                  ref={dialogButtonRef}
+                  type="button"
+                  className="relative h-[50px] flex-1 flex items-center justify-center rounded-[50px] text-black font-rethink text-[14px] leading-[14px] p-0 border-0 overflow-hidden"
+                  style={{ background: buttonColor }}
+                  onMouseEnter={handleDialogButtonMouseEnter}
+                  onMouseLeave={handleDialogButtonMouseLeave}
+                  onClick={handleDialogButtonClick}
+                >
+                  <span
+                    className="hover-circle absolute left-1/2 bottom-0 rounded-full z-[1] block pointer-events-none"
+                    style={{
+                      background: '#ffffff',
+                      willChange: 'transform'
+                    }}
+                    aria-hidden="true"
+                    ref={dialogCircleRef}
+                  />
+                  <span className="relative z-[2]">
+                    View Project
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         </DialogContent>

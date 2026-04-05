@@ -22,7 +22,7 @@ const Index = () => {
         }
         return false;
       });
-      
+
       if (currentSection) {
         setActiveSection(currentSection);
       }
@@ -32,12 +32,20 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Enable scroll snapping only for this page
+  useEffect(() => {
+    document.documentElement.classList.add('snap-scroll-enabled');
+    return () => {
+      document.documentElement.classList.remove('snap-scroll-enabled');
+    };
+  }, []);
+
   return (
     <CustomCursor>
       <ClickSpark>
         <div className="min-h-screen bg-background">
           <Navigation activeSection={activeSection} />
-          
+
           <main>
             <HeroSection />
             <WorkSection />
